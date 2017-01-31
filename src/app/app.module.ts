@@ -3,16 +3,22 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { StoryEditorComponent } from './story-editor/story-editor.component';
+import { TestModelComponent } from './test-model/test-model.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    StoryEditorComponent,
+    TestModelComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
