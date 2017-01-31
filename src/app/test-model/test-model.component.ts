@@ -12,4 +12,26 @@ export class TestModelComponent implements OnInit {
   ngOnInit() {
   }
 
+  addActor(){
+
+  }
+
+  addEvent(){
+  	
+  }
+
+  addThing(){
+  	
+  }
+
+
+  derivation(){
+  	
+  }
+
+  export(){
+  	
+  }
+
+
 }

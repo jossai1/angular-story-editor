@@ -12,19 +12,4 @@ export class StoryEditorComponent implements OnInit {
   ngOnInit() {
   }
 
-  addActor(){
-
-  }
-
-  addEvent(){
-  	
-  }
-
-  derivation(){
-  	
-  }
-
-  export(){
-  	
-  }
 }
