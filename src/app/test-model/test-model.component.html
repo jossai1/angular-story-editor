@@ -16,3 +16,21 @@
     <br>
     <button (click)="export()">export</button>
 </div>
+
+
+ <fieldset>
+   <legend><img style="height:50px;width:50px" src="http://transparenciaong.info/images/document_icon.png"></legend>
+ 	<input [placeholder]="input.name" [(ngModel)]="input.name" *ngFor="let input of inputArray" [id]="input.id" name="min"   />
+ 	 <select  [(ngModel)]="selectedOption" (ngModelChange)="addClickedAttr(selectedOption.id)">
+  <option selected disabled>Add an Attribute</option>
+  <option *ngFor="let item of attributesArray" [ngValue]="item">{{item.name}}</option>
+  </select>
+  <button (click)="makeThing()" >make thing</button>
+</fieldset>
+
+<p>hi jane, just  tessting..</p>
+<p>{{title}}</p>
+<p>{{url}}</p>
+<p>{{location}}</p>
+<p>{{label}}</p>
+<p>{{name}}</p>
