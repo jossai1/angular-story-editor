@@ -1,7 +1,7 @@
-<p>
-    test-model works!
-</p>
-<div class="test-area">
+<h1>
+    Test-Model works
+</h1>
+<!-- <div class="test-area">
     <input type="text">
     <button (click)="addThing()">add thing</button>
     <br>
@@ -13,15 +13,20 @@
     <br>
     <input type="text">
     <button (click)="addEvent()">add event</button>
-    <br>
-    <button (click)="export()">export</button>
-</div>
+    <br> -->
+    <!-- <button (click)="export()">export</button>
+</div> -->
+
 <span>
 	<button (click)="addThing()">add thing </button>
 
 	<button (click)="addActor()">add actor </button>
 
 	<button (click)="addEvent()">add event </button>
+
+	<button (click)="addEvent()">add event </button>
+
+	<button (click)="export()">export</button>
 
 </span>
 
@@ -38,7 +43,7 @@
         </select>
 
         <!-- test to see if each box's input  is unique -->
-        <div>words: {{ele.inputArray | json}}</div>
+        <!-- <div>words: {{ele.inputArray | json}}</div> -->
 
         <button style="float:right" (click)="deleteElement(ele.id)"><img style="height:10px;width:10px" src="http://findicons.com/files/icons/557/creme/128/delete.png"></button>
 

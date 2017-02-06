@@ -34,7 +34,7 @@ export class TestModelComponent implements OnInit {
   elementsOnCanvas:Array<Object> = [
   	{id:"0",src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"Name",value:"",id:"0"},{name:"URL",value:"",id:"1"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2},{name:"Type",id:3}]},
   	{id:"1",src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"Name",value:"",id:"0"},{name:"URL",value:"",id:"1"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Start Time",id:3},{name:"End Time",id:4}]},
-  	{id:"2",src:"http://www.egton.net/files/2016/07/Healthcare-Service-desk-icon-250-x-250-1.png",type:"actor",inputArray:[{name:"Name",value:"",id:"0"},{name:"URL",value:"",id:"1"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]}
+  	{id:"2",src:"https://emergency.cdc.gov/radiation/00_images/icon_stayinside_shelterinside.png",type:"actor",inputArray:[{name:"Name",value:"",id:"0"},{name:"URL",value:"",id:"1"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]}
   ];
   
   //possible attributes that a user can select
@@ -64,7 +64,7 @@ export class TestModelComponent implements OnInit {
   // which subsequently adds it to the canvas
   addActor() {
 
-  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"http://www.egton.net/files/2016/07/Healthcare-Service-desk-icon-250-x-250-1.png",type:"actor",inputArray:[{name:"Name",value:"",id:"0"},{name:"URL",value:"",id:"1"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"https://emergency.cdc.gov/radiation/00_images/icon_stayinside_shelterinside.png",type:"actor",inputArray:[{name:"Name",value:"",id:"0"},{name:"URL",value:"",id:"1"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]});
 
   }
 
@@ -86,6 +86,7 @@ export class TestModelComponent implements OnInit {
 
   //deletes the elemnt with the given id from the canvas 
   // by deleteing it from the list of elementsOnTheCanvas
+  //TODO: HOW TO REMOVE ELEMENT FROM PROV DOCUMENT ALSO ?
   deleteElement(eleId:string) {
 
   	for (var i = 0; i < this.elementsOnCanvas.length; i++) {
@@ -313,6 +314,7 @@ export class TestModelComponent implements OnInit {
   	let inputArray = thing.inputArray;
   	let attributeArray = thing.attributes;
 
+  	console.log(inputArray);
 	let name = inputArray["0"].value;
 	let url = inputArray["1"].value;
 	
@@ -331,7 +333,7 @@ export class TestModelComponent implements OnInit {
 	let type:string;
 
 	//keep a ref to entity so we can update its attributes
-	var entity  = this.doc.entity(name+":"+ name);
+	let entity  = this.doc.entity(name+":"+ name);
 
 
 	//-1 indicates that this attribute was not added to the element
@@ -342,32 +344,32 @@ export class TestModelComponent implements OnInit {
 	
 	if(titleIndex !== -1){
 		//set the title to the user's input
-		 title = this.inputArray[this.getIndex("Title",this.inputArray).toString()].value;
+		 title = inputArray[this.getIndex("Title",inputArray).toString()].value;
 		 
 		if (title !== "") {
-			//this.doc.entity(name+":"+ name, ["dcterms:title", title]);
+
 			entity.attr("dcterms:title", [title]);
 		}
 	}
 	if(locationIndex !== -1){
 		//set the location to the user's input
-		 location = this.inputArray[this.getIndex("Location",this.inputArray).toString()].value;
+		 location = inputArray[this.getIndex("Location",inputArray).toString()].value;
 		 if (location !== "") {
-		 	//this.doc.entity(name+":"+ name,["prov:location", location]);
+
 			entity.attr("prov:location", [location]);
 		}
 
 	}
 	if(labelIndex !== -1){
 		//set the label to the user's input
-		 label = this.inputArray[this.getIndex("Label",this.inputArray).toString()].value;
+		 label = inputArray[this.getIndex("Label",inputArray).toString()].value;
 		 if (label !== "") {
-			//this.doc.entity(name+":"+ name,["prov:label", label]);
+			
 			entity.attr("prov:label", [label]);
 		}
 	}
 
-	if(typeIndex !== -1){
+	if(typeIndex !== -1) {
 
 		//todo: have a drop down box for users to select a prov type
 		// *** or they can click 'other' and define thir own -- will go for this option (custom type) and drag and drop 
@@ -378,16 +380,15 @@ export class TestModelComponent implements OnInit {
 		// hard code type to Person for now till we decide // let user type in a type for now - has to be on of the inbuilt prov types
 		
 		// //set the type to the user's input
-		 type = this.inputArray[this.getIndex("Type",this.inputArray).toString()].value;
+		 type = inputArray[this.getIndex("Type",inputArray).toString()].value;
 		 if (type !== "") {
 			entity.attr(this.prov.ns.qn("type"), this.prov.ns.qn(type));
 
 		}
 	}
 	
-	
-	console.log(this.getDoc());
-	console.log(JSON.stringify(this.getProvJSON(), null, "  "));
+	// console.log(this.getDoc());
+	// console.log(JSON.stringify(this.getProvJSON(), null, "  "));
 
   }
 
@@ -395,13 +396,210 @@ export class TestModelComponent implements OnInit {
   // adds it to global prov document 
   processActor(actor) {
 
+  	let inputArray = actor.inputArray;
+  	let attributeArray = actor.attributes;
+
+  	// test 
+  	console.log(inputArray);
+
+	let name = inputArray["0"].value;
+	let url = inputArray["1"].value;
+	
+	//set the name and url of the enetity 
+	this.doc.addNamespace(name, url);
+
+	//set any attributes the user has added 
+	let locationIndex:number = this.getIndex("Location",inputArray);
+	let labelIndex:number = this.getIndex("Label",inputArray);
+	let typeIndex:number = this.getIndex("Type",inputArray);
+	let givenNameIndex:number = this.getIndex("Given Name",inputArray);
+	let emailIndex:number = this.getIndex("E-mail",inputArray);
+
+	let location:string;
+	let label:string;
+	let type:string;
+	let givenName:string;
+	let email:string; 
+
+	//keep a ref to agent so we can update its attributes
+	let agent  = this.doc.agent(name+":"+ name);
+
+
+	//-1 indicates that this attribute was not added to the element
+	//now lets set our attributess
+	// if an attribute is empty then a user has not set it TODO: maybe set to null instead of empty?
+	// CHECK for which attributes a user has set
+	// if set set them
+	
+	if(givenNameIndex !== -1){
+		//set the title to the user's input
+		 givenName = inputArray[this.getIndex("Given Name",inputArray).toString()].value;
+
+		if (givenName !== "") {
+
+			agent.attr("foaf:givenName", givenName);
+		}
+	}
+
+	if(emailIndex !== -1){
+		//set the title to the user's input
+		 email = inputArray[this.getIndex("E-mail",inputArray).toString()].value;
+		 
+		if (email !== "") {
+
+			agent.attr("foaf:mbox", "<"+email+">");
+		}
+	}
+
+	if(locationIndex !== -1){
+		//set the location to the user's input
+		 location = inputArray[this.getIndex("Location",inputArray).toString()].value;
+		 if (location !== "") {
+
+			agent.attr("prov:location", [location]);
+		}
+
+	}
+
+	if(labelIndex !== -1){
+		//set the label to the user's input
+		 label = inputArray[this.getIndex("Label",inputArray).toString()].value;
+		 if (label !== "") {
+			
+			agent.attr("prov:label", [label]);
+		}
+	}
+
+	if(typeIndex !== -1) {
+
+		//todo: have a drop down box for users to select a prov type
+		// *** or they can click 'other' and define thir own -- will go for this option (custom type) and drag and drop 
+		// these will be two diff use cases 
+		// this is just for now till we implement the drag and drop 
+		// but we will still need the box their if they want to have thier own custom type 
+		// maybe give them the drop down and drag and drop option and in both cases they can create thier own custom types
+		// hard code type to Person for now till we decide // let user type in a type for now - has to be on of the inbuilt prov types
+		
+		// //set the type to the user's input
+		 type = inputArray[this.getIndex("Type",inputArray).toString()].value;
+		 if (type !== "") {
+			agent.attr(this.prov.ns.qn("type"), this.prov.ns.qn(type));
+
+		}
+	}
+	
+	// console.log(this.getDoc());
+	// console.log(JSON.stringify(this.getProvJSON(), null, "  "));
+
+
   }
 
   // creates a prov version of a 'event' story element param
   // adds it to global prov document 
   processEvent(event) {
 
+  	let inputArray = event.inputArray;
+  	let attributeArray = event.attributes;
+
+  	// test 
+  	console.log(inputArray);
+
+	let name = inputArray["0"].value;
+	let url = inputArray["1"].value;
+	
+	//set the name and url of the enetity 
+	this.doc.addNamespace(name, url);
+
+	//set any attributes the user has added 
+	let locationIndex:number = this.getIndex("Location",inputArray);
+	let labelIndex:number = this.getIndex("Label",inputArray);
+	let typeIndex:number = this.getIndex("Type",inputArray);
+	let startTimeIndex:number = this.getIndex("Start Time",inputArray);
+	let endTimeIndex:number = this.getIndex("End Time",inputArray);
+
+	let location:string;
+	let label:string;
+	let type:string;
+	let startTime:string;
+	let endTime:string; 
+
+	//keep a ref to activity so we can update its attributes
+	let activity  = this.doc.activity(name+":"+ name);
+
+
+	//-1 indicates that this attribute was not added to the element
+	//now lets set our attributess
+	// if an attribute is empty then a user has not set it TODO: maybe set to null instead of empty?
+	// CHECK for which attributes a user has set
+	// if set set them
+	
+	//TODO:STORT OUT TIME FORMATTING FOR USERS 
+	//MAKE IT EASIER 
+	if(startTimeIndex !== -1) {
+		//set the title to the user's input
+		 startTime = inputArray[this.getIndex("Start Time",inputArray).toString()].value;
+
+		if (startTime !== "") {
+
+			//activity("foaf:givenName", startTimeIndex);
+		}
+	}
+
+	if(endTimeIndex !== -1){
+		//set the title to the user's input
+		 startTime = inputArray[this.getIndex("End Time",inputArray).toString()].value;
+		 
+		if (startTime !== "") {
+
+			//activity.attr("foaf:mbox", "<"+email+">");
+		}
+	}
+
+	if(locationIndex !== -1){
+		//set the location to the user's input
+		 location = inputArray[this.getIndex("Location",inputArray).toString()].value;
+		 if (location !== "") {
+
+			activity.attr("prov:location", [location]);
+		}
+
+	}
+
+	if(labelIndex !== -1){
+		//set the label to the user's input
+		 label = inputArray[this.getIndex("Label",inputArray).toString()].value;
+		 if (label !== "") {
+			
+			activity.attr("prov:label", [label]);
+		}
+	}
+
+	if(typeIndex !== -1) {
+
+		//todo: have a drop down box for users to select a prov type
+		// *** or they can click 'other' and define thir own -- will go for this option (custom type) and drag and drop 
+		// these will be two diff use cases 
+		// this is just for now till we implement the drag and drop 
+		// but we will still need the box their if they want to have thier own custom type 
+		// maybe give them the drop down and drag and drop option and in both cases they can create thier own custom types
+		// hard code type to Person for now till we decide // let user type in a type for now - has to be on of the inbuilt prov types
+		
+		// //set the type to the user's input
+		 type = inputArray[this.getIndex("Type",inputArray).toString()].value;
+		 if (type !== "") {
+
+			activity.attr(this.prov.ns.qn("type"), this.prov.ns.qn(type));
+
+		}
+	}
+	
+	this.doc.activity(name+":"+ name,startTime,endTime)
+	// console.log(this.getDoc());
+	// console.log(JSON.stringify(this.getProvJSON(), null, "  "));
+
+
   }
+
 
   // this basically takes evrything on the canvas and processes it 
   // it seperates it by type into it's respective methods for further processing 
@@ -412,24 +610,35 @@ export class TestModelComponent implements OnInit {
 
   		//if type is a thing
   		if(this.elementsOnCanvas[i.toString()].type === "thing") {
-  			this.processThing(i);
+  			console.log("thing here");
+  			this.processThing(this.elementsOnCanvas[i]);
   		}
 
-  		//if type is a thing
-  		if(this.elementsOnCanvas[i.toString()].type === "event") {
-  			this.processEvent(i);
+  		//if type is a event
+  		else if(this.elementsOnCanvas[i.toString()].type === "event") {
+  			console.log("event here");
+  			this.processEvent(this.elementsOnCanvas[i]);
   		}
 
   		// if type is actor
   		else {
-  			this.processActor(i);
+  			console.log("here");
+  			this.processActor(this.elementsOnCanvas[i]);
   		}
   	};
   }
 
   export() {
+
+  	this.process();
   	console.log(this.getDoc());
+	console.log(JSON.stringify(this.getProvJSON(), null, "  "));
   }
+
+  // old
+  // export() {
+  // 	console.log(this.getDoc());
+  // }
 
 
   // //using it for a 'thing's attribute array
@@ -533,147 +742,6 @@ export class TestModelComponent implements OnInit {
   	
 // }
 
-//takes the data from the field of a thing and makes an entuty and disolays it
-makeThing() {
-	//only the input array seems to be recieving the changes from the input 
-	//display what user has put in each field
-	console.log(this.inputArray);
-	let name = this.inputArray["0"].value;
-	let url = this.inputArray["1"].value;
-	//let title = this.inputArray["0"].Object.value;
-	//error here --deal with case where user hasnt added extra field(S)
-
-	//set 'thing' values in prov doc
-	//clicking make thin makes a simple and small prov with a name,url and title
-	//displays on consile.log
-	//set the name and url of the enetity 
-	this.doc.addNamespace(name, url);
-
-	//set any attributes the user has added 
-	
-	let titleIndex:number = this.getIndex("title",this.inputArray);
-	let locationIndex:number = this.getIndex("location",this.inputArray);
-	let labelIndex:number = this.getIndex("label",this.inputArray);
-	let typeIndex:number = this.getIndex("type",this.inputArray);
-
-	let title:string;
-	let location:string;
-	let label:string;
-	let type:string;
-	//keep a ref to entity so we can update its attributes
-	var entity  = this.doc.entity(name+":"+ name);
-
-	// //testing something
-	// let isTitleSet:boolean = false;
-	// let isLocationSet:boolean = false;
-	// let isLabelSet:boolean = false;
-
-	
-	// if(titleIndex !== -1) {
-	// 	//set the title to the user's input
-	// 	 title = this.inputArray[this.getIndex("title",this.inputArray).toString()].value;
-		 
-	// 	if (title !== "") {
-	// 		//this.doc.entity(name+":"+ name, ["dcterms:title", title]);
-	// 		isTitleSet = true;
-	// 	}
-	// }
-	// if(locationIndex !== -1){
-	// 	//set the location to the user's input
-	// 	 location = this.inputArray[this.getIndex("location",this.inputArray).toString()].value;
-	// 	 if (location !== "") {
-	// 	 	//not sure of syntax for lcoation
-	// 	 	//this.doc.entity(name+":"+ name,["prov:location", this.prov.ns.Location]);
-	// 	 	isLocationSet = true;
-	// 		// not working this.doc.entity(name+":",["prov:location", this.prov.ns.Location, location]);
-	// 	}
-
-	// }
-	// if(labelIndex !== -1){
-	// 	//set the label to the user's input
-	// 	 label = this.inputArray[this.getIndex("label",this.inputArray).toString()].value;
-	// 	 if (label !== "") {
-	// 		//this.doc.entity(name+":"+ name,["prov:label", label]);
-	// 		isLabelSet = true;
-	// 	}
-	// }
-
-
-	// //set local name + attributes at creation 
-	// // if a location,title or label is set i.e not an empty string then we set the attribute value else we set it to undefined
-	// // hard code test this.doc.entity("ex:article", ["dcterms:title", "Crime rises in cities", "prov:location",location, "prov:label", label] );
-	// // wrong format this.doc.entity(name+":"+ name, (isTitleSet === true) ? ["dcterms:title", title] : undefined, (isLocationSet === true) ? ["prov:location", this.prov.ns.Location] : undefined, (isLabelSet === true) ? ["prov:label", label] : undefined);
-	
-	// //sets as expected but provenance doesnt like the undefined/null
-	// this.doc.entity(name+":"+ name, ["dcterms:title", (isTitleSet === true) ? title: undefined, "prov:location", (isLocationSet === true) ? location : undefined, "prov:label", (isLabelSet === true) ? label : undefined]);
-
-
-
-
-	//-1 indicates that this attribute was not added to the element
-	//now lets set our attributess
-	// if an attribute is empty then a user has not set it TODO: maybe set to null instead of empty?
-	// CHECK for which attributes a user has set
-	// if set set them
-	
-	if(titleIndex !== -1){
-		//set the title to the user's input
-		 title = this.inputArray[this.getIndex("title",this.inputArray).toString()].value;
-		 
-		if (title !== "") {
-			//this.doc.entity(name+":"+ name, ["dcterms:title", title]);
-			entity.attr("dcterms:title", [title]);
-		}
-	}
-	if(locationIndex !== -1){
-		//set the location to the user's input
-		 location = this.inputArray[this.getIndex("location",this.inputArray).toString()].value;
-		 if (location !== "") {
-		 	//this.doc.entity(name+":"+ name,["prov:location", location]);
-			entity.attr("prov:location", [location]);
-		}
-
-	}
-	if(labelIndex !== -1){
-		//set the label to the user's input
-		 label = this.inputArray[this.getIndex("label",this.inputArray).toString()].value;
-		 if (label !== "") {
-			//this.doc.entity(name+":"+ name,["prov:label", label]);
-			entity.attr("prov:label", [label]);
-		}
-	}
-
-	if(typeIndex !== -1){
-
-		//todo: have a drop down box for users to select a prov type
-		// *** or they can click 'other' and define thir own -- will go for this option (custom type) and drag and drop 
-		// these will be two diff use cases 
-		// this is just for now till we implement the drag and drop 
-		// but we will still need the box their if they want to have thier own custom type 
-		// maybe give them the drop down and drag and drop option and in both cases they can create thier own custom types
-		// hard code type to Person for now till we decide // let user type in a type for now - has to be on of the inbuilt prov types
-		
-		// //set the type to the user's input
-		 type = this.inputArray[this.getIndex("type",this.inputArray).toString()].value;
-		 if (type !== "") {
-			entity.attr(this.prov.ns.qn("type"), this.prov.ns.qn(type));
-
-		}
-	}
-	
-	
-	console.log(this.getDoc());
-	console.log(JSON.stringify(this.getProvJSON(), null, "  "));
-	//console.log(JSON.stringify(this.getProvJSON(), null, "  "));
-	// console.log(this.getProvJSON());
-	
-	//below is not displaying :/
-	// console.log(this.title);
-	// console.log(this.location);
-	// console.log(this.url);
-	// console.log(this.name);
-	// console.log(this.label);
-}
 
 setValues(name:string) {
 	if(name === "title"){

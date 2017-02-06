@@ -1,3 +1,14 @@
 .test-area{
 	text-align: center;
 }
+h1 {
+  color: #369;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 250%;
+}
+
+h2 {
+  font-size: 2em;
+  margin-top: 0;
+  padding-top: 0;
+}
