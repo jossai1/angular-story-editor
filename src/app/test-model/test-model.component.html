@@ -16,25 +16,31 @@
     <br>
     <button (click)="export()">export</button>
 </div>
-<fieldset>
-    <legend><img style="height:50px;width:50px" src="http://transparenciaong.info/images/document_icon.png"></legend>
+
+
+
+<span>
+	<button (click)="addThing()">add thing </button>
+
+	<button (click)="addActor()">add actor </button>
+
+	<button (click)="AddEvent()">add event </button>
+
+</span>
+
+<div class="canvas"  >
+	<fieldset *ngFor="let ele of elementsOnCanvas">
+    
+    <legend><img style="height:50px;width:50px" [src]="ele.src"></legend>
+    
     <input [placeholder]="input.name" *ngFor="let input of inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" />
-  <!--   <input *ngFor="let input of inputArray; let in=index" type="text" [(ngModel)]="inputArray[in].name" class="form-control" [attr.placeholder]="inputArray[in].id" required>
- -->
-    <select [(ngModel)]="selectedOption" (ngModelChange)="addClickedAttr(selectedOption.id)">
-        <option selected disabled>Add an Attribute</option>
-        <option *ngFor="let item of attributesArray" [ngValue]="item">{{item.name}}</option>
-    </select>
-    <button (click)="makeThing()">make thing</button>
+
+
+    <button type="submit" style="float:right"><img style="height:10px;width:10px" src="http://findicons.com/files/icons/557/creme/128/delete.png" alt="Submit"></button>
+   
 </fieldset>
 
-<!-- only the input array seems to be recieving the changes from the input -->
-<div>words: {{inputArray | json}}</div>
-<!-- the below is not displaying :/ -->
-<!-- <p>hi jane, just tessting..</p>
-<p>{{title}}</p>
-<p>{{url}}</p>
-<p>{{location}}</p>
-<p>{{label}}</p>
-<p>{{name}}</p>
- -->
+
+</div>
+
+

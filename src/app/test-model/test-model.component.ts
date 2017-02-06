@@ -29,45 +29,59 @@ export class TestModelComponent implements OnInit {
   label:string="";
   title:string="";
 
-
-  attributes:Array<Object> = [];
+  //a list that represents every element on the canvas 
+  //grows dynamically 
+  elementsOnCanvas:Array<Object> = [
+  	{id:0,src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}],attributeArray:{}},
+  	{id:1,src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}],attributeArray:{}},
+  	{id:2,src:"http://www.egton.net/files/2016/07/Healthcare-Service-desk-icon-250-x-250-1.png",type:"actor",inputArray:[{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}],attributeArray:{}}
+  ];
   
   //possible attributes that a user can select
-  //attributes = {"location":0, "title":1,"label":2 };
   attributesArray: Array<attribute> = [{name:"attributes..",id:-1},{name:"location",id:0}, {name:"title",id:1},{name:"label",id:2},{name:"type",id:3} ];
-  // attributes:any[] = [{"location":0}, {"title":1},{"label":2} ];
-  // selectedOption:number = this.attributesArray[0].id;
+
   //just set it to smhting - doesnt show add titile to box 
   selectedOption:attribute = {name:"attributes..",id:-1};
+
+  //no  longer in use 
   attributedSelected:boolean = false;
+
+  //an array of all the text boxes in a fieldset 
+  // users add more inputs by selecting from a list of atributes - used for a single thing for now 
   inputArray: Array<Object> = [{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}];
 
   ngOnInit() {
+  	//test to see if doc is loaded 
   	console.log(this.doc);
-  	// console.log(this.attributes.location);
-  	// console.log(this.attributes.title);
-  	// console.log(this.attributes.label);
+
   }
 
   setNameSpace(){
   	// Prefix declarations
   }
 
-  addActor(){
-  	this.doc.agent("ex:derek",
-      ["prov:type", this.prov.ns.Person, "foaf:givenName", "Derek",
-       "foaf:mbox", "<mailto:derek@example.org>"]);
+  // adds an actor to the elementsOnCanvas list
+  // which subsequently adds it to the canvas
+  addActor() {
+
+  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"http://www.egton.net/files/2016/07/Healthcare-Service-desk-icon-250-x-250-1.png",type:"actor",inputArray:[{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}],attributeArray:{}});
+
   }
 
-  addEvent(){
-  	// Activities
-    this.doc.activity("ex:compile1");
+   // adds an event  to the elementsOnCanvas list
+  // which subsequently adds it to the canvas
+  addEvent() {
+
+  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}],attributeArray:{}});
   	
   }
 
+  // adds a thing to the elementsOnCanvas list
+  // which subsequently adds it to the canvas
   addThing() { 
-  	this.doc.entity("ex:article", ["dcterms:title", "Crime rises in cities"]);
   	
+  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}],attributeArray:{}})
+
   }
 
 
