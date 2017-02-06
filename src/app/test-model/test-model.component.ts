@@ -32,9 +32,9 @@ export class TestModelComponent implements OnInit {
   //a list that represents every element on the canvas 
   //grows dynamically 
   elementsOnCanvas:Array<Object> = [
-  	{id:0,src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}],attributeArray:{}},
-  	{id:1,src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}],attributeArray:{}},
-  	{id:2,src:"http://www.egton.net/files/2016/07/Healthcare-Service-desk-icon-250-x-250-1.png",type:"actor",inputArray:[{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}],attributeArray:{}}
+  	{id:"0",src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}],attributeArray:{}},
+  	{id:"1",src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}],attributeArray:{}},
+  	{id:"2",src:"http://www.egton.net/files/2016/07/Healthcare-Service-desk-icon-250-x-250-1.png",type:"actor",inputArray:[{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}],attributeArray:{}}
   ];
   
   //possible attributes that a user can select
@@ -84,6 +84,17 @@ export class TestModelComponent implements OnInit {
 
   }
 
+  //deletes he elemnt with the given id from the canvas 
+  // by deleteing it from the list of elementsOnTheCanvas
+  deleteElement(eleId:string) {
+
+  	for (var i = 0; i < this.elementsOnCanvas.length; i++) {
+  		if(this.elementsOnCanvas[i.toString()].id === eleId) {
+  			this.elementsOnCanvas.splice( i, 1 );
+  		}
+  	};
+
+  }
 
   derivation(){
   	
