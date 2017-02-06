@@ -16,9 +16,6 @@
     <br>
     <button (click)="export()">export</button>
 </div>
-
-
-
 <span>
 	<button (click)="addThing()">add thing </button>
 
@@ -28,19 +25,22 @@
 
 </span>
 
-<div class="canvas"  >
-	<fieldset *ngFor="let ele of elementsOnCanvas">
-    
-    <legend><img style="height:50px;width:50px" [src]="ele.src"></legend>
-    
-    <input [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" />
+<div class="canvas">
+    <fieldset *ngFor="let ele of elementsOnCanvas">
 
+        <legend><img style="height:50px;width:50px" [src]="ele.src"></legend>
 
-    <button style="float:right" (click)="deleteElement(ele.id)" ><img style="height:10px;width:10px" src="http://findicons.com/files/icons/557/creme/128/delete.png"></button>
-   
-</fieldset>
+        <input [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" />
 
+        <select [(ngModel)]="selectedOption" (ngModelChange)="processEleAttribute(selectedOption.id,ele.type,ele.inputArray,ele.attributeArray)">
+            <option selected disabled> Add an Attribute </option>
+            <option *ngFor="let item of ele.attributeArray" [ngValue]="item">{{item.name}}</option>
+        </select>
 
+        <!-- test to see if each box's input  is unique -->
+        <div>words: {{ele.inputArray | json}}</div>
+
+        <button style="float:right" (click)="deleteElement(ele.id)"><img style="height:10px;width:10px" src="http://findicons.com/files/icons/557/creme/128/delete.png"></button>
+
+    </fieldset>
 </div>
-
-
