@@ -32,9 +32,9 @@ export class TestModelComponent implements OnInit {
   //a list that represents every element on the canvas 
   //grows dynamically 
   elementsOnCanvas:Array<Object> = [
-  	{id:"0",src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"Name",value:"",id:"0"},{name:"URL",value:"",id:"1"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2},{name:"Type",id:3}]},
-  	{id:"1",src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"Name",value:"",id:"0"},{name:"URL",value:"",id:"1"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Start Time",id:3},{name:"End Time",id:4}]},
-  	{id:"2",src:"https://emergency.cdc.gov/radiation/00_images/icon_stayinside_shelterinside.png",type:"actor",inputArray:[{name:"Name",value:"",id:"0"},{name:"URL",value:"",id:"1"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]}
+  	{id:"0",src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2},{name:"Type",id:3}]},
+  	{id:"1",src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Start Time",id:3},{name:"End Time",id:4}]},
+  	{id:"2",src:"https://emergency.cdc.gov/radiation/00_images/icon_stayinside_shelterinside.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]}
   ];
   
   //possible attributes that a user can select
@@ -48,7 +48,7 @@ export class TestModelComponent implements OnInit {
 
   //an array of all the text boxes in a fieldset 
   // users add more inputs by selecting from a list of atributes - used for a single thing for now 
-  inputArray: Array<Object> = [{name:"name",value:"",id:"0"},{name:"url",value:"",id:"1"}];
+  inputArray: Array<Object> = [{name:"url",value:"",id:"0"}];
 
   ngOnInit() {
   	//test to see if doc is loaded 
@@ -64,7 +64,7 @@ export class TestModelComponent implements OnInit {
   // which subsequently adds it to the canvas
   addActor() {
 
-  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"https://emergency.cdc.gov/radiation/00_images/icon_stayinside_shelterinside.png",type:"actor",inputArray:[{name:"Name",value:"",id:"0"},{name:"URL",value:"",id:"1"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"https://emergency.cdc.gov/radiation/00_images/icon_stayinside_shelterinside.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]});
 
   }
 
@@ -72,7 +72,7 @@ export class TestModelComponent implements OnInit {
   // which subsequently adds it to the canvas
   addEvent() {
 
-  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"Name",value:"",id:"0"},{name:"URL",value:"",id:"1"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Start Time",id:3},{name:"End Time",id:4}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Start Time",id:3},{name:"End Time",id:4}]});
   	
   }
 
@@ -80,7 +80,7 @@ export class TestModelComponent implements OnInit {
   // which subsequently adds it to the canvas
   addThing() { 
   	
-  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"Name",value:"",id:"0"},{name:"URL",value:"",id:"1"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2},{name:"Type",id:3}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2},{name:"Type",id:3}]});
 
   }
 
@@ -140,7 +140,7 @@ export class TestModelComponent implements OnInit {
 
   	//only allowed to have max 3 extra attributes 
   	//stop adding stop adding more atributes
-  	if(inputArray.length <= 5 ) {
+  	if(inputArray.length <= 4 ) {
   			
 	  	//location attr 
 	  	if (selectedAttrId === 0) {
@@ -194,7 +194,7 @@ export class TestModelComponent implements OnInit {
 
   	//only allowed to have max 5 extra attributes 
   	//stop adding stop adding more atributes
-  	if(inputArray.length <= 6 ) {
+  	if(inputArray.length <= 5 ) {
   			
 	  	//location attr 
 	  	if (selectedAttrId === 0) {
@@ -256,7 +256,7 @@ export class TestModelComponent implements OnInit {
 
   	//only allowed to have max 5 extra attributes 
   	//stop adding stop adding more atributes
-  	if(inputArray.length <= 6 ) {
+  	if(inputArray.length <= 5 ) {
   			
 	  	//location attr 
 	  	if (selectedAttrId === 0) {
@@ -307,16 +307,55 @@ export class TestModelComponent implements OnInit {
   }
 }
 
+
+	//split url and grab the string after the last slash 
+	//this will be the element's name
+	getElementNameFromURL(URL:string):string {
+		
+		//name extracted from url 
+		// if it ends in http://jane.com/
+		//it would return an empty string 
+
+		// so we need to check if theres is a trailing slash and if it exits  -> remove it and THEN WE CAN process 
+		if(URL.substr(-1) === '/') {
+
+       		URL = URL.substr(0, URL.length - 1);
+    	}
+
+		//NOW we can process as usual 
+  		let name:string = /[^/]*$/.exec(URL)[0];
+  		return name;
+	}
+
   // creates a prov version of a 'thing' story element param
   // adds it to global prov document 
   processThing(thing) {
 
+  	
   	let inputArray = thing.inputArray;
   	let attributeArray = thing.attributes;
 
   	console.log(inputArray);
-	let name = inputArray["0"].value;
-	let url = inputArray["1"].value;
+	
+	let url = inputArray["0"].value;
+
+	//handle case were url has no http:// before it 
+	//if the proefix is not ther 
+	///we append it 
+	var prefix = 'http://';
+		if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  )
+		{
+		    url = prefix + url;
+		}
+	let name = this.getElementNameFromURL(url);
+
+	//just get the suffix without the 'name' bit which is the bit after the last slash 
+	url = this.stripTrailingSlash(url);
+	url = url.substring(0, url.lastIndexOf('/')) + "/";
+
+	console.log(name,url);
+	
+
 	
 	//set the name and url of the enetity 
 	this.doc.addNamespace(name, url);
@@ -402,8 +441,24 @@ export class TestModelComponent implements OnInit {
   	// test 
   	console.log(inputArray);
 
-	let name = inputArray["0"].value;
-	let url = inputArray["1"].value;
+	let url = inputArray["0"].value;
+
+	//handle case were url has no http:// before it 
+	//if the proefix is not ther 
+	///we append it 
+	var prefix = 'http://';
+		if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  )
+		{
+		    url = prefix + url;
+		}
+	let name = this.getElementNameFromURL(url);
+
+	//just get the suffix without the 'name' bit which is the bit after the last slash 
+	url = this.stripTrailingSlash(url);
+	url = url.substring(0, url.lastIndexOf('/')) + "/";
+
+	console.log(name,url);
+	
 	
 	//set the name and url of the enetity 
 	this.doc.addNamespace(name, url);
@@ -494,6 +549,13 @@ export class TestModelComponent implements OnInit {
 
   }
 
+  stripTrailingSlash(str) {
+    if(str.substr(-1) === '/') {
+        return str.substr(0, str.length - 1);
+    }
+    return str;
+}
+
   // creates a prov version of a 'event' story element param
   // adds it to global prov document 
   processEvent(event) {
@@ -504,9 +566,25 @@ export class TestModelComponent implements OnInit {
   	// test 
   	console.log(inputArray);
 
-	let name = inputArray["0"].value;
-	let url = inputArray["1"].value;
-	
+	let url = inputArray["0"].value;
+
+
+	//handle case were url has no http:// before it 
+	//if the proefix is not ther 
+	///we append it 
+	var prefix = 'http://';
+		if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  )
+		{
+		    url = prefix + url;
+		}
+
+	let name = this.getElementNameFromURL(url);
+	//just get the suffix without the 'name' bit which is the bit after the last slash 
+	url = this.stripTrailingSlash(url);
+	url = url.substring(0, url.lastIndexOf('/')) + "/";
+
+	console.log(name,url);
+
 	//set the name and url of the enetity 
 	this.doc.addNamespace(name, url);
 
@@ -604,6 +682,8 @@ export class TestModelComponent implements OnInit {
   // this basically takes evrything on the canvas and processes it 
   // it seperates it by type into it's respective methods for further processing 
   // to create a story - using prov 
+  //TODO : ADD IN CHECKS TO MAK SURE URL FIELDS ARE NOT EMPTY 
+  //SO IF URL FIELD IS EMPTY ....WE COULD GET THE ID AND HIGHIGHT IT OR ADD A TOAST MESSAGE 
   process()
   {
   	for (var i = 0; i < this.elementsOnCanvas.length; i++) {
@@ -633,6 +713,12 @@ export class TestModelComponent implements OnInit {
   	this.process();
   	console.log(this.getDoc());
 	console.log(JSON.stringify(this.getProvJSON(), null, "  "));
+  }
+
+  clear() {
+  	//only removes elements put the namespace is still there :(
+  	this.doc = this.prov.document();
+  	this.elementsOnCanvas = [];
   }
 
   // old
