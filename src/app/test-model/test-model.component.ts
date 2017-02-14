@@ -742,6 +742,10 @@ export class TestModelComponent implements OnInit {
   	this.inferRelations();
   }
 
+  //check that all url fields are filled 
+  //call in process() method
+  UrlFieldCheck(){}
+
 
   inferRelations() {
 
@@ -765,30 +769,35 @@ export class TestModelComponent implements OnInit {
   			//delegation 
   		if (startEle.type === "actor" && endEle.type === "actor") {
 
+  			console.log("hi delegation");
   			this.delegation(startEle.prefixSuffix,endEle.prefixSuffix);
   		}
 
   		//association
   		else if (startEle.type === "event" && endEle.type === "actor") {
 
+  			console.log("hi association");
   			this.association(startEle.prefixSuffix,endEle.prefixSuffix);
   		}
 
   		//usage
   		else if (startEle.type === "event" && endEle.type === "thing") {
 
+  			console.log("hi usage");
   			this.usage(startEle.prefixSuffix,endEle.prefixSuffix);
   		}
 
   		//generation
   		else if (startEle.type === "thing" && endEle.type === "event") {
   			
+  			console.log("hi generation");
   			this.generation(startEle.prefixSuffix,endEle.prefixSuffix);
   		}
 
   		//attribution
   		else if (startEle.type === "thing" && endEle.type === "actor") {
   			
+  			console.log("hi attribution");
   			this.attribution(startEle.prefixSuffix,endEle.prefixSuffix);
   		}
 
@@ -869,30 +878,80 @@ export class TestModelComponent implements OnInit {
   derivation(startEleName:string, endElementName:string) {
 
 	//dont need local ref -> don't have any attriutes(yet, will keep simple for now sha)
-	this.doc.wasDerivedFrom(startEleName, endElementName);
-  	console.log("making a derivation");
-  }
+
+	//if names have not been set -> it means the 'export' button has not been pressed in order to make elements 
+	//do nothing -> without this check prov throws errors when the names are empty
+	// just used for manual connections
+	if(startEleName === "" || endElementName === "") {
+
+	}
+	else {
+		this.doc.wasDerivedFrom(startEleName, endElementName);
+		console.log("making a derivation");
+	}
+}
+	
 
   usage(startEleName:string, endElementName:string) {
+
+  	if(startEleName === "" || endElementName === "") {
+
+	}
+	else {
+		this.doc.used(startEleName, endElementName);
+		console.log("making a usage");
+	}
 
   }
 
   generation(startEleName:string, endElementName:string) {
 
+  	if(startEleName === "" || endElementName === "") {
+
+	}
+	else {
+		this.doc.wasGeneratedBy(startEleName, endElementName);
+		console.log("making a generation");
+	}
   }
 
   attribution(startEleName:string, endElementName:string) {
+  	
 
+  	if(startEleName === "" || endElementName === "") {
+
+	}
+	else {
+		this.doc.wasAttributedTo(startEleName, endElementName);
+		console.log("making a attribution");
+	}
+  	
   }
 
   association(startEleName:string, endElementName:string) {
 
+  	if(startEleName === "" || endElementName === "") {
+
+	}
+	else {
+		this.doc.wasAssociatedWith(startEleName, endElementName);
+		console.log("making a association");
+	}
+  	
   }
 
   delegation(startEleName:string, endElementName:string) {
 
-  }
+  	if(startEleName === "" || endElementName === "") {
 
+	}
+	else {
+		this.doc.actedOnBehalfOf(startEleName, endElementName);
+		console.log("making a delegation");
+	}
+	
+  	
+  }
 
 
   export() {
@@ -1017,11 +1076,25 @@ export class TestModelComponent implements OnInit {
   	
 // }
 
+
+//delete a pair
+//for interactive app
+//user select arrow and click 'delete' that point will have an id - which will be the same as the pairing's id in the array
+deleteAPair(pairId:string) {
+
+	for (var i = 0; i < this.pairedElementsArray.length; i++) {
+		if(this.pairedElementsArray[i.toString()].id === pairId) {
+			this.pairedElementsArray.splice( i, 1 );
+		}
+	};
+}
+
+//add a relation 
 addPair(startEleId:string,endEleId:string) {
 
 	//make pairing - using ngmodel 
-	this.pairedElementsArray.push({startEleId:this.startEleId,endEleId:this.endEleId});
-	console.log(this.pairedElementsArray);;;
+	this.pairedElementsArray.push({id: this.generateUUID(), startEleId:this.startEleId, endEleId:this.endEleId});
+	console.log(this.pairedElementsArray);
 }
 
 
