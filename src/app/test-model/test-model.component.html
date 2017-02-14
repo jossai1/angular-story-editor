@@ -31,8 +31,26 @@
 
 </span>
 
+
+<!-- making relations section -->
+<br>
+<span>
+
+	<input type="text" name="a" placeholder="start (ele id)" [(ngModel)]="startEleId">
+	<input type="text" name="b" placeholder="end (ele id)" [(ngModel)]="endEleId">
+
+	<button (click)="addPair(startEleId,endEleId)"> Join </button>
+	<p>{{startEleId}}</p>
+	<p>{{endEleId}}</p>
+
+</span>
+
+<button (click)="inferRelations()">infer test </button>
+
+
+
 <div class="canvas">
-    <fieldset *ngFor="let ele of elementsOnCanvas">
+    <fieldset *ngFor="let ele of elementsOnCanvas" [id]="ele.id">
 
         <legend><img style="height:50px;width:50px" [src]="ele.src"></legend>
 
@@ -46,7 +64,7 @@
         <!-- test to see if each box's input  is unique -->
         <!-- <div>words: {{ele.inputArray | json}}</div> -->
 
-        <button style="float:right" (click)="deleteElement(ele.id)"><img style="height:10px;width:10px" src="http://findicons.com/files/icons/557/creme/128/delete.png"></button>
+        <button style="float:right" (click)="deleteElementFromCanvas(ele.id)"><img style="height:10px;width:10px" src="http://findicons.com/files/icons/557/creme/128/delete.png"></button>
 
     </fieldset>
 </div>

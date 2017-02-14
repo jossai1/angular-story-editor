@@ -29,14 +29,28 @@ export class TestModelComponent implements OnInit {
   label:string="";
   title:string="";
 
+  //for pairings
+  startEleId:string;
+  endEleId:string;
+
   //a list that represents every element on the canvas 
   //grows dynamically 
   elementsOnCanvas:Array<Object> = [
-  	{id:"0",src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2},{name:"Type",id:3}]},
-  	{id:"1",src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Start Time",id:3},{name:"End Time",id:4}]},
-  	{id:"2",src:"https://emergency.cdc.gov/radiation/00_images/icon_stayinside_shelterinside.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]}
+  	{id:"0", prefixSuffix:"", src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2},{name:"Type",id:3}]},
+  	{id:"1", prefixSuffix:"", src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Start Time",id:3},{name:"End Time",id:4}]},
+  	{id:"2", prefixSuffix:"", src:"https://emergency.cdc.gov/radiation/00_images/icon_stayinside_shelterinside.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]}
   ];
   
+
+  //an array of all the pairings of elements(stores element's id) that a user has made
+  //used for making relations
+  //when a users makes a connection in the ui 
+  //a method is called which pushes the two elements in thisarray 
+  // {startEleId:, endEleId:} 
+  pairedElementsArray: Array<Object> = [];
+
+
+
   //possible attributes that a user can select
   attributesArray: Array<attribute> = [{name:"attributes..",id:-1},{name:"location",id:0}, {name:"title",id:1},{name:"label",id:2},{name:"type",id:3} ];
 
@@ -64,7 +78,7 @@ export class TestModelComponent implements OnInit {
   // which subsequently adds it to the canvas
   addActor() {
 
-  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"https://emergency.cdc.gov/radiation/00_images/icon_stayinside_shelterinside.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(), prefixSuffix:"", src:"https://emergency.cdc.gov/radiation/00_images/icon_stayinside_shelterinside.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]});
 
   }
 
@@ -72,7 +86,7 @@ export class TestModelComponent implements OnInit {
   // which subsequently adds it to the canvas
   addEvent() {
 
-  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Start Time",id:3},{name:"End Time",id:4}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(), prefixSuffix:"", src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Start Time",id:3},{name:"End Time",id:4}]});
   	
   }
 
@@ -80,14 +94,14 @@ export class TestModelComponent implements OnInit {
   // which subsequently adds it to the canvas
   addThing() { 
   	
-  	this.elementsOnCanvas.push({id:this.generateUUID(),src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2},{name:"Type",id:3}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(), prefixSuffix:"", src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2},{name:"Type",id:3}]});
 
   }
 
   //deletes the elemnt with the given id from the canvas 
   // by deleteing it from the list of elementsOnTheCanvas
   //TODO: HOW TO REMOVE ELEMENT FROM PROV DOCUMENT ALSO ?
-  deleteElement(eleId:string) {
+  deleteElementFromCanvas(eleId:string) {
 
   	for (var i = 0; i < this.elementsOnCanvas.length; i++) {
   		if(this.elementsOnCanvas[i.toString()].id === eleId) {
@@ -97,9 +111,20 @@ export class TestModelComponent implements OnInit {
 
   }
 
-  derivation(){
-  	
+
+   //deletes the elemnt with the given id from the given array 
+  // by deleteing it from the list of elementsOnTheCanvas
+  //TODO: HOW TO REMOVE ELEMENT FROM PROV DOCUMENT ALSO ?
+  genericDeleteElement(eleId:number , array:Array<Object>) {
+
+  	for (var i = 0; i < array.length; i++) {
+  		if(i === eleId) {
+  			array.splice( i, 1 );
+  		}
+  	};
+
   }
+
 
   getDoc() {
   	return this.doc.scope;
@@ -374,6 +399,8 @@ export class TestModelComponent implements OnInit {
 	//keep a ref to entity so we can update its attributes
 	let entity  = this.doc.entity(name+":"+ name);
 
+	thing.prefixSuffix = name+":"+ name; //set element's suffixPrefix
+
 
 	//-1 indicates that this attribute was not added to the element
 	//now lets set our attributess
@@ -479,6 +506,7 @@ export class TestModelComponent implements OnInit {
 	//keep a ref to agent so we can update its attributes
 	let agent  = this.doc.agent(name+":"+ name);
 
+	actor.prefixSuffix = name+":"+ name; //set element's suffixPrefix
 
 	//-1 indicates that this attribute was not added to the element
 	//now lets set our attributess
@@ -604,6 +632,8 @@ export class TestModelComponent implements OnInit {
 	//keep a ref to activity so we can update its attributes
 	let activity  = this.doc.activity(name+":"+ name);
 
+	event.prefixSuffix = name+":"+ name; //set element's suffixPrefix
+
 
 	//-1 indicates that this attribute was not added to the element
 	//now lets set our attributess
@@ -706,7 +736,164 @@ export class TestModelComponent implements OnInit {
   			this.processActor(this.elementsOnCanvas[i]);
   		}
   	};
+
+  	//once all elements have been made-we then need to make relations
+  	//might need promises ?
+  	this.inferRelations();
   }
+
+
+  inferRelations() {
+
+  	this.checkPairings();
+
+  	//might need a promise here 
+
+  	for (var i = 0; i < this.pairedElementsArray.length; i++) {
+
+  		let startEle = this.getElement(this.pairedElementsArray[i.toString()].startEleId);
+  		let endEle = this.getElement(this.pairedElementsArray[i.toString()].endEleId);
+
+  		//if null then no element with that id was found
+
+  		if(startEle === null || endEle === null ){
+  			console.log("Element not found")
+  		}
+
+  		else {
+
+  			//delegation 
+  		if (startEle.type === "actor" && endEle.type === "actor") {
+
+  			this.delegation(startEle.prefixSuffix,endEle.prefixSuffix);
+  		}
+
+  		//association
+  		else if (startEle.type === "event" && endEle.type === "actor") {
+
+  			this.association(startEle.prefixSuffix,endEle.prefixSuffix);
+  		}
+
+  		//usage
+  		else if (startEle.type === "event" && endEle.type === "thing") {
+
+  			this.usage(startEle.prefixSuffix,endEle.prefixSuffix);
+  		}
+
+  		//generation
+  		else if (startEle.type === "thing" && endEle.type === "event") {
+  			
+  			this.generation(startEle.prefixSuffix,endEle.prefixSuffix);
+  		}
+
+  		//attribution
+  		else if (startEle.type === "thing" && endEle.type === "actor") {
+  			
+  			this.attribution(startEle.prefixSuffix,endEle.prefixSuffix);
+  		}
+
+  		//derivation
+  		else if (startEle.type === "thing" && endEle.type === "thing") {
+  			
+  			console.log("hi derivation");
+  			this.derivation(startEle.prefixSuffix,endEle.prefixSuffix);
+  		}
+
+  		else {
+  			console.log("hmm");
+  		}
+
+  	}
+
+  	};
+  }
+
+
+  //check that all the 
+  //TODO: add a style(with a message or tooltip or somrthing or red thing) to the elements to show that a wrong relation was made 
+  // for now we will remove incorrect pairing from array  
+  checkPairings() {
+
+  	for (var i = 0; i < this.pairedElementsArray.length; i++) {
+
+  		let startEle = this.getElement(this.pairedElementsArray[i.toString()].startEleId);
+  		let endEle = this.getElement(this.pairedElementsArray[i.toString()].endEleId);
+
+  		//if null then no element with that id was found
+
+  		if(startEle === null || endEle === null ) {
+  			console.log("Element not found")
+  		}
+
+	  	else {
+
+	  		
+	  		if (startEle.type === "event" && endEle.type === "event") {
+	  			this.genericDeleteElement(i,this.pairedElementsArray);
+	  			console.log("removing something");
+	  		}
+	  		else if (startEle.type === "actor" && endEle.type === "event") {
+	  			this.genericDeleteElement(i,this.pairedElementsArray);
+	  			console.log("removing something");
+	  		}
+	  		else if (startEle.type === "actor" && endEle.type === "thing") {
+	  			this.genericDeleteElement(i,this.pairedElementsArray);
+	  			console.log("removing something");
+	  		}
+
+	  		else {
+
+	  		}
+  		}
+  	};
+
+  }
+
+  //returns element from array with corresponding id 
+  getElement(eleId:string) {
+
+  	let element = null; 
+
+  	for (var i = 0; i < this.elementsOnCanvas.length; i++) {
+  		if(this.elementsOnCanvas[i.toString()].id === eleId) {
+
+  			element = this.elementsOnCanvas[i.toString()];
+  		}
+  	};
+
+  	return element;
+  }
+
+
+  /*all the relations*/
+  derivation(startEleName:string, endElementName:string) {
+
+	//dont need local ref -> don't have any attriutes(yet, will keep simple for now sha)
+	this.doc.wasDerivedFrom(startEleName, endElementName);
+  	console.log("making a derivation");
+  }
+
+  usage(startEleName:string, endElementName:string) {
+
+  }
+
+  generation(startEleName:string, endElementName:string) {
+
+  }
+
+  attribution(startEleName:string, endElementName:string) {
+
+  }
+
+  association(startEleName:string, endElementName:string) {
+
+  }
+
+  delegation(startEleName:string, endElementName:string) {
+
+  }
+
+
 
   export() {
 
@@ -761,6 +948,8 @@ export class TestModelComponent implements OnInit {
   	};
   	return index;
   }
+
+
  generateUUID() {
     var d = new Date().getTime();
     if(window.performance && typeof window.performance.now === "function"){
@@ -827,6 +1016,14 @@ export class TestModelComponent implements OnInit {
 //   }
   	
 // }
+
+addPair(startEleId:string,endEleId:string) {
+
+	//make pairing - using ngmodel 
+	this.pairedElementsArray.push({startEleId:this.startEleId,endEleId:this.endEleId});
+	console.log(this.pairedElementsArray);;;
+}
+
 
 
 setValues(name:string) {
