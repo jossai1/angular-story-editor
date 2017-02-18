@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoryEditorComponent } from './story-editor/story-editor.component';
 import { TestModelComponent } from './test-model/test-model.component';
+import { AccordionModule } from 'primeng/primeng';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { TestModelComponent } from './test-model/test-model.component';
   ],
   imports: [
     BrowserModule,
+    AccordionModule,
     FormsModule,
     HttpModule,
     AppRoutingModule
