@@ -75,6 +75,9 @@ div.panel {
    overflow-y: scroll;*/
 }
 
+.well{
+  width:284px;
+}
 .sidebar-nav-fixed 
 {
   height: 950px;
@@ -85,5 +88,26 @@ div.panel {
 .ui-accordion-content-wrapper.ui-accordion-content-wrapper-overflown 
 {
   overflow: hidden;
+
+}
+
+.story-elements
+{
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+
+.fa-icons
+{
+  font-size: 57px;
+
+}
+
+.spacing
+{
+  margin:3%;
+  width: 40px;
+  height: 40px;
 
 }
