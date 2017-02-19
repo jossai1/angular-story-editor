@@ -7,7 +7,7 @@ interface attribute {
 
 @Component({
   selector: 'app-test-model',
-  templateUrl: './test-model.component.html',
+  templateUrl: './ui-test.html', //swap to test-compomnent.html for model test 
   styleUrls: ['./test-model.component.css']
 })
 
@@ -35,11 +35,7 @@ export class TestModelComponent implements OnInit {
 
   //a list that represents every element on the canvas 
   //grows dynamically 
-  elementsOnCanvas:Array<Object> = [
-  	{id:"0", prefixSuffix:"", src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2},{name:"Type",id:3}]},
-  	{id:"1", prefixSuffix:"", src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Start Time",id:3},{name:"End Time",id:4}]},
-  	{id:"2", prefixSuffix:"", src:"https://emergency.cdc.gov/radiation/00_images/icon_stayinside_shelterinside.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]}
-  ];
+  elementsOnCanvas:Array<Object> = [];
   
 
   //an array of all the pairings of elements(stores element's id) that a user has made
@@ -66,6 +62,11 @@ export class TestModelComponent implements OnInit {
 
   ngOnInit() {
   	//test to see if doc is loaded 
+
+  	///add some elemens initially to the element - for ease of testing
+  	this.addThing();
+  	this.addActor();
+  	this.addEvent();
   	console.log(this.doc);
 
   }
@@ -78,7 +79,7 @@ export class TestModelComponent implements OnInit {
   // which subsequently adds it to the canvas
   addActor() {
 
-  	this.elementsOnCanvas.push({id:this.generateUUID(), prefixSuffix:"", src:"https://emergency.cdc.gov/radiation/00_images/icon_stayinside_shelterinside.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given name",id:3},{name:"E-mail",id:4}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(), prefixSuffix:"", src:"../../assets/images/actor-icon2.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given Name",id:3},{name:"E-mail",id:4}]});
 
   }
 
@@ -86,7 +87,7 @@ export class TestModelComponent implements OnInit {
   // which subsequently adds it to the canvas
   addEvent() {
 
-  	this.elementsOnCanvas.push({id:this.generateUUID(), prefixSuffix:"", src:"http://affinityallianceco.com.au/wp-content/uploads/2015/06/events-icon-orange-.jpg",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Start Time",id:3},{name:"End Time",id:4}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(), prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
   	
   }
 
@@ -94,7 +95,7 @@ export class TestModelComponent implements OnInit {
   // which subsequently adds it to the canvas
   addThing() { 
   	
-  	this.elementsOnCanvas.push({id:this.generateUUID(), prefixSuffix:"", src:"http://transparenciaong.info/images/document_icon.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2},{name:"Type",id:3}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(), prefixSuffix:"", src:"../../assets/images/document64.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2}]});
 
   }
 
@@ -165,7 +166,7 @@ export class TestModelComponent implements OnInit {
 
   	//only allowed to have max 3 extra attributes 
   	//stop adding stop adding more atributes
-  	if(inputArray.length <= 4 ) {
+  	if(inputArray.length <= 3 ) {
   			
 	  	//location attr 
 	  	if (selectedAttrId === 0) {
@@ -281,7 +282,7 @@ export class TestModelComponent implements OnInit {
 
   	//only allowed to have max 5 extra attributes 
   	//stop adding stop adding more atributes
-  	if(inputArray.length <= 5 ) {
+  	if(inputArray.length <= 4 ) {
   			
 	  	//location attr 
 	  	if (selectedAttrId === 0) {
@@ -301,16 +302,8 @@ export class TestModelComponent implements OnInit {
 	  		this.removeAttributeFromList("Label",attributeArray);
 	  	}
 
-	  	//type attr 
-	  	else if(selectedAttrId === 2) {
-	  		
-	  		inputArray.push({name:"Type",value:"", id:this.generateUUID()});
-	  		//remove label from list so they cant add it again
-	  		this.removeAttributeFromList("Type",attributeArray);
-	  	} 
-
 	  	//start time attr 
-	  	else if (selectedAttrId === 3) {
+	  	else if (selectedAttrId === 2) {
 	  		
 	  		inputArray.push({name:"Start Time",value:"", id:this.generateUUID()});
 	  		//remove type from list so they cant add it again
@@ -318,7 +311,7 @@ export class TestModelComponent implements OnInit {
 	  	}
 
 	  	//end time attr 
-	  	else if (selectedAttrId === 4) {
+	  	else if (selectedAttrId === 3) {
 	  		
 	  		inputArray.push({name:"End Time",value:"", id:this.generateUUID()});
 	  		//remove type from list so they cant add it again
@@ -389,12 +382,12 @@ export class TestModelComponent implements OnInit {
 	let titleIndex:number = this.getIndex("Title",inputArray);
 	let locationIndex:number = this.getIndex("Location",inputArray);
 	let labelIndex:number = this.getIndex("Label",inputArray);
-	let typeIndex:number = this.getIndex("Type",inputArray);
+	
 
 	let title:string;
 	let location:string;
 	let label:string;
-	let type:string;
+	
 
 	//keep a ref to entity so we can update its attributes
 	let entity  = this.doc.entity(name+":"+ name);
@@ -432,24 +425,6 @@ export class TestModelComponent implements OnInit {
 		 if (label !== "") {
 			
 			entity.attr("prov:label", [label]);
-		}
-	}
-
-	if(typeIndex !== -1) {
-
-		//todo: have a drop down box for users to select a prov type
-		// *** or they can click 'other' and define thir own -- will go for this option (custom type) and drag and drop 
-		// these will be two diff use cases 
-		// this is just for now till we implement the drag and drop 
-		// but we will still need the box their if they want to have thier own custom type 
-		// maybe give them the drop down and drag and drop option and in both cases they can create thier own custom types
-		// hard code type to Person for now till we decide // let user type in a type for now - has to be on of the inbuilt prov types
-		
-		// //set the type to the user's input
-		 type = inputArray[this.getIndex("Type",inputArray).toString()].value;
-		 if (type !== "") {
-			entity.attr(this.prov.ns.qn("type"), this.prov.ns.qn(type));
-
 		}
 	}
 	
@@ -553,6 +528,7 @@ export class TestModelComponent implements OnInit {
 		}
 	}
 
+	//only agents will have types
 	if(typeIndex !== -1) {
 
 		//todo: have a drop down box for users to select a prov type
@@ -563,10 +539,31 @@ export class TestModelComponent implements OnInit {
 		// maybe give them the drop down and drag and drop option and in both cases they can create thier own custom types
 		// hard code type to Person for now till we decide // let user type in a type for now - has to be on of the inbuilt prov types
 		
-		// //set the type to the user's input
+		//set the type to the user's input
 		 type = inputArray[this.getIndex("Type",inputArray).toString()].value;
 		 if (type !== "") {
-			agent.attr(this.prov.ns.qn("type"), this.prov.ns.qn(type));
+
+		 	//check which type user put/drug in 
+		 	if(type.toLowerCase() === "organisation")
+		 	{
+				agent.attr("prov:type", this.prov.ns.qn("Organization"));
+				// agent.attr("prov:type", this.prov.ns.Organization);
+		 	}
+		 	else if(type.toLowerCase() === "person")
+		 	{
+
+		 		agent.attr("prov:type", this.prov.ns.qn("Person"));
+		 	}
+		 	else if(type.toLowerCase() === "softwareagent")
+		 	{
+
+		 	 	agent.attr("prov:type", this.prov.ns.qn("SoftwareAgent"));
+		 	 	// agent.attr("prov:type", this.prov.ns.SoftwareAgent);
+		 	}
+		 	else
+		 	{
+		 		//todo:allert that this field does nt have a valid type
+		 	}
 
 		}
 	}
@@ -679,25 +676,6 @@ export class TestModelComponent implements OnInit {
 		 if (label !== "") {
 			
 			activity.attr("prov:label", [label]);
-		}
-	}
-
-	if(typeIndex !== -1) {
-
-		//todo: have a drop down box for users to select a prov type
-		// *** or they can click 'other' and define thir own -- will go for this option (custom type) and drag and drop 
-		// these will be two diff use cases 
-		// this is just for now till we implement the drag and drop 
-		// but we will still need the box their if they want to have thier own custom type 
-		// maybe give them the drop down and drag and drop option and in both cases they can create thier own custom types
-		// hard code type to Person for now till we decide // let user type in a type for now - has to be on of the inbuilt prov types
-		
-		// //set the type to the user's input
-		 type = inputArray[this.getIndex("Type",inputArray).toString()].value;
-		 if (type !== "") {
-
-			activity.attr(this.prov.ns.qn("type"), this.prov.ns.qn(type));
-
 		}
 	}
 	
@@ -1119,5 +1097,58 @@ setValues(name:string) {
 
 }
 
+draggedCar:any;
+selectedCars:any[]= ["jane"];
 
+
+// dragStart(event,ele) {
+//         this.draggedCar = ele;
+//     }
+    
+//     drop(event) {
+//         if(this.draggedCar) {
+//             this.selectedCars.push(this.draggedCar);
+//             // this.availableCars.splice(this.findIndex(this.draggedCar), 1);
+//             this.draggedCar = null;
+//         }
+//     }
+    
+//     dragEnd(event) {
+//         this.draggedCar = null;
+//     }
+    
+	selectedIcon:any;
+
+	dragStart(event,iconName) {
+        this.selectedIcon = iconName;
+    }
+    
+    drop(event) {
+        if(this.selectedIcon) {
+
+
+        	if(this.selectedIcon === "thing") {
+        		this.addThing();
+        	}
+        	else if(this.selectedIcon === "actor")
+        	{
+        		this.addActor();
+        	}
+        	//else event
+        	else {
+        		this.addEvent();
+        	}
+            //this.selectedCars.push(this.draggedCar);
+            // this.availableCars.splice(this.findIndex(this.draggedCar), 1);
+            this.selectedIcon = null;
+        }
+
+
+
+    }
+    
+    dragEnd(event) {
+        this.selectedIcon = null;
+    }
+    
 }

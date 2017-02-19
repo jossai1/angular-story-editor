@@ -68,3 +68,43 @@
 
     </fieldset>
 </div>
+
+
+<div style="float: left;
+    width: 300px;
+    height: 300px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black;" pDraggable="dd">Draggable 
+
+     <ul style="margin:0;padding:0" *ngFor="let ele of elementsOnCanvas" class="ui-state-default ui-helper-clearfix" pDraggable="ele.type"
+                    (onDragStart)="dragStart($event,ele.type)" (onDragEnd)="dragEnd($event)">
+                <li >
+
+                {{ele.type}}
+                    <!-- <i class="fa fa-arrows fa-2x" style="float:right;margin-top:8px"></i>
+                    <img src="showcase/resources/demo/images/car/{{car.brand}}.gif" style="float:left" draggable="false">
+                    <div style="margin:8px 0 0 8px;float:left">{{car.vin}} - {{car.year}}</div> -->
+                </li>
+            </ul>
+<i class="fa fa-file-text-o" aria-hidden="true"></i>
+
+</div>
+
+<br>
+
+<div style="float: left;
+    width: 300px;
+    height: 300px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black;" (onDrop)="drop($event)" pDroppable="dd">Droppable 
+<div [dragula]='"first-bag"'>
+    
+
+    <ul  *ngFor="let i of selectedCars">
+        <li>{{i}}</li>
+    </ul>
+    </div>
+        
+</div>

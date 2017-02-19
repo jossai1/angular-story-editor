@@ -76,7 +76,7 @@
             </div>
             <div [dragula]='"first-bag"'>
                 <fieldset *ngFor="let ele of elementsOnCanvas" [id]="ele.id">
-                    <legend><img class="canvas-icons" [src]="ele.src"></legend>
+                    <legend><img style="height:50px;width:50px" [src]="ele.src"></legend>
                     <input [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" />
                     <select [(ngModel)]="selectedOption" (ngModelChange)="processEleAttribute(selectedOption.id,ele.type,ele.inputArray,ele.attributeArray)">
                         <option selected disabled> Add an Attribute </option>

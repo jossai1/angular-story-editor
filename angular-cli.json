@@ -20,7 +20,8 @@
       "styles": [
         "styles.css",
         "../node_modules/primeng/resources/themes/omega/theme.css" ,
-        "../node_modules/primeng/resources/primeng.css"
+        "../node_modules/primeng/resources/primeng.css",
+        "node_modules/dragula/dist/dragula.css"
       ],
       "scripts": [],
       "environments": {

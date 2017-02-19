@@ -53,6 +53,13 @@ div.panel {
     transition: max-height 0.2s ease-out;
 }
 
+.canvas-icons
+{
+   opacity: 0.3;
+   width: 40px;
+   height: 40px;
+}
+
 /*.side-panel{
   height:800px;
   width:230px;
@@ -75,9 +82,10 @@ div.panel {
    overflow-y: scroll;*/
 }
 
-.well{
+.well {
   width:284px;
 }
+
 .sidebar-nav-fixed 
 {
   height: 950px;

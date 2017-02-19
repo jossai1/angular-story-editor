@@ -9,6 +9,12 @@ import { StoryEditorComponent } from './story-editor/story-editor.component';
 import { TestModelComponent } from './test-model/test-model.component';
 import { AccordionModule } from 'primeng/primeng';
 
+import { DragulaModule } from 'ng2-dragula';
+
+// temp testing 
+import { DragDropModule } from 'primeng/primeng';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,9 +24,11 @@ import { AccordionModule } from 'primeng/primeng';
   imports: [
     BrowserModule,
     AccordionModule,
+    DragDropModule,
     FormsModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
+    DragulaModule
   ],
   providers: [],
   bootstrap: [AppComponent]
