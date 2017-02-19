@@ -75,9 +75,9 @@
                 <input type="text" placeholder="Story title">
             </div>
             <div [dragula]='"first-bag"'>
-                <fieldset *ngFor="let ele of elementsOnCanvas" [id]="ele.id">
+                <fieldset class="fieldset" *ngFor="let ele of elementsOnCanvas" [id]="ele.id">
                     <legend><img class="canvas-icons" [src]="ele.src"></legend>
-                    <input [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" />
+                    <input type="text" [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" />
 
                     <!-- SHOW START/END SPEACIAL INPUT BOX IF CLICKED  -->
                     <!-- todo: when to date boxes get added one goes to second line -->
@@ -96,7 +96,10 @@
                     </select>
                     <!-- test to see if each box's input  is unique -->
                     <!-- <div>words: {{ele.inputArray | json}}</div> -->
-                    <button style="float:right" (click)="deleteElementFromCanvas(ele.id)"><img style="height:10px;width:10px" src="http://findicons.com/files/icons/557/creme/128/delete.png"></button>
+                   
+                   <!--  old delete button <button class="grey-out" style="float:right;background-color: transparent;" (click)="deleteElementFromCanvas(ele.id)"><img style="height:10px;width:10px" src="../../assets/images/trash.png"></button> -->
+                  <img  class="delete-icon grey-out" (click)="deleteElementFromCanvas(ele.id)"  src="../../assets/images/trash.png">
+
                 </fieldset>
             </div>
             <!-- elements will go here -->
