@@ -78,7 +78,19 @@
                 <fieldset *ngFor="let ele of elementsOnCanvas" [id]="ele.id">
                     <legend><img class="canvas-icons" [src]="ele.src"></legend>
                     <input [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" />
-                    <select [(ngModel)]="selectedOption" (ngModelChange)="processEleAttribute(selectedOption.id,ele.type,ele.inputArray,ele.attributeArray)">
+
+                    <!-- SHOW START/END SPEACIAL INPUT BOX IF CLICKED  -->
+                    <!-- todo: when to date boxes get added one goes to second line -->
+                    <span *ngIf="ele.startDateAdded && ele.type==='event'">
+                    <p-calendar  [(ngModel)]="ele.startDate" [showTime]="true" [showIcon]="true" ></p-calendar> 
+                    <p>{{startDate}}</p>
+                    </span>
+                    <span *ngIf="ele.endDateAdded && ele.type==='event'">
+                    <p-calendar  [(ngModel)]="ele.endDate" [showTime]="true" [showIcon]="true"></p-calendar> 
+                    <p>{{endDate}}</p>
+                    </span>
+
+                    <select [(ngModel)]="selectedOption" (ngModelChange)="processEleAttribute(selectedOption.id,ele.type,ele.inputArray,ele.attributeArray,ele)">
                         <option selected disabled> Add an Attribute </option>
                         <option *ngFor="let item of ele.attributeArray" [ngValue]="item">{{item.name}}</option>
                     </select>

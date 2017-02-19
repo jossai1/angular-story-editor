@@ -34,6 +34,17 @@ export class StoryEditorComponent implements OnInit {
   startEleId:string;
   endEleId:string;
 
+
+  //for bools used for ng if - for start and end time 
+  // they need special inputs so to add we will use an ngif 
+  startDateAdded:boolean =false;
+  endDateAdded:boolean=false;
+
+
+  //to store input from user 
+  startDate: Date;
+  endDate: Date;
+
   //a list that represents every element on the canvas 
   //grows dynamically 
   elementsOnCanvas:Array<Object> = [];
@@ -88,7 +99,7 @@ export class StoryEditorComponent implements OnInit {
   // which subsequently adds it to the canvas
   addEvent() {
 
-  	this.elementsOnCanvas.push({id:this.generateUUID(), prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(),startDate:null,endDate:null,startDateAdded:false,endDateAdded:false ,prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
   	
   }
 
@@ -140,7 +151,7 @@ export class StoryEditorComponent implements OnInit {
   // determine which type of element was clicked - so we can send it to appropriate method 
   // each element has diff types and numbers of attributes 
   // so we need to split this out into their own methods 
-  processEleAttribute(selectedAttrId, eleType, inputArray, attributeArray) {
+  processEleAttribute(selectedAttrId, eleType, inputArray, attributeArray,ele) {
 
   	// type thing
   	if(eleType === "thing") {
@@ -155,7 +166,7 @@ export class StoryEditorComponent implements OnInit {
 	
 	// type event 
 	else { 
-		this.addClickedAttToEventInput(selectedAttrId,inputArray,attributeArray);
+		this.addClickedAttToEventInput(selectedAttrId,inputArray,attributeArray,ele);
 	}  	
 
   }
@@ -277,7 +288,7 @@ export class StoryEditorComponent implements OnInit {
   }
 
    //add attribute to a event
-  addClickedAttToEventInput(selectedAttrId:number, inputArray, attributeArray) {
+  addClickedAttToEventInput(selectedAttrId:number, inputArray, attributeArray,ele) {
   	
   	console.log(selectedAttrId);
 
@@ -306,15 +317,27 @@ export class StoryEditorComponent implements OnInit {
 	  	//start time attr 
 	  	else if (selectedAttrId === 2) {
 	  		
-	  		inputArray.push({name:"Start Time",value:"", id:this.generateUUID()});
+	  		//user has added a start time so lets add a special input box for them 
+	  		//to do this we set the startDateAdded var to true 
+	  		// which will make it appear using ngif 
+
+	  		ele.startDateAdded = true;
+	  		
+	  		//inputArray.push({name:"Start Time",value:"", id:this.generateUUID()});
 	  		//remove type from list so they cant add it again
 	  		this.removeAttributeFromList("Start Time",attributeArray);
 	  	}
 
 	  	//end time attr 
 	  	else if (selectedAttrId === 3) {
+
+	  		//user has added a start time so lets add a special input box for them 
+	  		//to do this we set the startDateAdded var to true 
+	  		// which will make it appear using ngif 
+
+	  		ele.endDateAdded = true;
 	  		
-	  		inputArray.push({name:"End Time",value:"", id:this.generateUUID()});
+	  		//inputArray.push({name:"End Time",value:"", id:this.generateUUID()});
 	  		//remove type from list so they cant add it again
 	  		this.removeAttributeFromList("End Time",attributeArray);
 	  	}
@@ -618,14 +641,16 @@ export class StoryEditorComponent implements OnInit {
 	let locationIndex:number = this.getIndex("Location",inputArray);
 	let labelIndex:number = this.getIndex("Label",inputArray);
 	let typeIndex:number = this.getIndex("Type",inputArray);
-	let startTimeIndex:number = this.getIndex("Start Time",inputArray);
-	let endTimeIndex:number = this.getIndex("End Time",inputArray);
+
+	//not being added to input array - remove?
+	// let startTimeIndex:number = this.getIndex("Start Time",inputArray);
+	// let endTimeIndex:number = this.getIndex("End Time",inputArray);
 
 	let location:string;
 	let label:string;
 	let type:string;
-	let startTime:string;
-	let endTime:string; 
+	let startDate:string;
+	let endDate:string; 
 
 	//keep a ref to activity so we can update its attributes
 	let activity  = this.doc.activity(name+":"+ name);
@@ -641,24 +666,22 @@ export class StoryEditorComponent implements OnInit {
 	
 	//TODO:STORT OUT TIME FORMATTING FOR USERS 
 	//MAKE IT EASIER 
-	if(startTimeIndex !== -1) {
+	if(event.startDate !== null) {
 		//set the title to the user's input
-		 startTime = inputArray[this.getIndex("Start Time",inputArray).toString()].value;
+		console.log("startdate added", event.startDate.toISOString());
+		startDate = event.startDate.toISOString();
 
-		if (startTime !== "") {
-
-			//activity("foaf:givenName", startTimeIndex);
-		}
+		// activity("startTimee", event.startDate.toISOString());
+		
 	}
 
-	if(endTimeIndex !== -1){
+	if(event.endDate !== null){
 		//set the title to the user's input
-		 startTime = inputArray[this.getIndex("End Time",inputArray).toString()].value;
 		 
-		if (startTime !== "") {
+		console.log("endDate added", event.endDate.toISOString());
+		endDate = event.endDate.toISOString();
 
-			//activity.attr("foaf:mbox", "<"+email+">");
-		}
+		// activity.attr("endTime", event.endDate.toISOString());
 	}
 
 	if(locationIndex !== -1){
@@ -680,7 +703,7 @@ export class StoryEditorComponent implements OnInit {
 		}
 	}
 	
-	this.doc.activity(name+":"+ name,startTime,endTime)
+	this.doc.activity(name+":"+ name,startDate,endDate);
 	// console.log(this.getDoc());
 	// console.log(JSON.stringify(this.getProvJSON(), null, "  "));
 

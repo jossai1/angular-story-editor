@@ -13,6 +13,7 @@ import { DragulaModule } from 'ng2-dragula';
 
 // temp testing 
 import { DragDropModule } from 'primeng/primeng';
+import { CalendarModule } from 'primeng/primeng';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { DragDropModule } from 'primeng/primeng';
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    DragulaModule
+    DragulaModule,
+    CalendarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
