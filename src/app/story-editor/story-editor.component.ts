@@ -1,24 +1,31 @@
-import { Component, OnInit, SimpleChange } from '@angular/core';
-
+import { Component, OnInit, SimpleChange, ElementRef } from '@angular/core';
+import { ConfirmationService } from 'primeng/primeng';
 
 interface attribute {
   name: string,
   id:number
 }
 
-
 @Component({
   selector: 'app-story-editor',
   templateUrl: './story-editor.component.html', 
-  styleUrls: ['./story-editor.component.css']
+  styleUrls: ['./story-editor.component.css'],
+  providers: [ConfirmationService]
 })
 export class StoryEditorComponent implements OnInit {
 
  
-  constructor() { }
+  //constructor() { }
+
+  constructor(private confirmationService: ConfirmationService) {}
+
+    
+ 
 
   prov:any = require('../../../provjs/prov');
   doc:any =  this.prov.document();
+  provstore:any = require('../../../provjs/provstore');
+ 
 
   ex = this.doc.addNamespace("ex", "http://www.example.org#");
   dcterms = this.doc.addNamespace("dcterms", "http://purl.org/dc/terms/");
@@ -28,18 +35,18 @@ export class StoryEditorComponent implements OnInit {
   name:string="";
   location:string="";
   label:string="";
-  title:string="";
+  storyTitle:string="";
 
   //for pairings
   startEleId:string;
   endEleId:string;
 
+  storyUrl:string; //url to prov store 
 
   //for bools used for ng if - for start and end time 
   // they need special inputs so to add we will use an ngif 
   startDateAdded:boolean =false;
   endDateAdded:boolean=false;
-
 
   //to store input from user 
   startDate: Date;
@@ -76,13 +83,59 @@ export class StoryEditorComponent implements OnInit {
   	//test to see if doc is loaded 
 
   	///add some elemens initially to the element - for ease of testing
-  	this.addThing();
-  	this.addActor();
-  	this.addEvent();
-  	console.log(this.doc);
+  	// this.addThing();
+  	// this.addActor();
+  	// this.addEvent();
+  	// console.log(this.doc);
 
   }
+ 
 
+ // need to add in jquer y to use these funcs
+ currFFZoom:number = 1;
+ currIEZoom:number = 100;
+  zoomIn()
+  {
+  	// if (this.jquery.browser.mozilla){
+   //          var step = 0.02;
+   //          this.currFFZoom += step; 
+   //         this.jquery('body').css('MozTransform','scale(' + this.currFFZoom + ')');
+   //      } else {
+   //          var step = 2;
+   //          this.currIEZoom += step;
+   //          this.jquery('body').css('zoom', ' ' + this.currIEZoom + '%');
+   //      }
+  }
+
+  zoomOut()
+  {
+
+  	  // if (jquery.browser.mozilla){
+     //        var step = 0.02;
+     //        this.currFFZoom -= step;                 
+     //       jquery('body').css('MozTransform','scale(' + this.currFFZoom + ')');
+
+     //    } else {
+     //        var step = 2;
+     //        this.currIEZoom -= step;
+     //        jquery('body').css('zoom', ' ' + this.currIEZoom + '%');
+     //    }
+  }
+
+
+confirm(storyUrl) {
+        this.confirmationService.confirm({
+            message: "Your story has been created!\
+             If you click 'Yes' you will be redirected to the ProvStore to view the PROV Document.\
+             \
+             \
+             If you wish to stay, here's the link: " + storyUrl +
+             "\ you can visit in your own time.",
+            accept: () => {
+                //Actual logic to perform a confirmation
+            }
+        });
+    }
   setNameSpace(){
   	// Prefix declarations
   }
@@ -961,12 +1014,48 @@ export class StoryEditorComponent implements OnInit {
   	this.process();
   	console.log(this.getDoc());
 	console.log(JSON.stringify(this.getProvJSON(), null, "  "));
+	let storyUrl:string = "";
+	let store = new this.provstore (
+    'https://provenance.ecs.soton.ac.uk/store/api/v0/',
+    'jossai1',
+    'ead7d3d3e18845a807ab18af501805e05f7169eb'
+	);
+
+	// do check here to see if storytitle is empty - if empty -> error message
+	 store.submitDocument(this.storyTitle, this.getProvJSON(), true,
+                    function(new_document_id) {
+                    	
+                    	//not working - url is empty as the new_doc id is not being set by provestore - stupid
+                    	let docUrl = "https://provenance.ecs.soton.ac.uk/store/documents/" + new_document_id;
+
+                    	storyUrl = docUrl;
+                    	console.log(new_document_id);
+                    	
+          
+                        //show dialog 
+                        //loadFromProvStore((new_document_id));
+                    },
+                    function(error) {
+                    	//show dialog saying something went wrong ? or leave out?
+                        console.error(error);
+                    }
+            );
+
+	  setTimeout(() => {
+          this.confirm(storyUrl);
+          
+        }, 500);
+
   }
+
+
 
   clear() {
   	//only removes elements put the namespace is still there :(
   	this.doc = this.prov.document();
   	this.elementsOnCanvas = [];
+  	this.storyTitle = "";
+  	this.storyUrl = "";
   }
 
   // old
@@ -1102,21 +1191,21 @@ addPair(startEleId:string,endEleId:string) {
 
 
 setValues(name:string) {
-	if(name === "title"){
-		this.title = name;
-	}
-	else if(name === "url"){
-		this.url = name;
-	}
-	else if(name === "name"){
-		this.name = name;
-	}
-	else if(name === "label"){
-		this.label = name;
-	}
-	else {
-		this.location = name;
-	}
+	// if(name === "title"){
+	// 	this.title = name;
+	// }
+	// else if(name === "url"){
+	// 	this.url = name;
+	// }
+	// else if(name === "name"){
+	// 	this.name = name;
+	// }
+	// else if(name === "label"){
+	// 	this.label = name;
+	// }
+	// else {
+	// 	this.location = name;
+	// }
 
 
 }

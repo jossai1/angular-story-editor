@@ -1,0 +1,21 @@
+div.middle {
+    /*width: 780px;*/
+   /* height: 230px;
+    margin-top: 2%;
+    text-align: center;
+    background-color: blue;*/
+    /*border-radius: 53px;
+    border-style: dashed;*/
+    display: table;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15%;   /*centers vertically*/
+}
+
+.middle-text {
+    text-align: center;
+}
+
+.grey {
+    color: grey;
+}

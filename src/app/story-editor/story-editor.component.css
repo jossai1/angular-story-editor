@@ -16,6 +16,32 @@
     border-bottom: 1px solid #C8C8C8;
 }
 
+div.traced-sign {
+    /*width: 780px;*/
+   /* height: 230px;
+    margin-top: 2%;
+    text-align: center;
+    background-color: blue;*/
+    border-radius: 53px;
+    border-style: dashed;
+    display: table;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15%;   /*centers vertically*/
+}
+
+p.middle-text {
+    width: 780px;
+    height: 230px;
+    display: table-cell;
+    vertical-align: middle;
+    font-family: roboto;
+    font-weight: bold;
+    text-align: center;
+    font-size: 41px;
+    text-decoration: none;
+}
+
 button.accordion {
     background-color: #eee;
     color: #444;

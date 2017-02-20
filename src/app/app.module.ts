@@ -14,13 +14,16 @@ import { DragulaModule } from 'ng2-dragula';
 // temp testing 
 import { DragDropModule } from 'primeng/primeng';
 import { CalendarModule } from 'primeng/primeng';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { ConfirmDialogModule } from 'primeng/primeng';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     StoryEditorComponent,
-    TestModelComponent
+    TestModelComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +33,8 @@ import { CalendarModule } from 'primeng/primeng';
     HttpModule,
     AppRoutingModule,
     DragulaModule,
-    CalendarModule
+    CalendarModule,
+    ConfirmDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

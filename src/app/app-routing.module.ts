@@ -3,10 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { StoryEditorComponent }   from './story-editor/story-editor.component';
 import { TestModelComponent } from './test-model/test-model.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/story-editor', pathMatch: 'full' },
   { path: 'story-editor',  component: StoryEditorComponent },
+  { path: 'welcome',  component: WelcomeComponent },
   { path: 'test-model', component: TestModelComponent }
 ];
 
