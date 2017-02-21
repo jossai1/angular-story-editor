@@ -1,5 +1,8 @@
 import { Component, OnInit, SimpleChange, ElementRef } from '@angular/core';
 import { ConfirmationService } from 'primeng/primeng';
+import { Headers, Http, RequestOptions, Response } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
+
 
 interface attribute {
   name: string,
@@ -17,7 +20,7 @@ export class StoryEditorComponent implements OnInit {
  
   //constructor() { }
 
-  constructor(private confirmationService: ConfirmationService) {}
+  constructor(private confirmationService: ConfirmationService,private http: Http) {}
 
     
  
@@ -41,7 +44,12 @@ export class StoryEditorComponent implements OnInit {
   startEleId:string;
   endEleId:string;
 
-  storyUrl:string; //url to prov store 
+  storyUrl:string; //url to prov store
+  private provStoreUrl = 'https://provenance.ecs.soton.ac.uk/store/api/v0/documents/';
+  //respponse returned from provstore -> json obj that contains id to doc,
+  provStoreResponse:any;
+  error:any;
+
 
   //for bools used for ng if - for start and end time 
   // they need special inputs so to add we will use an ngif 
@@ -121,18 +129,17 @@ export class StoryEditorComponent implements OnInit {
      //        jquery('body').css('zoom', ' ' + this.currIEZoom + '%');
      //    }
   }
+         // " Copy the document's link below: \r
 
-
-confirm(storyUrl) {
+confirm() {
         this.confirmationService.confirm({
-            message: "Your story has been created!\
-             If you click 'Yes' you will be redirected to the ProvStore to view the PROV Document.\
-             \
-             \
-             If you wish to stay, here's the link: " + storyUrl +
-             "\ you can visit in your own time.",
+            message: " Your story has been created! \r" +
+             " Click 'Yes' to visit the document in the ProvStore \r" +
+             " OR Copy the document's link below: \r" + 
+             this.storyUrl,
             accept: () => {
-                //Actual logic to perform a confirmation
+            	 //Actual logic to perform a confirmation
+                window.location.href = this.storyUrl;
             }
         });
     }
@@ -1014,44 +1021,56 @@ confirm(storyUrl) {
   	this.process();
   	console.log(this.getDoc());
 	console.log(JSON.stringify(this.getProvJSON(), null, "  "));
-	let storyUrl:string = "";
-	let store = new this.provstore (
-    'https://provenance.ecs.soton.ac.uk/store/api/v0/',
-    'jossai1',
-    'ead7d3d3e18845a807ab18af501805e05f7169eb'
-	);
 
-	// do check here to see if storytitle is empty - if empty -> error message
-	 store.submitDocument(this.storyTitle, this.getProvJSON(), true,
-                    function(new_document_id) {
-                    	
-                    	//not working - url is empty as the new_doc id is not being set by provestore - stupid
-                    	let docUrl = "https://provenance.ecs.soton.ac.uk/store/documents/" + new_document_id;
+	this.saveToStore()
+        .then(response => this.provStoreResponse = response)
+        .catch(error => this.error = error);
 
-                    	storyUrl = docUrl;
-                    	console.log(new_document_id);
-                    	
+        //check that provstoreresponse is not undefines
+        setTimeout(() => {
+        	console.log(this.provStoreResponse);
+        	console.log(this.provStoreResponse.id);
+        	let docID = this.provStoreResponse.id;
+        	
+        	//set story url
+        	//do check here to see if storytitle is empty - if empty -> error message 
+        	this.storyUrl = "https://provenance.ecs.soton.ac.uk/store/documents/" + docID;
+          	this.confirm();
           
-                        //show dialog 
-                        //loadFromProvStore((new_document_id));
-                    },
-                    function(error) {
-                    	//show dialog saying something went wrong ? or leave out?
-                        console.error(error);
-                    }
-            );
+        }, 1000);
+  }
 
-	  setTimeout(() => {
-          this.confirm(storyUrl);
-          
-        }, 500);
+  saveToStore (): Promise<any> {
 
+  	console.log('its nkechi here again!!!');
+
+  	//do check here to see if storytitle is empty - if empty -> error message 
+  	///do other checks on content
+	let body = JSON.stringify({"content":this.getProvJSON(),"public":true,"rec_id":this.storyTitle});
+
+	//set required headers ..cf /help/api
+	let headers = new Headers({ 'Content-Type': 'application/json' });
+	headers.append('Authorization','ApiKey jossai1:ead7d3d3e18845a807ab18af501805e05f7169eb');
+	headers.append('Accept','application/json');
+	let options = new RequestOptions({ headers: headers });
+
+	return this.http.post(this.provStoreUrl, body, options)
+	      .toPromise() 
+	      .then(response => response.json())
+	      .catch(this.handleError);
+  }
+
+
+ private handleError(error: any) {
+     console.error('An error occurred', error);
+     return Promise.reject(error.message || error);
   }
 
 
 
   clear() {
   	//only removes elements put the namespace is still there :(
+  	//reset erthang !
   	this.doc = this.prov.document();
   	this.elementsOnCanvas = [];
   	this.storyTitle = "";
@@ -1075,6 +1094,7 @@ confirm(storyUrl) {
 
   // }
 
+  
 
 
   //remove an given attribute from a given attribute arrasy 
