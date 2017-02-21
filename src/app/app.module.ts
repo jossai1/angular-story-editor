@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -16,6 +16,8 @@ import { DragDropModule } from 'primeng/primeng';
 import { CalendarModule } from 'primeng/primeng';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ConfirmDialogModule } from 'primeng/primeng';
+import { MaterialModule } from '@angular/material';
+import { OverlayPanelModule } from 'primeng/primeng';
 
 
 @NgModule({
@@ -30,11 +32,14 @@ import { ConfirmDialogModule } from 'primeng/primeng';
     AccordionModule,
     DragDropModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     AppRoutingModule,
     DragulaModule,
     CalendarModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    MaterialModule,
+    OverlayPanelModule
   ],
   providers: [],
   bootstrap: [AppComponent]

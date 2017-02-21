@@ -1,4 +1,7 @@
 import { Component, OnInit,SimpleChange} from '@angular/core';
+import { EmbedlyService } from '../services/embedly-service.service';
+import 'rxjs/add/operator/toPromise';
+
 
 interface attribute {
   name: string,
@@ -8,13 +11,14 @@ interface attribute {
 @Component({
   selector: 'app-test-model',
   templateUrl: './ui-test.html', //swap to test-compomnent.html for model test 
-  styleUrls: ['./test-model.component.css']
+  styleUrls: ['./test-model.component.css'],
+  providers: [ EmbedlyService ]
 })
 
 
 export class TestModelComponent implements OnInit {
 
-  constructor() { }
+  constructor(private embedlyService: EmbedlyService) { }
 
   prov:any = require('../../../provjs/prov');
   doc:any =  this.prov.document();
@@ -60,6 +64,11 @@ export class TestModelComponent implements OnInit {
   // users add more inputs by selecting from a list of atributes - used for a single thing for now 
   inputArray: Array<Object> = [{name:"url",value:"",id:"0"}];
 
+  //temp varriable
+  embedlyResponse:any;
+  error:any;
+
+
   ngOnInit() {
   	//test to see if doc is loaded 
 
@@ -68,7 +77,17 @@ export class TestModelComponent implements OnInit {
   	this.addActor();
   	this.addEvent();
   	console.log(this.doc);
+ 
+  	this.embedlyService
+  		.getUrlSummary("http://www.youtube.com/watch?v=Zk7dDekYej0")
+        .then(response => this.embedlyResponse = response)
+        .catch(error => this.error = error);
 
+        //check that provstoreresponse is not undefines
+        setTimeout(() => {
+        	console.log(this.embedlyResponse);
+          
+        }, 1000);
   }
 
   setNameSpace(){

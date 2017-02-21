@@ -173,7 +173,7 @@ div.panel {
  }
 
 fieldset {
-  margin: 2%;
+ /* margin: 2%; *//*remove for now as the overlay panel is already big enough adding this makes it too bug*/
   display: block;
   padding-top: 0.35em;
   padding-bottom: 0.625em;

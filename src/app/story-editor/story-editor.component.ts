@@ -2,6 +2,8 @@ import { Component, OnInit, SimpleChange, ElementRef } from '@angular/core';
 import { ConfirmationService } from 'primeng/primeng';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
+import { EmbedlyService } from '../services/embedly-service.service';
+import 'rxjs/add/operator/toPromise';
 
 
 interface attribute {
@@ -13,14 +15,14 @@ interface attribute {
   selector: 'app-story-editor',
   templateUrl: './story-editor.component.html', 
   styleUrls: ['./story-editor.component.css'],
-  providers: [ConfirmationService]
+  providers: [ConfirmationService, EmbedlyService]
 })
 export class StoryEditorComponent implements OnInit {
 
  
   //constructor() { }
 
-  constructor(private confirmationService: ConfirmationService,private http: Http) {}
+  constructor(private confirmationService: ConfirmationService,private http: Http, private embedlyService: EmbedlyService) {}
 
     
  
@@ -151,7 +153,7 @@ confirm() {
   // which subsequently adds it to the canvas
   addActor() {
 
-  	this.elementsOnCanvas.push({id:this.generateUUID(), prefixSuffix:"", src:"../../assets/images/actor-icon2.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given Name",id:3},{name:"E-mail",id:4}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(),  urlSummary:{img:"../../assets/images/actor-icon2.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/actor-icon2.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given Name",id:3},{name:"E-mail",id:4}]});
 
   }
 
@@ -159,7 +161,7 @@ confirm() {
   // which subsequently adds it to the canvas
   addEvent() {
 
-  	this.elementsOnCanvas.push({id:this.generateUUID(),startDate:null,endDate:null,startDateAdded:false,endDateAdded:false ,prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(),startDate:null,endDate:null,startDateAdded:false,endDateAdded:false ,   urlSummary:{img:"../../assets/images/event64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
   	
   }
 
@@ -167,7 +169,7 @@ confirm() {
   // which subsequently adds it to the canvas
   addThing() { 
   	
-  	this.elementsOnCanvas.push({id:this.generateUUID(), prefixSuffix:"", src:"../../assets/images/document64.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(),  urlSummary:{img:"../../assets/images/document64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/document64.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2}]});
 
   }
 
@@ -1061,11 +1063,112 @@ confirm() {
   }
 
 
+ //temp? 
+ //contains embedly response data 
+ embedlyResponse:any;
+
  private handleError(error: any) {
      console.error('An error occurred', error);
      return Promise.reject(error.message || error);
   }
 
+//check when url value changes 
+valuechange(newValue,inputName,inputValue,ele) {
+
+	// console.log(newValue);
+	// console.log(inputValue);
+	// console.log(inputName);
+
+	// let response;
+	// //check if url is empty 
+	
+	// //only care about url changing 
+	// if(inputName === "URL"){
+		
+	// 	if(inputValue !== "") {
+
+	// 		//wait a bit 
+
+	// 		setTimeout(() => {
+
+ //        	response = this.getUrlSummary(inputValue);
+
+
+ //        	setTimeout(() => {
+ //         	//once geturlsummry is done (above) 
+ //         	//we wait then we set the elements stuff 
+
+ //         	//check for null or undefined or empty -> truthy
+
+ //         	if(response.description !== null ) {
+ //         		ele.urlSummary.desc = response.description;
+ //         	}
+ //         	else{
+ //         		ele.urlSummary.desc = "no description";
+ //         	}
+
+ //         	// if(response.url){
+ //         	// 	ele.url = response.url;
+ //         	// }
+ //         	// else{
+ //         	// 	ele.url = "";
+ //         	// }
+
+ //         	// if(response.title){
+ //         	// 	ele.title = response.title;
+ //         	// }
+ //         	// else{
+ //         	// 	ele.title = "no title";
+ //         	// }
+
+ //         	// if(response.provider_url){
+ //         	// 	ele.providerUrl = response.provider_url;
+ //         	// }
+ //         	// else {
+ //         	// 	ele.providerUrl = "";
+ //         	// }
+
+ //         	// if(response.images["0"] !== undefined) {
+
+ //         	// 	if(response.images["0"].url) {
+ //         	// 		ele.img = response.images["0"].url;
+ //         	// 	}
+	//          // 	else {
+	//          // 		//todo:assing/give a blank image
+	//          // 		ele.img = "";
+	//          // 	}
+         	
+ //         	// }
+         	
+         	
+ //        }, 2500);
+        	
+          
+ //        }, 5000);
+			
+	// 	}
+		
+	// }
+
+}
+
+
+  //takes a url 
+  //returns all the relvant summary data in an array
+  getUrlSummary (url:string): any {
+  		let response = "";
+  		this.embedlyService
+  		.getUrlSummary(url)
+        .then(res => response = res)
+        .catch(error => this.error = error);
+
+        //check that provstoreresponse is not undefines
+        setTimeout(() => {
+        	console.log(response);
+          
+        }, 2000);
+    return response;
+  }
 
 
   clear() {

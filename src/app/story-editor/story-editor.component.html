@@ -63,12 +63,10 @@
       <li><a href="#">Link</a></li>
       <li><a href="#">Link</a></li>
     </ul> -->
-        <button class="btn btn-success navbar-btn"  (click)="clear()" >New Story</button>
+        <button class="btn btn-success navbar-btn" (click)="clear()">New Story</button>
         <button style="float:right;" class="btn btn-default navbar-btn" (click)="export()">Export</button>
-
         <button style="" class="btn btn-default navbar-btn" (click)="zoomIn()">zoom in</button>
         <button style="" class="btn btn-default navbar-btn" (click)="zoomOut()">zoom out</button>
-
         <button style="float:right;" class="btn btn-info navbar-btn">Help</button>
     </div>
 </nav>
@@ -78,44 +76,64 @@
             <div class="story-title">
                 <input [(ngModel)]="storyTitle" type="text" placeholder="Story title">
             </div>
-
             <!-- / boolean to see if we should show the 'drag and drop story...' sign //only show if canvas is blank /i.e canvas array  is empty -->
             <div *ngIf="elementsOnCanvas.length === 0" class="traced-sign  grey-out">
                 <p class="middle-text grey-out">
                     Drag and drop Story Elements here
                 </p>
             </div>
-            <div [dragula]='"first-bag"'>
-                <fieldset class="fieldset" *ngFor="let ele of elementsOnCanvas" [id]="ele.id">
-                    <legend><img class="canvas-icons" [src]="ele.src"></legend>
-                    <input type="text" [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" />
-                    <!-- SHOW START/END SPEACIAL INPUT BOX IF CLICKED  -->
-                    <!-- todo: when to date boxes get added one goes to second line -->
-                    <span *ngIf="ele.startDateAdded && ele.type==='event'">
+            <!--  <div [dragula]='"first-bag"'> -->
+            <div style="margin:2%;width:100px" class="fieldset" *ngFor="let ele of elementsOnCanvas" [id]="ele.id">
+                <!-- stiuff from url will go here -->
+                <md-card (dblclick)="op2.show($event)" style="width:200px">
+                   <!--  <img style="width:20px;height: 20px" [src]="ele.src" md-card-sm-image> -->
+                   <img style="width:20px;height: 20px" class="canvas-icons" [src]="ele.urlSummary.img" md-card-avatar>
+                    <!-- <img class="canvas-icons" [src]="ele.src" md-card-avatar>
+                        <md-card-title>Shiba Inu</md-card-title>
+                        <md-card-subtitle>Dog Breed</md-card-subtitle>-->
+                    
+                        <md-card-title style="font-size:15px" >{{ele.urlSummary.title}}</md-card-title>
+                        <md-card-subtitle style="font-size:10px;font-weight: ">{{ele.urlSummary.desc}}</md-card-subtitle>
+                        <md-card-content> 
+                           <!--  <img [src]="ele.urlSummary.img">  --> 
+                            <a [href]="ele.urlSummary.url"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                        </md-card-content> 
+                   
+                </md-card>
+                <p-overlayPanel #op2 [showCloseIcon]="true" [dismissable]="true">
+                    <fieldset>
+                        <legend><img class="canvas-icons" [src]="ele.src"></legend>
+                        <input type="text" [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" (ngModelChange)="valuechange($event,input.name,input.value,ele)"/>
+                        <!-- SHOW START/END SPEACIAL INPUT BOX IF CLICKED  -->
+                        <!-- todo: when to date boxes get added one goes to second line -->
+                        <span *ngIf="ele.startDateAdded && ele.type==='event'">
                     <p-calendar  [(ngModel)]="ele.startDate" [showTime]="true" [showIcon]="true" ></p-calendar> 
                     <p>{{startDate}}</p>
                     </span>
-                    <span *ngIf="ele.endDateAdded && ele.type==='event'">
+                        <span *ngIf="ele.endDateAdded && ele.type==='event'">
                     <p-calendar  [(ngModel)]="ele.endDate" [showTime]="true" [showIcon]="true"></p-calendar> 
                     <p>{{endDate}}</p>
                     </span>
-                    <select [(ngModel)]="selectedOption" (ngModelChange)="processEleAttribute(selectedOption.id,ele.type,ele.inputArray,ele.attributeArray,ele)">
-                        <option selected disabled> Add an Attribute </option>
-                        <option *ngFor="let item of ele.attributeArray" [ngValue]="item">{{item.name}}</option>
-                    </select>
-                    <!-- test to see if each box's input  is unique -->
-                    <!-- <div>words: {{ele.inputArray | json}}</div> -->
-                    <!--  old delete button <button class="grey-out" style="float:right;background-color: transparent;" (click)="deleteElementFromCanvas(ele.id)"><img style="height:10px;width:10px" src="../../assets/images/trash.png"></button> -->
-                    <img class="delete-icon grey-out" (click)="deleteElementFromCanvas(ele.id)" src="../../assets/images/trash.png">
-                </fieldset>
+                        <select [(ngModel)]="selectedOption" (ngModelChange)="processEleAttribute(selectedOption.id,ele.type,ele.inputArray,ele.attributeArray,ele)">
+                            <option selected disabled> Add an Attribute </option>
+                            <option *ngFor="let item of ele.attributeArray" [ngValue]="item">{{item.name}}</option>
+                        </select>
+                        <!-- test to see if each box's input  is unique -->
+                        <!-- <div>words: {{ele.inputArray | json}}</div> -->
+                        <!--  old delete button <button class="grey-out" style="float:right;background-color: transparent;" (click)="deleteElementFromCanvas(ele.id)"><img style="height:10px;width:10px" src="../../assets/images/trash.png"></button> -->
+                        <img class="delete-icon grey-out" (click)="deleteElementFromCanvas(ele.id)" src="../../assets/images/trash.png">
+                    </fieldset>
+                </p-overlayPanel>
             </div>
+            <!-- </div> -->
             <!-- elements will go here -->
         </div>
         <div class="col-sm-3">
             <div class="sidebar-nav-fixed pull-right affix">
-                <div class="well" pDraggable="dd">
+                <div class="well">
+                    <!-- removed from well pDraggable="dd"-->
                     <!-- <h3></h3> -->
-                    <p-accordion [multiple]="true">
+                    <p-accordion pDraggable="dd" [multiple]="true">
                         <p-accordionTab header="Story Elements" [selected]="true">
                             <div class="story-elements">
                                 <img pDraggable="thing" (onDragStart)="dragStart($event,'thing')" (onDragEnd)="dragEnd($event)" draggable="true" class="spacing" src="../../assets/images/document64.png">
@@ -145,4 +163,4 @@
             </div>
         </div>
     </div>
-<p-confirmDialog  header="Do you wish to leave this page ?" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+    <p-confirmDialog header="Do you wish to leave this page ?" icon="fa fa-question-circle" width="425"></p-confirmDialog>
