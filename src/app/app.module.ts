@@ -7,17 +7,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoryEditorComponent } from './story-editor/story-editor.component';
 import { TestModelComponent } from './test-model/test-model.component';
-import { AccordionModule } from 'primeng/primeng';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 import { DragulaModule } from 'ng2-dragula';
 
 // temp testing 
-import { DragDropModule } from 'primeng/primeng';
-import { CalendarModule } from 'primeng/primeng';
-import { WelcomeComponent } from './welcome/welcome.component';
-import { ConfirmDialogModule } from 'primeng/primeng';
+import { DragDropModule, DropdownModule, OverlayPanelModule, CalendarModule, AccordionModule, ConfirmDialogModule } from 'primeng/primeng';
+
 import { MaterialModule } from '@angular/material';
-import { OverlayPanelModule } from 'primeng/primeng';
+
 
 
 @NgModule({
@@ -39,7 +37,8 @@ import { OverlayPanelModule } from 'primeng/primeng';
     CalendarModule,
     ConfirmDialogModule,
     MaterialModule,
-    OverlayPanelModule
+    OverlayPanelModule,
+    DropdownModule
   ],
   providers: [],
   bootstrap: [AppComponent]

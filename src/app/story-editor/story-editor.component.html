@@ -103,7 +103,7 @@
                 <p-overlayPanel #op2 [showCloseIcon]="true" [dismissable]="true">
                     <fieldset>
                         <legend><img class="canvas-icons" [src]="ele.src"></legend>
-                        <input type="text" [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" (ngModelChange)="valuechange($event,input.name,input.value,ele)"/>
+                        <input size="25" pInputText type="text" [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" (ngModelChange)="valuechange($event,input.name,input.value,ele)"/>
                         <!-- SHOW START/END SPEACIAL INPUT BOX IF CLICKED  -->
                         <!-- todo: when to date boxes get added one goes to second line -->
                         <span *ngIf="ele.startDateAdded && ele.type==='event'">
@@ -118,6 +118,8 @@
                             <option selected disabled> Add an Attribute </option>
                             <option *ngFor="let item of ele.attributeArray" [ngValue]="item">{{item.name}}</option>
                         </select>
+                       <!--  <p-dropdown [options]="ele.attributeArray" [(ngModel)]="selectedOption"></p-dropdown> -->
+
                         <!-- test to see if each box's input  is unique -->
                         <!-- <div>words: {{ele.inputArray | json}}</div> -->
                         <!--  old delete button <button class="grey-out" style="float:right;background-color: transparent;" (click)="deleteElementFromCanvas(ele.id)"><img style="height:10px;width:10px" src="../../assets/images/trash.png"></button> -->
@@ -136,9 +138,9 @@
                     <p-accordion pDraggable="dd" [multiple]="true">
                         <p-accordionTab header="Story Elements" [selected]="true">
                             <div class="story-elements">
-                                <img pDraggable="thing" (onDragStart)="dragStart($event,'thing')" (onDragEnd)="dragEnd($event)" draggable="true" class="spacing" src="../../assets/images/document64.png">
-                                <img pDraggable="event" (onDragStart)="dragStart($event,'event')" (onDragEnd)="dragEnd($event)" draggable="true" class="spacing" src="../../assets/images/event64.png">
-                                <img pDraggable="actor" (onDragStart)="dragStart($event,'actor')" (onDragEnd)="dragEnd($event)" draggable="true" style="width: 64px; height: 54px;" class="spacing" src="../../assets/images/actor-icon2.png">
+                                <img  title="Thing (e.g. document, webpage, chart)" pDraggable="thing" (onDragStart)="dragStart($event,'thing')" (onDragEnd)="dragEnd($event)" draggable="true" class="spacing" src="../../assets/images/document64.png">
+                                <img  title="Event (e.g. inaguration, meeting, conference)" align=" " pDraggable="event" (onDragStart)="dragStart($event,'event')" (onDragEnd)="dragEnd($event)" draggable="true" class="spacing" src="../../assets/images/event64.png">
+                                <img  title="Actor (e.g. organisation, person)"  pDraggable="actor" (onDragStart)="dragStart($event,'actor')" (onDragEnd)="dragEnd($event)" draggable="true" style="width: 64px; height: 54px;" class="spacing" src="../../assets/images/actor-icon2.png">
                             </div>
                         </p-accordionTab>
                         <p-accordionTab header="Labels" [selected]="true">

@@ -1030,14 +1030,21 @@ confirm() {
 
         //check that provstoreresponse is not undefines
         setTimeout(() => {
-        	console.log(this.provStoreResponse);
-        	console.log(this.provStoreResponse.id);
-        	let docID = this.provStoreResponse.id;
+
+        	if(this.provStoreResponse){
+	        	console.log(this.provStoreResponse);
+	        	console.log(this.provStoreResponse.id);
+	        	let docID = this.provStoreResponse.id;
+	        	
+	        	//set story url
+	        	//do check here to see if storytitle is empty - if empty -> error message 
+	        	this.storyUrl = "https://provenance.ecs.soton.ac.uk/store/documents/" + docID;
+	          	this.confirm();
+        	}
+        	else{
+        		console.log("undefined response");
+        	}
         	
-        	//set story url
-        	//do check here to see if storytitle is empty - if empty -> error message 
-        	this.storyUrl = "https://provenance.ecs.soton.ac.uk/store/documents/" + docID;
-          	this.confirm();
           
         }, 1000);
   }

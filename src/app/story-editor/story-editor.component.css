@@ -189,5 +189,5 @@ fieldset {
 fieldset input {
   font-size: smaller;
   margin-right: 1%;
-  width: 12%;
+  /*width: 12%;*/
 }
