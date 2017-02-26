@@ -28,7 +28,7 @@ export class EmbedlyService {
 		// call single url
 		//var url = 'http://www.youtube.com/watch?v=Zk7dDekYej0';
 		let QueryUrl =  this.embedlyApi + url;
-	    console.log('getting url summary)');
+	    console.log("service:",'getting url summary');
 	    return this.http.get(QueryUrl)
 	                 .toPromise()
 	                 .then(response => response.json())

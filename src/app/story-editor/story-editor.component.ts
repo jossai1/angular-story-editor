@@ -67,7 +67,7 @@ export class StoryEditorComponent implements OnInit {
   elementsOnCanvas:Array<Object> = [];
   
 
-  //an array of all the pairings of elements(stores element's id) that a user has made
+  //an array of all the pairings of elements(stores element's id) thatondon a user has made
   //used for making relations
   //when a users makes a connection in the ui 
   //a method is called which pushes the two elements in thisarray 
@@ -97,6 +97,7 @@ export class StoryEditorComponent implements OnInit {
   	// this.addActor();
   	// this.addEvent();
   	// console.log(this.doc);
+
 
   }
  
@@ -1079,90 +1080,296 @@ confirm() {
      return Promise.reject(error.message || error);
   }
 
-//check when url value changes 
-valuechange(newValue,inputName,inputValue,ele) {
+testInput:string;
+testImg:string="";
+testResponse:any;
+testUrl:string;
+testTitle:string = "No Title";
+testDesc:string = "No Description";
 
-	// console.log(newValue);
-	// console.log(inputValue);
-	// console.log(inputName);
-
-	// let response;
-	// //check if url is empty 
-	
-	// //only care about url changing 
-	// if(inputName === "URL"){
-		
-	// 	if(inputValue !== "") {
-
-	// 		//wait a bit 
-
-	// 		setTimeout(() => {
-
- //        	response = this.getUrlSummary(inputValue);
+  testEmbedly() {
 
 
- //        	setTimeout(() => {
- //         	//once geturlsummry is done (above) 
- //         	//we wait then we set the elements stuff 
+this.embedlyService
+  		.getUrlSummary("https://www.khanacademy.org/")
+        .then(res => this.testResponse = res)
+        .catch(error => this.error = error);
 
- //         	//check for null or undefined or empty -> truthy
+        //check that provstoreresponse is not undefines
+        setTimeout(() => {
+        	console.log( this.testResponse );
+        	console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
 
- //         	if(response.description !== null ) {
- //         		ele.urlSummary.desc = response.description;
- //         	}
- //         	else{
- //         		ele.urlSummary.desc = "no description";
- //         	}
+        	//set variables
+        	this.testImg = this.testResponse.images["0"].url;
+			this.testUrl = this.testResponse.url;
+			this.testTitle = this.testResponse.title;
 
- //         	// if(response.url){
- //         	// 	ele.url = response.url;
- //         	// }
- //         	// else{
- //         	// 	ele.url = "";
- //         	// }
-
- //         	// if(response.title){
- //         	// 	ele.title = response.title;
- //         	// }
- //         	// else{
- //         	// 	ele.title = "no title";
- //         	// }
-
- //         	// if(response.provider_url){
- //         	// 	ele.providerUrl = response.provider_url;
- //         	// }
- //         	// else {
- //         	// 	ele.providerUrl = "";
- //         	// }
-
- //         	// if(response.images["0"] !== undefined) {
-
- //         	// 	if(response.images["0"].url) {
- //         	// 		ele.img = response.images["0"].url;
- //         	// 	}
-	//          // 	else {
-	//          // 		//todo:assing/give a blank image
-	//          // 		ele.img = "";
-	//          // 	}
-         	
- //         	// }
-         	
-         	
- //        }, 2500);
-        	
-          
- //        }, 5000);
+			//the description is too long so trim it to a certain length
+			let length = 20;
+			this.testDesc = this.testResponse.description;
+			//new length
+			this.testDesc = this.testDesc.substring(0, length);
 			
-	// 	}
-		
-	// }
+          
+        }, 2000);
+  }
 
+
+//check every url field and see if it has changed 
+// if it has pass that changed value to embedly to update 
+updateUrlSummary()
+{
+	for (var i = 0; i < this.elementsOnCanvas.length; i++) {
+		let newUrl = this.elementsOnCanvas[i.toString()].inputArray["0"].url;
+		let oldUrl = this.elementsOnCanvas[i.toString()].oldUrl;
+		
+		console.log("new",newUrl);
+		console.log("old",oldUrl);
+
+		if(newUrl)
+		{
+			//its changes so call emebedly 
+			if(newUrl !== oldUrl) {
+				console.log("url has changed");
+				//call embedly to 
+				this.grabURL(newUrl);
+			}
+
+		}
+
+		oldUrl = newUrl;
+	}
 }
+
+// from stackverflow http://stackoverflow.com/questions/1701898/how-to-detect-whether-a-string-is-in-url-format-using-javascript
+isUrl(s) {
+   var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+   return regexp.test(s);
+}
+
+ delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+  clearTimeout (timer);
+  timer = setTimeout(callback, ms);
+ };
+})();
+
+
+ dede(url) {
+ 	let timer:any = 0;
+    return new Promise(
+      (resolve)=>{ 
+        console.log('2.process setting timer');
+        
+        clearTimeout (timer);
+       timer = setTimeout(()=>{
+          console.log('4.process timer completed; calling resolve');
+        
+          resolve('timer complete')}, 5000);
+      });
+  }
+
+//check when url value changes 
+valuechange(url,$event) {
+
+// this.delay(function() {
+//     console.log("final value: ", url);
+//     //this.getUrlSummary(url);
+//   }, 10000 );	
+
+
+
+ console.log('1.valuechange calling dede');
+    this.dede(url).then(
+      (n) => {
+        console.log('5.valuechange process promise resolved');
+         console.log("final value: ", url);
+        console.log(n);
+      });
+    console.log('3.done');
+}
+
+
+
+ getUrlSummary(url) {
+ 		// if(inputName === "URL"){
+
+ 		// 	if(url !== "")
+ 		// 	{
+ 		// 		//code below goes in here
+ 		// 	}
+
+ 		// }
+
+        //onlu care if the url lenght is greater than 10 
+        //else would be serch for letter in embedly
+        //check that it is a valid url ..google keep does this :) 
+        if(url.length >= 10 && this.isUrl(url)) {
+
+           this.embedlyService
+		  		.getUrlSummary(url)
+		        .then(res => this.testResponse = res)
+		        .catch(error => this.error = error);
+
+
+		        setTimeout(() => {
+        		
+		          	console.log( this.testResponse );
+		        	console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
+
+
+		        	//check for any null or e,pty stuff
+
+		        	if(this.testResponse.images["0"].url) {
+		        		//set variables
+		        		this.testImg = this.testResponse.images["0"].url;
+		        	}
+		        	else
+		        	{
+		        		this.testImg = "";
+		        	}
+
+		        	if(this.testResponse.url) {
+		        		this.testUrl = this.testResponse.url;
+
+		        	}
+		        	else
+		        	{
+		        		this.testUrl = "";
+		        	}
+
+		        	if(this.testResponse.title) {
+
+		        		this.testTitle = this.testResponse.title;
+		        	}
+		        	else
+		        	{
+		        		this.testTitle = "No Title";
+		        	}
+
+		        	if( this.testResponse.description) {
+
+			        	//the description is too long so trim it to a certain length
+						let length = 20;
+						this.testDesc = this.testResponse.description;
+						//new length
+						this.testDesc = this.testDesc.substring(0, length);
+		        	}
+		        	else
+		        	{
+		        		this.testDesc = "No Descrition";
+		        	}
+		        	
+
+          		}, 2000);
+
+        }
+        else {
+        	console.log("too short or wrong url format")
+        	return;
+        }
+  }
+
+
+//old and for testing 
+ grabURL(url) {
+
+ 	console.log("change detected");
+ 	console.log(url);
+// this.embedlyService
+//   		.getUrlSummary(url)
+//         .then(res => this.testResponse = res)
+//         .catch(error => this.error = error);
+
+        //check that provstoreresponse is not undefines
+
+        //onlu care if the url lenght is greater than 10 
+        //else would be serch for letter in embedly
+        //check that it is a valid url ..google keep does this :) 
+        if(url.length >= 10 && this.isUrl(url)) {
+
+
+        	 setTimeout(() => {
+
+
+        	setTimeout(() => {
+
+           this.embedlyService
+		  		.getUrlSummary(url)
+		        .then(res => this.testResponse = res)
+		        .catch(error => this.error = error);
+
+
+		        setTimeout(() => {
+        		
+		          	console.log( this.testResponse );
+		        	console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
+
+
+		        	//check for any null or e,pty stuff
+
+		        	if(this.testResponse.images["0"].url) {
+		        		//set variables
+		        		this.testImg = this.testResponse.images["0"].url;
+		        	}
+		        	else
+		        	{
+		        		this.testImg = "";
+		        	}
+
+		        	if(this.testResponse.url) {
+		        		this.testUrl = this.testResponse.url;
+
+		        	}
+		        	else
+		        	{
+		        		this.testUrl = "";
+		        	}
+
+		        	if(this.testResponse.title) {
+
+		        		this.testTitle = this.testResponse.title;
+		        	}
+		        	else
+		        	{
+		        		this.testTitle = "No Title";
+		        	}
+
+		        	if( this.testResponse.description) {
+
+			        	//the description is too long so trim it to a certain length
+						let length = 20;
+						this.testDesc = this.testResponse.description;
+						//new length
+						this.testDesc = this.testDesc.substring(0, length);
+		        	}
+		        	else
+		        	{
+		        		this.testDesc = "No Descrition";
+		        	}
+		        	
+
+          		}, 2000);
+
+        	}, 0);
+
+        }, 60000);
+
+
+        }
+        else
+        {
+        	return;
+        }
+    
+  }
 
 
   //takes a url 
   //returns all the relvant summary data in an array
-  getUrlSummary (url:string): any {
+  oldGetUrlSummary (url:string): any {
   		let response = "";
   		this.embedlyService
   		.getUrlSummary(url)
