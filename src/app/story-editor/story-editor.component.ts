@@ -4,11 +4,16 @@ import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { EmbedlyService } from '../services/embedly-service.service';
 import 'rxjs/add/operator/toPromise';
-
+import { NgGridConfig, NgGridItemConfig, NgGridItemEvent } from "angular2-grid";
 
 interface attribute {
   name: string,
   id:number
+}
+
+interface Box {
+    id: number;
+    config: NgGridItemConfig;
 }
 
 @Component({
@@ -24,8 +29,45 @@ export class StoryEditorComponent implements OnInit {
 
   constructor(private confirmationService: ConfirmationService,private http: Http, private embedlyService: EmbedlyService) {}
 
+    private _generateDefaultItemConfig(): NgGridItemConfig {
+        return { 'dragHandle': '.handle', 'col': 1, 'row': 1, 'sizex': 1, 'sizey': 1 };
+    }
+
+    onDrag(index: number, event: NgGridItemEvent): void {
+        // Do something here
+    }
+
+    onResize(index: number, event: NgGridItemEvent): void {
+        // Do something here
+    }
+
+    updateItem(index: number, event: NgGridItemEvent): void {
+        // Do something here
+    }
     
- 
+    private gridConfig: NgGridConfig = <NgGridConfig>{
+        'margins': [5],
+        'draggable': true,
+        'resizable': false,
+        'max_cols': 0,
+        'max_rows': 0,
+        'visible_cols': 0,
+        'visible_rows': 0,
+        'min_cols': 1,
+        'min_rows': 1,
+        'col_width': 2,
+        'row_height': 2,
+        'cascade': 'up',
+        'min_width': 50,
+        'min_height': 50,
+        'fix_to_grid': false,
+        'auto_style': true,
+        'auto_resize': false,
+        'maintain_ratio': false,
+        'prefer_new': false,
+        'zoom_on_drag': false,
+        'limit_to_screen': true
+    };
 
   prov:any = require('../../../provjs/prov');
   doc:any =  this.prov.document();
@@ -153,24 +195,33 @@ confirm() {
   // adds an actor to the elementsOnCanvas list
   // which subsequently adds it to the canvas
   addActor() {
-
-  	this.elementsOnCanvas.push({id:this.generateUUID(),  urlSummary:{img:"../../assets/images/actor-icon2.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/actor-icon2.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given Name",id:3},{name:"E-mail",id:4}]});
+	//for ng2-grid box sizing
+	let id = this.elementsOnCanvas.length - 1 ;	
+	const conf = this._generateDefaultItemConfig();
+    conf.payload = 1 + id;
+  	this.elementsOnCanvas.push({id:this.generateUUID(), config:conf, urlSummary:{img:"../../assets/images/actor-icon2.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/actor-icon2.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given Name",id:3},{name:"E-mail",id:4}]});
 
   }
 
    // adds an event  to the elementsOnCanvas list
   // which subsequently adds it to the canvas
   addEvent() {
-
-  	this.elementsOnCanvas.push({id:this.generateUUID(),startDate:null,endDate:null,startDateAdded:false,endDateAdded:false ,   urlSummary:{img:"../../assets/images/event64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
+  	//for ng2-grid
+  	let id = this.elementsOnCanvas.length - 1 ;	
+	const conf = this._generateDefaultItemConfig();
+    conf.payload = 1 + id;
+  	this.elementsOnCanvas.push({id:this.generateUUID(), config:conf, startDate:null,endDate:null,startDateAdded:false,endDateAdded:false ,   urlSummary:{img:"../../assets/images/event64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
   	
   }
 
   // adds a thing to the elementsOnCanvas list
   // which subsequently adds it to the canvas
   addThing() { 
-  	
-  	this.elementsOnCanvas.push({id:this.generateUUID(),  urlSummary:{img:"../../assets/images/document64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/document64.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2}]});
+  	//for ng2-grid box sizing
+  	let id = this.elementsOnCanvas.length - 1 ;	
+	const conf = this._generateDefaultItemConfig();
+    conf.payload = 1 + id;
+  	this.elementsOnCanvas.push({id:this.generateUUID(), config:conf, urlSummary:{img:"../../assets/images/document64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/document64.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2}]});
 
   }
 

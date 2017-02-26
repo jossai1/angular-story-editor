@@ -73,10 +73,11 @@
 </nav>
 <div class="container-fluid">
     <div class="row">
-        <div class=" canvas col-sm-9 push-sm-3" (onDrop)="drop($event)" pDroppable="dd">
-            <div class="story-title">
+     <div class="story-title">
                 <input [(ngModel)]="storyTitle" type="text" placeholder="Story title">
             </div>
+        <div [ngGrid]="{'resizeable': false, 'margins': [5, 10]}" class=" canvas col-sm-9 push-sm-3" (onDrop)="drop($event)" pDroppable="dd">
+           
             <!-- / boolean to see if we should show the 'drag and drop story...' sign //only show if canvas is blank /i.e canvas array  is empty -->
             <div *ngIf="elementsOnCanvas.length === 0" class="traced-sign  grey-out">
                 <p class="middle-text grey-out">
@@ -96,10 +97,11 @@
                 </md-card>
                 <input size="25" pInputText type="text" [(ngModel)]="testInput" (keyup)="valuechange(testInput,$event)"/> -->
             <!-- remove after testing  -->
+
             <!--  <div [dragula]='"first-bag"'> -->
-            <div style="margin:2%;width:100px" class="fieldset" *ngFor="let ele of elementsOnCanvas" [id]="ele.id">
+            <div style="margin:2%;width:100px" class="grid-item" *ngFor="let ele of elementsOnCanvas; let i = index;" [(ngGridItem)]="ele.config" (onDrag)="onDrag(i, $event)" [id]="ele.id">
                 <!-- stiuff from url will go here -->
-                <md-card style="width: 200px;height:70px" (dblclick)="op2.show($event)">
+                <md-card class="handle" style="width: 200px;height:70px" (dblclick)="op2.show($event)">
                     <!--  <img style="width:20px;height: 20px" [src]="ele.src" md-card-sm-image> -->
                     <img md-card-image style="float:left;width:50px;height: 50px" class="canvas-icons" [src]="ele.urlSummary.img">
                     <!-- <img class="canvas-icons" [src]="ele.src" md-card-avatar>

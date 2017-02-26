@@ -13,7 +13,7 @@ import { DragulaModule } from 'ng2-dragula';
 
 // temp testing 
 import { DragDropModule, DropdownModule, OverlayPanelModule, CalendarModule, AccordionModule, ConfirmDialogModule } from 'primeng/primeng';
-
+import { NgGridModule } from "angular2-grid"; 
 import { MaterialModule } from '@angular/material';
 
 
@@ -38,7 +38,8 @@ import { MaterialModule } from '@angular/material';
     ConfirmDialogModule,
     MaterialModule,
     OverlayPanelModule,
-    DropdownModule
+    DropdownModule,
+    NgGridModule
   ],
   providers: [],
   bootstrap: [AppComponent]
