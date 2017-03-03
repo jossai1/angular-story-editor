@@ -4,6 +4,7 @@
   margin-top:2%;
   font-size: 30px;
   text-align: center;
+  margin-bottom: 4%; /*to space btwn grid and title*/
 }
 
 .story-title input:focus {
@@ -114,7 +115,8 @@ div.panel {
 
 .sidebar-nav-fixed 
 {
-  height: 950px;
+  height: 950px; 
+  margin-left: 3%; /*move away from grid a little*/
   margin-top: -21px; /*joins sidepanel to nav bar for seamsless apperance*/
   display: flex;  /*my sidepanel span full lenght of page--might take off?*/
 }
@@ -196,9 +198,13 @@ fieldset input {
 .handle {
     width: 100%;
     height: 50px;
-    background: blue;
+    background: #cccccc;
     /*color: white;*/
     padding: 15px;
     box-sizing: border-box;
 }
 
+
+.grid{
+  width:auto;
+}

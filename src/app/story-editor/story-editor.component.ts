@@ -64,7 +64,7 @@ export class StoryEditorComponent implements OnInit {
         'auto_style': true,
         'auto_resize': false,
         'maintain_ratio': false,
-        'prefer_new': false,
+        'prefer_new': true,
         'zoom_on_drag': false,
         'limit_to_screen': true
     };

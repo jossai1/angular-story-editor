@@ -76,10 +76,10 @@
      <div class="story-title">
                 <input [(ngModel)]="storyTitle" type="text" placeholder="Story title">
             </div>
-        <div [ngGrid]="gridConfig" class="canvas col-sm-9 push-sm-3" (onDrop)="drop($event)" pDroppable="dd">
+        <div style="margin-right:-26%; background: white;" class="canvas col-sm-9 push-sm-3" [ngGrid]="gridConfig" (onDrop)="drop($event)" pDroppable="dd">
            
             <!-- / boolean to see if we should show the 'drag and drop story...' sign //only show if canvas is blank /i.e canvas array  is empty -->
-            <div *ngIf="elementsOnCanvas.length === 0" class="traced-sign  grey-out">
+            <div *ngIf="elementsOnCanvas.length === 0" class="traced-sign grey-out">
                 <p class="middle-text grey-out">
                     Drag and drop Story Elements here
                 </p>
@@ -99,7 +99,8 @@
             <!-- remove after testing  -->
 
             <!--  <div [dragula]='"first-bag"'> -->
-            <div style="margin:2%;width:100px" *ngFor="let ele of elementsOnCanvas; let i = index;" [(ngGridItem)]="ele.config" (onDrag)="onDrag(i, $event)" [id]="ele.id">
+            <!-- old <div style="margin:2%;width:100px" *ngFor="let ele of elementsOnCanvas; let i = index;" [(ngGridItem)]="ele.config" (onDrag)="onDrag(i, $event)" [id]="ele.id"> -->
+            <div *ngFor="let ele of elementsOnCanvas; let i = index;" [(ngGridItem)]="ele.config" (onDrag)="onDrag(i, $event)" [id]="ele.id">
                 <!-- stiuff from url will go here -->
                 <div class="handle"> </div>
                  <!-- old <md-card style="width: 200px;height:70px" (dblclick)="op2.show($event)"> -->
