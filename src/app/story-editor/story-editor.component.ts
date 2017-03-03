@@ -58,8 +58,8 @@ export class StoryEditorComponent implements OnInit {
         'col_width': 2,
         'row_height': 2,
         'cascade': 'up',
-        'min_width': 50,
-        'min_height': 50,
+        'min_width': 40, //for size of grid item (holds card)
+        'min_height': 25,
         'fix_to_grid': false,
         'auto_style': true,
         'auto_resize': false,
