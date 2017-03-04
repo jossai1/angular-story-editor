@@ -24,8 +24,6 @@ interface Box {
 })
 export class StoryEditorComponent implements OnInit {
 
- 
-  //constructor() { }
 
   constructor(private confirmationService: ConfirmationService,private http: Http, private embedlyService: EmbedlyService) {}
 
@@ -41,14 +39,14 @@ export class StoryEditorComponent implements OnInit {
         // Do something here
     }
 
-    updateItem(index: number, event: NgGridItemEvent): void {
+    updateItem(eleId: string, event: NgGridItemEvent): void {
         // Do something here
     }
     
     private gridConfig: NgGridConfig = <NgGridConfig>{
         'margins': [5],
         'draggable': true,
-        'resizable': false,
+        'resizable': true,
         'max_cols': 0,
         'max_rows': 0,
         'visible_cols': 0,
@@ -58,8 +56,8 @@ export class StoryEditorComponent implements OnInit {
         'col_width': 2,
         'row_height': 2,
         'cascade': 'up',
-        'min_width': 40, //for size of grid item (holds card)
-        'min_height': 25,
+        'min_width': 33, //for size of grid item (holds card)
+        'min_height': 22,
         'fix_to_grid': false,
         'auto_style': true,
         'auto_resize': false,
@@ -68,6 +66,7 @@ export class StoryEditorComponent implements OnInit {
         'zoom_on_drag': false,
         'limit_to_screen': true
     };
+
 
   prov:any = require('../../../provjs/prov');
   doc:any =  this.prov.document();
@@ -195,11 +194,11 @@ confirm() {
   // adds an actor to the elementsOnCanvas list
   // which subsequently adds it to the canvas
   addActor() {
-	//for ng2-grid box sizing
-	let id = this.elementsOnCanvas.length - 1 ;	
-	const conf = this._generateDefaultItemConfig();
+	  //for ng2-grid box sizing
+	  let id = this.elementsOnCanvas.length - 1 ;	
+	  const conf = this._generateDefaultItemConfig();
     conf.payload = 1 + id;
-  	this.elementsOnCanvas.push({id:this.generateUUID(), config:conf, urlSummary:{img:"../../assets/images/actor-icon2.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/actor-icon2.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given Name",id:3},{name:"E-mail",id:4}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(), isEditable:true, config:conf, urlSummary:{img:"../../assets/images/actor-icon2.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/actor-icon2.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given Name",id:3},{name:"E-mail",id:4}]});
 
   }
 
@@ -208,9 +207,9 @@ confirm() {
   addEvent() {
   	//for ng2-grid
   	let id = this.elementsOnCanvas.length - 1 ;	
-	const conf = this._generateDefaultItemConfig();
+	  const conf = this._generateDefaultItemConfig();
     conf.payload = 1 + id;
-  	this.elementsOnCanvas.push({id:this.generateUUID(), config:conf, startDate:null,endDate:null,startDateAdded:false,endDateAdded:false ,   urlSummary:{img:"../../assets/images/event64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(), isEditable:true, config:conf, startDate:null,endDate:null,startDateAdded:false,endDateAdded:false ,   urlSummary:{img:"../../assets/images/event64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
   	
   }
 
@@ -219,9 +218,9 @@ confirm() {
   addThing() { 
   	//for ng2-grid box sizing
   	let id = this.elementsOnCanvas.length - 1 ;	
-	const conf = this._generateDefaultItemConfig();
+	  const conf = this._generateDefaultItemConfig();
     conf.payload = 1 + id;
-  	this.elementsOnCanvas.push({id:this.generateUUID(), config:conf, urlSummary:{img:"../../assets/images/document64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/document64.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2}]});
+  	this.elementsOnCanvas.push({id:this.generateUUID(), isEditable:true, config:conf, urlSummary:{img:"../../assets/images/document64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/document64.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2}]});
 
   }
 
