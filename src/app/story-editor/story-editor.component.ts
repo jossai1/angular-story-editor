@@ -16,6 +16,9 @@ interface Box {
     config: NgGridItemConfig;
 }
 
+declare var $:any;
+declare var jsPlumb:any;
+
 @Component({
   selector: 'app-story-editor',
   templateUrl: './story-editor.component.html', 
@@ -130,6 +133,10 @@ export class StoryEditorComponent implements OnInit {
   // users add more inputs by selecting from a list of atributes - used for a single thing for now 
   inputArray: Array<Object> = [{name:"url",value:"",id:"0"}];
 
+  twoSelectedElements:any [] = []; //array of twoclicked eles
+  selecting:boolean = false;
+  connections:any [] = [];
+
   ngOnInit() {
   	//test to see if doc is loaded 
 
@@ -138,42 +145,8 @@ export class StoryEditorComponent implements OnInit {
   	// this.addActor();
   	// this.addEvent();
   	// console.log(this.doc);
-
-
   }
  
-
- // need to add in jquer y to use these funcs
- currFFZoom:number = 1;
- currIEZoom:number = 100;
-  zoomIn()
-  {
-  	// if (this.jquery.browser.mozilla){
-   //          var step = 0.02;
-   //          this.currFFZoom += step; 
-   //         this.jquery('body').css('MozTransform','scale(' + this.currFFZoom + ')');
-   //      } else {
-   //          var step = 2;
-   //          this.currIEZoom += step;
-   //          this.jquery('body').css('zoom', ' ' + this.currIEZoom + '%');
-   //      }
-  }
-
-  zoomOut()
-  {
-
-  	  // if (jquery.browser.mozilla){
-     //        var step = 0.02;
-     //        this.currFFZoom -= step;                 
-     //       jquery('body').css('MozTransform','scale(' + this.currFFZoom + ')');
-
-     //    } else {
-     //        var step = 2;
-     //        this.currIEZoom -= step;
-     //        jquery('body').css('zoom', ' ' + this.currIEZoom + '%');
-     //    }
-  }
-         // " Copy the document's link below: \r
 
 confirm() {
         this.confirmationService.confirm({
@@ -862,6 +835,108 @@ confirm() {
   UrlFieldCheck(){}
 
 
+
+  chosenElement(id) {
+   
+    // console.log(value);
+    // var target = event.target || event.srcElement || event.currentTarget;
+    // var idAttr = target.attributes.id;
+    // var value = idAttr.nodeValue;
+
+   
+    if(this.selecting==true){
+       if(this.twoSelectedElements.length < 2){
+
+         
+         console.log(id);
+        this.twoSelectedElements.push(id);
+        if(this.twoSelectedElements.length === 2) {
+           this.resetSelection();
+         }
+      
+      }
+       else
+       {
+         console.log("you can only selct two at a time");
+         //this.resetSelection();
+       }
+    }
+    else{
+      console.log("hit the connect btn first");
+    }
+   
+  }
+
+
+  activateSelectionMode()
+  {
+    this.selecting = true;
+    console.log("selecting: ", this.selecting);
+
+  }
+
+  resetSelection ()
+  {
+    console.log("the selected items are: ", this.twoSelectedElements);
+    this.drawLine(this.twoSelectedElements[0],this.twoSelectedElements[1]);
+    //this.drawLine();
+    this.twoSelectedElements = [];
+    this.selecting = false;
+  }
+
+
+
+  drawLine(sourceId,targetId)
+  {
+
+    //which is spurce and which is trget 
+    //id 1  is 
+    //id 2 is 
+    let source = sourceId.toString();
+    let target = targetId.toString();
+    let connId = this.connections.length+1;
+    let connection;
+    //common style for all connections 
+    var commomStyle = {
+        connector:"StateMachine",
+        paintStyle:{ stroke:"grey", strokeWidth:5},
+        hoverPaintStyle:{stroke:"red"},
+        endpoint:"Blank",
+        anchors:["Right", "Continuous" ],
+        overlays:[ ["PlainArrow", {location:1, width:15, length:12} ],
+           ["Custom", {
+            create:function(component) {
+              return $("<button id='myDropDown'> X </button>");                
+            },
+            location:0.7,
+            id:"customOverlay"
+          },{
+        events:{
+          click:function() { 
+             jsPlumb.detach(connection);
+
+             ///remove from list of pairs (copied from deleteapair but couldnt call it from here as js wont let me :/ )
+             // for (var i = 0; i < this.pairedElementsArray.length; i++) {
+             //    if(this.pairedElementsArray[i.toString()].id === connection.id) {
+             //      this.pairedElementsArray.splice( i, 1 );
+             //    }
+             //    };
+          }
+        }
+      }]
+        ]
+    };
+
+        jsPlumb.ready(function() {   
+        connection = jsPlumb.connect({source:source, target:target}, commomStyle);
+        jsPlumb.draggable($(".window")); //temp - renders funny but the best option, doesnt play nice with nggrid , will remove when i v=come up with another soutuin
+  });
+     //add connecion to arr of connections 
+     this.connections.push({id:connId,connectionObj:connection});
+     this.addPair(connection.id,source,target);
+     console.log("jsplumbConID",connection.id);
+}
+
   inferRelations() {
 
   	this.checkPairings();
@@ -1242,85 +1317,169 @@ valuechange(url,$event) {
 }
 
 
+getUrlSummary(url,ele) {
+     // if(inputName === "URL"){
 
- getUrlSummary(url) {
- 		// if(inputName === "URL"){
+     //   if(url !== "")
+     //   {
+     //     //code below goes in here
+     //   }
 
- 		// 	if(url !== "")
- 		// 	{
- 		// 		//code below goes in here
- 		// 	}
-
- 		// }
+     // }
 
         //onlu care if the url lenght is greater than 10 
         //else would be serch for letter in embedly
         //check that it is a valid url ..google keep does this :) 
+        let img = ele.urlSummary.img;
+        let title = ele.urlSummary.title;
+        let desc = ele.urlSummary.desc;
+        let URL = ele.urlSummary.url;
+        let response;
+        
         if(url.length >= 10 && this.isUrl(url)) {
 
            this.embedlyService
-		  		.getUrlSummary(url)
-		        .then(res => this.testResponse = res)
-		        .catch(error => this.error = error);
+          .getUrlSummary(url)
+            .then(res => response= res)
+            .catch(error => this.error = error);
 
 
-		        setTimeout(() => {
-        		
-		          	console.log( this.testResponse );
-		        	console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
+            setTimeout(() => {
+            
+              console.log( response );
+              console.log("embedly stuff: ",  response ,  response.images["0"].url);
 
 
-		        	//check for any null or e,pty stuff
+              //check for any null or e,pty stuff
 
-		        	if(this.testResponse.images["0"].url) {
-		        		//set variables
-		        		this.testImg = this.testResponse.images["0"].url;
-		        	}
-		        	else
-		        	{
-		        		this.testImg = "";
-		        	}
+              if(response.images["0"].url) {
+                //set variables
+                img = response.images["0"].url;
+              }
+              else
+              {
+                img = "";
+              }
 
-		        	if(this.testResponse.url) {
-		        		this.testUrl = this.testResponse.url;
+              if(response.url) {
+                URL = response.url;
 
-		        	}
-		        	else
-		        	{
-		        		this.testUrl = "";
-		        	}
+              }
+              else
+              {
+               URL = "";
+              }
 
-		        	if(this.testResponse.title) {
+              if(response.title) {
 
-		        		this.testTitle = this.testResponse.title;
-		        	}
-		        	else
-		        	{
-		        		this.testTitle = "No Title";
-		        	}
+                title = response.title;
+              }
+              else
+              {
+               title = "No Title";
+              }
 
-		        	if( this.testResponse.description) {
+              if(response.description) {
 
-			        	//the description is too long so trim it to a certain length
-						let length = 20;
-						this.testDesc = this.testResponse.description;
-						//new length
-						this.testDesc = this.testDesc.substring(0, length);
-		        	}
-		        	else
-		        	{
-		        		this.testDesc = "No Descrition";
-		        	}
-		        	
+                      //the description is too long so trim it to a certain length
+                  let length = 20;
+                 desc = response.description;
+                  //new length
+                  desc = desc.substring(0, length);
+              }
+              else
+              {
+                desc = "No Descrition";
+              }
+              
 
-          		}, 2000);
+              }, 2000);
 
         }
         else {
-        	console.log("too short or wrong url format")
-        	return;
+          console.log("too short or wrong url format")
+          return;
         }
   }
+
+ // getUrlSummary(url) {
+ // 		// if(inputName === "URL"){
+
+ // 		// 	if(url !== "")
+ // 		// 	{
+ // 		// 		//code below goes in here
+ // 		// 	}
+
+ // 		// }
+
+ //        //onlu care if the url lenght is greater than 10 
+ //        //else would be serch for letter in embedly
+ //        //check that it is a valid url ..google keep does this :) 
+ //        if(url.length >= 10 && this.isUrl(url)) {
+
+ //           this.embedlyService
+	// 	  		.getUrlSummary(url)
+	// 	        .then(res => this.testResponse = res)
+	// 	        .catch(error => this.error = error);
+
+
+	// 	        setTimeout(() => {
+        		
+	// 	          console.log( this.testResponse );
+	// 	        	console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
+
+
+	// 	        	//check for any null or e,pty stuff
+
+	// 	        	if(this.testResponse.images["0"].url) {
+	// 	        		//set variables
+	// 	        		this.testImg = this.testResponse.images["0"].url;
+	// 	        	}
+	// 	        	else
+	// 	        	{
+	// 	        		this.testImg = "";
+	// 	        	}
+
+	// 	        	if(this.testResponse.url) {
+	// 	        		this.testUrl = this.testResponse.url;
+
+	// 	        	}
+	// 	        	else
+	// 	        	{
+	// 	        		this.testUrl = "";
+	// 	        	}
+
+	// 	        	if(this.testResponse.title) {
+
+	// 	        		this.testTitle = this.testResponse.title;
+	// 	        	}
+	// 	        	else
+	// 	        	{
+	// 	        		this.testTitle = "No Title";
+	// 	        	}
+
+	// 	        	if( this.testResponse.description) {
+
+	// 		        	//the description is too long so trim it to a certain length
+	// 					let length = 20;
+	// 					this.testDesc = this.testResponse.description;
+	// 					//new length
+	// 					this.testDesc = this.testDesc.substring(0, length);
+	// 	        	}
+	// 	        	else
+	// 	        	{
+	// 	        		this.testDesc = "No Descrition";
+	// 	        	}
+		        	
+
+ //          		}, 2000);
+
+ //        }
+ //        else {
+ //        	console.log("too short or wrong url format")
+ //        	return;
+ //        }
+ //  }
 
 
 //old and for testing 
@@ -1568,10 +1727,10 @@ deleteAPair(pairId:string) {
 }
 
 //add a relation 
-addPair(startEleId:string,endEleId:string) {
+addPair(connId:string, startEleId:string,endEleId:string) {
 
 	//make pairing - using ngmodel 
-	this.pairedElementsArray.push({id: this.generateUUID(), startEleId:this.startEleId, endEleId:this.endEleId});
+	this.pairedElementsArray.push({id: connId, startEleId:startEleId, endEleId:endEleId});
 	console.log(this.pairedElementsArray);
 }
 

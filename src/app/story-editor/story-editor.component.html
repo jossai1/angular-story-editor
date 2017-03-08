@@ -65,9 +65,7 @@
     </ul> -->
         <button class="btn btn-success navbar-btn" (click)="clear()">New Story</button>
         <button style="float:right;" class="btn btn-default navbar-btn" (click)="export()">Export</button>
-        <button style="" class="btn btn-default navbar-btn" (click)="zoomIn()">zoom in</button>
-        <button style="" class="btn btn-default navbar-btn" (click)="testEmbedly()">test</button>
-        <button style="" class="btn btn-default navbar-btn" (click)="zoomOut()">zoom out</button>
+        <button style="" class="btn btn-default navbar-btn" (click)="activateSelectionMode()">Make Connections</button>
         <button style="float:right;" class="btn btn-info navbar-btn">Help</button>
     </div>
 </nav>
@@ -100,7 +98,7 @@
 
             <!--  <div [dragula]='"first-bag"'> -->
             <!-- old <div style="margin:2%;width:100px" *ngFor="let ele of elementsOnCanvas; let i = index;" [(ngGridItem)]="ele.config" (onDrag)="onDrag(i, $event)" [id]="ele.id"> -->
-            <div *ngFor="let ele of elementsOnCanvas; let i = index;" [(ngGridItem)]="ele.config" (onDrag)="onDrag(ele.id, $event)" [id]="ele.id">
+            <div class="window" style="position: absolute;" (click)="chosenElement(ele.id)" *ngFor="let ele of elementsOnCanvas; let i = index;" [(ngGridItem)]="ele.config" (onDrag)="onDrag(ele.id, $event)" [id]="ele.id">
                 <!-- stiuff from url will go here -->
                 <div class="handle"> </div>
                  <!-- old <md-card style="width: 200px;height:70px" (dblclick)="op2.show($event)"> -->
