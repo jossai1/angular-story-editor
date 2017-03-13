@@ -19,7 +19,7 @@
         <div class="story-title">
             <input [(ngModel)]="storyTitle" type="text" placeholder="Story title">
         </div>
-        <div class="canvas col-sm-9 push-sm-3" (onDrop)="drop($event)">
+        <div class="canvas col-sm-9 push-sm-3">
             <!-- / boolean to see if we should show the 'drag and drop story...' sign //only show if canvas is blank /i.e canvas array  is empty -->
             <div *ngIf="elementsOnCanvas.length === 0" class="traced-sign grey-out">
                 <p class="middle-text grey-out">
@@ -94,7 +94,6 @@
         <div class="col-sm-3">
             <div class="sidebar-nav-fixed pull-right affix">
                 <div class="well">
-                    <!-- removed from well pDraggable="dd"-->
                     <!-- <h3></h3> -->
                     <p-accordion [multiple]="true">
                         <p-accordionTab header="Story Elements" [selected]="true">
@@ -102,9 +101,9 @@
                                 <span> Thing </span>
                                 <span> Event </span>
                                 <span> Actor </span>
-                                <img title="Thing (e.g. document, webpage, chart)" pDraggable="thing" (click)="addThing()" (onDragStart)="dragStart($event,'thing')" (onDragEnd)="dragEnd($event)" draggable="true" class="spacing" src="../../assets/images/document64.png">
-                                <img title="Event (e.g. inaguration, meeting, conference)" align=" " pDraggable="event" (click)="addEvent()" (onDragStart)="dragStart($event,'event')" (onDragEnd)="dragEnd($event)" draggable="true" class="spacing" src="../../assets/images/event64.png">
-                                <img title="Actor (e.g. organisation, person)" pDraggable="actor" (click)="addActor()" (onDragStart)="dragStart($event,'actor')" (onDragEnd)="dragEnd($event)" draggable="true" style="width: 64px; height: 54px;" class="spacing" src="../../assets/images/actor-icon2.png">
+                                <img title="Thing (e.g. document, webpage, chart)" (click)="addThing()" class="spacing" src="../../assets/images/document64.png">
+                                <img title="Event (e.g. inaguration, meeting, conference)"  (click)="addEvent()" class="spacing" src="../../assets/images/event64.png">
+                                <img title="Actor (e.g. organisation, person)" (click)="addActor()" style="width: 64px; height: 54px;" class="spacing" src="../../assets/images/actor-icon2.png">
                             </div>
                         </p-accordionTab>
                         <br>
