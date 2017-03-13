@@ -78,16 +78,16 @@ export class TestModelComponent implements OnInit {
   	this.addEvent();
   	console.log(this.doc);
  
-  	this.embedlyService
-  		.getUrlSummary("http://www.youtube.com/watch?v=Zk7dDekYej0")
-        .then(response => this.embedlyResponse = response)
-        .catch(error => this.error = error);
+  	// this.embedlyService
+  	// 	.getUrlSummary("http://www.youtube.com/watch?v=Zk7dDekYej0")
+   //      .then(response => this.embedlyResponse = response)
+   //      .catch(error => this.error = error);
 
-        //check that provstoreresponse is not undefines
-        setTimeout(() => {
-        	console.log(this.embedlyResponse);
+   //      //check that provstoreresponse is not undefines
+   //      setTimeout(() => {
+   //      	console.log(this.embedlyResponse);
           
-        }, 1000);
+   //      }, 1000);
   }
 
   setNameSpace(){

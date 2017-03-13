@@ -950,14 +950,8 @@ highlight() {
         events:{
           click:function() { 
              jsPlumb.detach(connection);
-            console.log(jsPlumb.getConnections());
-
-             ///remove from list of pairs (copied from deleteapair but couldnt call it from here as js wont let me :/ )
-             // for (var i = 0; i < this.pairedElementsArray.length; i++) {
-             //    if(this.pairedElementsArray[i.toString()].id === connection.id) {
-             //      this.pairedElementsArray.splice( i, 1 );
-             //    }
-             //    };
+             //testing
+             console.log(jsPlumb.getConnections());
           }
         }
       }]
@@ -971,7 +965,6 @@ highlight() {
   });
      //add connecion to arr of connections 
      this.connections.push({id:connId,connectionObj:connection});
-     this.addPair(connection.id,source,target);
      console.log("jsplumbConID",connection.id);
      this.removeBorder(source,target);
 }
@@ -983,7 +976,7 @@ highlight() {
      setTimeout(() => {
         $("#"+ source).css({border: "none" }); 
         $("#"+ target).css({border: "none" });
-    }, 300);
+    }, 350);
   
   }
 
@@ -1000,13 +993,13 @@ highlight() {
   inferRelations() {
 
     this.checkPairings();
-
+    let conectionList = jsPlumb.getConnections();
     //might need a promise here 
 
-    for (var i = 0; i < this.pairedElementsArray.length; i++) {
+    for (var i = 0; i < conectionList.length; i++) {
 
-      let startEle = this.getElement(this.pairedElementsArray[i.toString()].startEleId);
-      let endEle = this.getElement(this.pairedElementsArray[i.toString()].endEleId);
+      let startEle = this.getElement(conectionList[i.toString()].sourceId);
+      let endEle = this.getElement(conectionList[i.toString()].targetId);
 
       //if null then no element with that id was found
 
@@ -1073,10 +1066,12 @@ highlight() {
   // for now we will remove incorrect pairing from array  
   checkPairings() {
 
-    for (var i = 0; i < this.pairedElementsArray.length; i++) {
+    let conectionList = jsPlumb.getConnections();
+    for (var i = 0; i < conectionList.length; i++) {
 
-      let startEle = this.getElement(this.pairedElementsArray[i.toString()].startEleId);
-      let endEle = this.getElement(this.pairedElementsArray[i.toString()].endEleId);
+      let startEle = this.getElement(conectionList[i.toString()].sourceId);
+      let endEle = this.getElement(conectionList[i.toString()].targetId);
+
 
       //if null then no element with that id was found
 
@@ -1088,16 +1083,16 @@ highlight() {
 
         
         if (startEle.type === "event" && endEle.type === "event") {
-          this.genericDeleteElement(i,this.pairedElementsArray);
-          console.log("removing something");
+          jsPlumb.detach(conectionList[i.toString()]);
+          console.log("removing something", jsPlumb.getConnections().length);
         }
         else if (startEle.type === "actor" && endEle.type === "event") {
-          this.genericDeleteElement(i,this.pairedElementsArray);
-          console.log("removing something");
+          jsPlumb.detach(conectionList[i.toString()]);
+           console.log("removing something", jsPlumb.getConnections().length);
         }
         else if (startEle.type === "actor" && endEle.type === "thing") {
-          this.genericDeleteElement(i,this.pairedElementsArray);
-          console.log("removing something");
+         jsPlumb.detach(conectionList[i.toString()]);
+           console.log("removing something", jsPlumb.getConnections().length);
         }
 
         else {
@@ -1206,33 +1201,41 @@ highlight() {
 
   export() {
 
-    this.process();
-    console.log(this.getDoc());
-  console.log(JSON.stringify(this.getProvJSON(), null, "  "));
 
-  this.saveToStore()
-        .then(response => this.provStoreResponse = response)
-        .catch(error => this.error = error);
+    if(this.storyTitle !== "" && this.elementsOnCanvas.length > 1)
+    {
+        this.process();
+        console.log(this.getDoc());
+        console.log(JSON.stringify(this.getProvJSON(), null, "  "));
 
-        //check that provstoreresponse is not undefines
-        setTimeout(() => {
+      this.saveToStore()
+            .then(response => this.provStoreResponse = response)
+            .catch(error => this.error = error);
 
-          if(this.provStoreResponse){
-            console.log(this.provStoreResponse);
-            console.log(this.provStoreResponse.id);
-            let docID = this.provStoreResponse.id;
-            
-            //set story url
-            //do check here to see if storytitle is empty - if empty -> error message 
-            this.storyUrl = "https://provenance.ecs.soton.ac.uk/store/documents/" + docID;
-              this.confirm();
-          }
-          else{
-            console.log("undefined response");
-          }
-          
-          
-        }, 1000);
+            //check that provstoreresponse is not undefines
+            setTimeout(() => {
+
+              if(this.provStoreResponse){
+                console.log(this.provStoreResponse);
+                console.log(this.provStoreResponse.id);
+                let docID = this.provStoreResponse.id;
+                
+                //set story url
+                //do check here to see if storytitle is empty - if empty -> error message 
+                this.storyUrl = "https://provenance.ecs.soton.ac.uk/store/documents/" + docID;
+                  this.confirm();
+              }
+              else{
+                console.log("undefined response");
+              }
+              
+              
+            }, 1000);
+      }
+      else
+      {
+        console.log("set title and make sure there are elements on the canvas");
+      }
   }
 
   saveToStore (): Promise<any> {
@@ -1318,7 +1321,7 @@ this.embedlyService
         if(newUrl !== oldUrl) {
           console.log("url has changed");
           //call embedly to 
-          this.grabURL(newUrl);
+          //this.grabURL(newUrl);
         }
 
       }
@@ -1426,6 +1429,7 @@ this.embedlyService
     this.elementsOnCanvas = [];
     this.storyTitle = "";
     this.storyUrl = "";
+    jsPlumb.detachEveryConnection();
   }
 
   // old
