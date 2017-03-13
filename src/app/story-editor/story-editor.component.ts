@@ -1301,99 +1301,52 @@ this.embedlyService
   }
 
 
-//check every url field and see if it has changed 
-// if it has pass that changed value to embedly to update 
-updateUrlSummary()
-{
-  for (var i = 0; i < this.elementsOnCanvas.length; i++) {
-    let newUrl = this.elementsOnCanvas[i.toString()].inputArray["0"].url;
-    let oldUrl = this.elementsOnCanvas[i.toString()].oldUrl;
-    
-    console.log("new",newUrl);
-    console.log("old",oldUrl);
+  //check every url field and see if it has changed 
+  // if it has pass that changed value to embedly to update 
+  updateUrlSummary()
+  {
+    for (var i = 0; i < this.elementsOnCanvas.length; i++) {
+      let newUrl = this.elementsOnCanvas[i.toString()].inputArray["0"].url;
+      let oldUrl = this.elementsOnCanvas[i.toString()].oldUrl;
+      
+      console.log("new",newUrl);
+      console.log("old",oldUrl);
 
-    if(newUrl)
-    {
-      //its changes so call emebedly 
-      if(newUrl !== oldUrl) {
-        console.log("url has changed");
-        //call embedly to 
-        this.grabURL(newUrl);
+      if(newUrl)
+      {
+        //its changes so call emebedly 
+        if(newUrl !== oldUrl) {
+          console.log("url has changed");
+          //call embedly to 
+          this.grabURL(newUrl);
+        }
+
       }
 
+      oldUrl = newUrl;
     }
-
-    oldUrl = newUrl;
-  }
-}
-
-// from stackverflow http://stackoverflow.com/questions/1701898/how-to-detect-whether-a-string-is-in-url-format-using-javascript
-isUrl(s) {
-   var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-   return regexp.test(s);
-}
-
- delay = (function(){
-  var timer = 0;
-  return function(callback, ms){
-  clearTimeout (timer);
-  timer = setTimeout(callback, ms);
- };
-})();
-
-
- dede(url) {
-   let timer:any = 0;
-    return new Promise(
-      (resolve)=>{ 
-        console.log('2.process setting timer');
-        
-        clearTimeout (timer);
-       timer = setTimeout(()=>{
-          console.log('4.process timer completed; calling resolve');
-        
-          resolve('timer complete')}, 5000);
-      });
   }
 
-//check when url value changes 
-valuechange(url,$event) {
+  // from stackverflow http://stackoverflow.com/questions/1701898/how-to-detect-whether-a-string-is-in-url-format-using-javascript
+  isUrl(s) {
+     var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+     return regexp.test(s);
+  }
 
-// this.delay(function() {
-//     console.log("final value: ", url);
-//     //this.getUrlSummary(url);
-//   }, 10000 );  
+ 
 
-
-
- console.log('1.valuechange calling dede');
-    this.dede(url).then(
-      (n) => {
-        console.log('5.valuechange process promise resolved');
-         console.log("final value: ", url);
-        console.log(n);
-      });
-    console.log('3.done');
-}
-
-
-getUrlSummary(url,ele) {
+  getUrlSummary(ele) {
      // if(inputName === "URL"){
-
-     //   if(url !== "")
-     //   {
-     //     //code below goes in here
-     //   }
-
-     // }
+       let url = ele.inputArray['0'].value;
+  
+         //code below goes in here
+       
 
         //onlu care if the url lenght is greater than 10 
         //else would be serch for letter in embedly
         //check that it is a valid url ..google keep does this :) 
-        let img = ele.urlSummary.img;
-        let title = ele.urlSummary.title;
+        
         let desc = ele.urlSummary.desc;
-        let URL = ele.urlSummary.url;
         let response;
         
         if(url.length >= 10 && this.isUrl(url)) {
@@ -1406,52 +1359,54 @@ getUrlSummary(url,ele) {
 
             setTimeout(() => {
             
-              console.log( response );
-              console.log("embedly stuff: ",  response ,  response.images["0"].url);
+             
 
 
               //check for any null or e,pty stuff
-
-              if(response.images["0"].url) {
-                //set variables
-                img = response.images["0"].url;
-              }
-              else
+              if(response)
               {
-                img = "";
-              }
+                 console.log( response );
+          
+                  if(response.images["0"].url) {
+                    //set variables
+                    ele.urlSummary.img = response.images["0"].url;
+                  }
+                  else
+                  {
+                     ele.urlSummary.img = "";
+                  }
 
-              if(response.url) {
-                URL = response.url;
+                  if(response.url) {
+                    ele.urlSummary.url = response.url;
 
-              }
-              else
-              {
-               URL = "";
-              }
+                  }
+                  else
+                  {
+                   ele.urlSummary.url = "";
+                  }
 
-              if(response.title) {
+                  if(response.title) {
 
-                title = response.title;
-              }
-              else
-              {
-               title = "No Title";
-              }
+                    ele.urlSummary.title = response.title;
+                  }
+                  else
+                  {
+                     ele.urlSummary.title = "No Title";
+                  }
 
-              if(response.description) {
+                  if(response.description) {
 
-                      //the description is too long so trim it to a certain length
-                  let length = 20;
-                 desc = response.description;
-                  //new length
-                  desc = desc.substring(0, length);
+                          //the description is too long so trim it to a certain length
+                     let length = 20;
+                     desc = response.description;
+                      //new length
+                      ele.urlSummary.desc = desc.substring(0, length);
+                  }
+                  else
+                  {
+                    ele.urlSummary.desc = "No Descrition";
+                  }
               }
-              else
-              {
-                desc = "No Descrition";
-              }
-              
 
               }, 2000);
 
@@ -1460,200 +1415,10 @@ getUrlSummary(url,ele) {
           console.log("too short or wrong url format")
           return;
         }
+      
   }
 
- // getUrlSummary(url) {
- //     // if(inputName === "URL"){
-
- //     //   if(url !== "")
- //     //   {
- //     //     //code below goes in here
- //     //   }
-
- //     // }
-
- //        //onlu care if the url lenght is greater than 10 
- //        //else would be serch for letter in embedly
- //        //check that it is a valid url ..google keep does this :) 
- //        if(url.length >= 10 && this.isUrl(url)) {
-
- //           this.embedlyService
-  //         .getUrlSummary(url)
-  //           .then(res => this.testResponse = res)
-  //           .catch(error => this.error = error);
-
-
-  //           setTimeout(() => {
-            
-  //             console.log( this.testResponse );
-  //             console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
-
-
-  //             //check for any null or e,pty stuff
-
-  //             if(this.testResponse.images["0"].url) {
-  //               //set variables
-  //               this.testImg = this.testResponse.images["0"].url;
-  //             }
-  //             else
-  //             {
-  //               this.testImg = "";
-  //             }
-
-  //             if(this.testResponse.url) {
-  //               this.testUrl = this.testResponse.url;
-
-  //             }
-  //             else
-  //             {
-  //               this.testUrl = "";
-  //             }
-
-  //             if(this.testResponse.title) {
-
-  //               this.testTitle = this.testResponse.title;
-  //             }
-  //             else
-  //             {
-  //               this.testTitle = "No Title";
-  //             }
-
-  //             if( this.testResponse.description) {
-
-  //               //the description is too long so trim it to a certain length
-  //           let length = 20;
-  //           this.testDesc = this.testResponse.description;
-  //           //new length
-  //           this.testDesc = this.testDesc.substring(0, length);
-  //             }
-  //             else
-  //             {
-  //               this.testDesc = "No Descrition";
-  //             }
-              
-
- //              }, 2000);
-
- //        }
- //        else {
- //          console.log("too short or wrong url format")
- //          return;
- //        }
- //  }
-
-
-//old and for testing 
- grabURL(url) {
-
-   console.log("change detected");
-   console.log(url);
-// this.embedlyService
-//       .getUrlSummary(url)
-//         .then(res => this.testResponse = res)
-//         .catch(error => this.error = error);
-
-        //check that provstoreresponse is not undefines
-
-        //onlu care if the url lenght is greater than 10 
-        //else would be serch for letter in embedly
-        //check that it is a valid url ..google keep does this :) 
-        if(url.length >= 10 && this.isUrl(url)) {
-
-
-           setTimeout(() => {
-
-
-          setTimeout(() => {
-
-           this.embedlyService
-          .getUrlSummary(url)
-            .then(res => this.testResponse = res)
-            .catch(error => this.error = error);
-
-
-            setTimeout(() => {
-            
-                console.log( this.testResponse );
-              console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
-
-
-              //check for any null or e,pty stuff
-
-              if(this.testResponse.images["0"].url) {
-                //set variables
-                this.testImg = this.testResponse.images["0"].url;
-              }
-              else
-              {
-                this.testImg = "";
-              }
-
-              if(this.testResponse.url) {
-                this.testUrl = this.testResponse.url;
-
-              }
-              else
-              {
-                this.testUrl = "";
-              }
-
-              if(this.testResponse.title) {
-
-                this.testTitle = this.testResponse.title;
-              }
-              else
-              {
-                this.testTitle = "No Title";
-              }
-
-              if( this.testResponse.description) {
-
-                //the description is too long so trim it to a certain length
-            let length = 20;
-            this.testDesc = this.testResponse.description;
-            //new length
-            this.testDesc = this.testDesc.substring(0, length);
-              }
-              else
-              {
-                this.testDesc = "No Descrition";
-              }
-              
-
-              }, 2000);
-
-          }, 0);
-
-        }, 60000);
-
-
-        }
-        else
-        {
-          return;
-        }
-    
-  }
-
-
-  //takes a url 
-  //returns all the relvant summary data in an array
-  oldGetUrlSummary (url:string): any {
-      let response = "";
-      this.embedlyService
-      .getUrlSummary(url)
-        .then(res => response = res)
-        .catch(error => this.error = error);
-
-        //check that provstoreresponse is not undefines
-        setTimeout(() => {
-          console.log(response);
-          
-        }, 2000);
-    return response;
-  }
-
-
+ 
   clear() {
     //only removes elements put the namespace is still there :(
     //reset erthang !
