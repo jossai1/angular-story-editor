@@ -793,12 +793,15 @@ confirm() {
     // activity.attr("endTime", event.endDate.toISOString());
   }
 
+  //fix for issue #13
+  var act = this.doc.activity(name+":"+ name, startDate,endDate);
+
   if(locationIndex !== -1){
     //set the location to the user's input
      location = inputArray[this.getIndex("Location",inputArray).toString()].value;
      if (location !== "") {
 
-      activity.attr("prov:location", [location]);
+      act.attr("prov:location", [location]);
     }
 
   }
@@ -808,11 +811,12 @@ confirm() {
      label = inputArray[this.getIndex("Label",inputArray).toString()].value;
      if (label !== "") {
       
-      activity.attr("prov:label", [label]);
+     act.attr("prov:label", [label]);
     }
   }
   
-  this.doc.activity(name+":"+ name,startDate,endDate);
+
+  //this.doc.activity(name+":"+ name,startDate,endDate);
   // console.log(this.getDoc());
   // console.log(JSON.stringify(this.getProvJSON(), null, "  "));
 
@@ -1202,7 +1206,7 @@ highlight() {
   export() {
 
 
-    if(this.storyTitle !== "" && this.elementsOnCanvas.length > 1)
+    if(this.storyTitle !== "" && this.elementsOnCanvas.length !== 0)
     {
         this.process();
         console.log(this.getDoc());
