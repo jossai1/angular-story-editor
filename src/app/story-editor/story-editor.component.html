@@ -65,7 +65,8 @@
     </ul> -->
         <button class="btn btn-success navbar-btn" (click)="clear()">New Story</button>
         <button style="float:right;" class="btn btn-default navbar-btn" (click)="export()">Export</button>
-        <button style="" class="btn btn-default navbar-btn" (click)="activateSelectionMode()">Make Connections</button>
+        <button *ngIf="!selecting" style="" class="btn btn-default navbar-btn" (click)="activateSelectionMode()">Make Connections</button>
+        <button *ngIf="selecting" style="" class="btn btn-danger navbar-btn" (click)="deactivateSelection()">Cancel</button>
         <button style="float:right;" class="btn btn-info navbar-btn">Help</button>
     </div>
 </nav>
@@ -74,7 +75,7 @@
      <div class="story-title">
                 <input [(ngModel)]="storyTitle" type="text" placeholder="Story title">
             </div>
-        <div style="margin-right:-26%; background: white;" class="canvas col-sm-9 push-sm-3" [ngGrid]="gridConfig" (onDrop)="drop($event)" pDroppable="dd">
+        <div  class="canvas col-sm-9 push-sm-3" (onDrop)="drop($event)" pDroppable="dd">
            
             <!-- / boolean to see if we should show the 'drag and drop story...' sign //only show if canvas is blank /i.e canvas array  is empty -->
             <div *ngIf="elementsOnCanvas.length === 0" class="traced-sign grey-out">
@@ -96,13 +97,13 @@
                 <input size="25" pInputText type="text" [(ngModel)]="testInput" (keyup)="valuechange(testInput,$event)"/> -->
             <!-- remove after testing  -->
 
-            <!--  <div [dragula]='"first-bag"'> -->
+             <!-- <div [dragula]='"first-bag"'> -->
             <!-- old <div style="margin:2%;width:100px" *ngFor="let ele of elementsOnCanvas; let i = index;" [(ngGridItem)]="ele.config" (onDrag)="onDrag(i, $event)" [id]="ele.id"> -->
-            <div class="window" style="position: absolute;" (click)="chosenElement(ele.id)" *ngFor="let ele of elementsOnCanvas; let i = index;" [(ngGridItem)]="ele.config" (onDrag)="onDrag(ele.id, $event)" [id]="ele.id">
+            <div class="card" style="margin:2%;width:24%;position: absolute;" (click)="chosenElement(ele.id)" *ngFor="let ele of elementsOnCanvas; let i = index;" [id]="ele.id">
                 <!-- stiuff from url will go here -->
                 <div class="handle"> </div>
                  <!-- old <md-card style="width: 200px;height:70px" (dblclick)="op2.show($event)"> -->
-                     <md-card *ngIf="ele.isEditable" (dblclick)="ele.isEditable=false;ele.config.sizex=60;ele.config.sizey=12">
+                     <md-card *ngIf="ele.isEditable" (dblclick)="ele.isEditable=false;">
                     <!--  <img style="width:20px;height: 20px" [src]="ele.src" md-card-sm-image> -->
                     <img md-card-image style="float:left;width:50px;height: 50px" class="canvas-icons" [src]="ele.urlSummary.img">
                     <!-- <img class="canvas-icons" [src]="ele.src" md-card-avatar>
@@ -112,7 +113,7 @@
                     <md-card-subtitle style="margin-left:20%;font-size:10px;">{{ele.urlSummary.desc}} <a style="font-size: 14px;float: right;" [href]="ele.urlSummary.url"><i  class="fa fa-external-link" aria-hidden="true"></i></a></md-card-subtitle>
                 </md-card> 
                
-                    <fieldset *ngIf="!ele.isEditable" (dblclick)="ele.isEditable=true;ele.config.sizex=1">
+                    <fieldset *ngIf="!ele.isEditable" (dblclick)="ele.isEditable=true;">
                         <legend><img class="canvas-icons" [src]="ele.src"></legend>
                         <input size="25" pInputText type="text" [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" (keyup)="valuechange($event,input.name,input.value,ele)" />
                         <!-- SHOW START/END SPEACIAL INPUT BOX IF CLICKED  -->
@@ -137,7 +138,7 @@
                     </fieldset>
     
             </div>
-            <!-- </div> -->
+          <!--   </div> -->
             <!-- elements will go here -->
         </div>
         <div class="col-sm-3">

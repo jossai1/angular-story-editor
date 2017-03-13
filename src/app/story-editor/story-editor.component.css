@@ -105,6 +105,8 @@ div.panel {
 
 .canvas
 {
+   height:950px;
+   position: relative;
    /*max-height: 950px;
    overflow-y: scroll;*/
 }

@@ -138,13 +138,13 @@ export class StoryEditorComponent implements OnInit {
   connections:any [] = [];
 
   ngOnInit() {
-  	//test to see if doc is loaded 
+    //test to see if doc is loaded 
 
-  	///add some elemens initially to the element - for ease of testing
-  	// this.addThing();
-  	// this.addActor();
-  	// this.addEvent();
-  	// console.log(this.doc);
+    ///add some elemens initially to the element - for ease of testing
+    // this.addThing();
+    // this.addActor();
+    // this.addEvent();
+    // console.log(this.doc);
   }
  
 
@@ -155,45 +155,68 @@ confirm() {
              " OR Copy the document's link below: \r" + 
              this.storyUrl,
             accept: () => {
-            	 //Actual logic to perform a confirmation
+               //Actual logic to perform a confirmation
                 window.location.href = this.storyUrl;
             }
         });
     }
   setNameSpace(){
-  	// Prefix declarations
+    // Prefix declarations
+  }
+
+  randomIntFromInterval(min,max)
+  {
+     return Math.floor(Math.random()*(max-min+1)+min);
   }
 
   // adds an actor to the elementsOnCanvas list
   // which subsequently adds it to the canvas
   addActor() {
-	  //for ng2-grid box sizing
-	  let id = this.elementsOnCanvas.length - 1 ;	
-	  const conf = this._generateDefaultItemConfig();
+    //for ng2-grid box sizing
+    let id = this.elementsOnCanvas.length - 1 ;  
+    const conf = this._generateDefaultItemConfig();
     conf.payload = 1 + id;
-  	this.elementsOnCanvas.push({id:this.generateUUID(), isEditable:true, config:conf, urlSummary:{img:"../../assets/images/actor-icon2.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/actor-icon2.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given Name",id:3},{name:"E-mail",id:4}]});
+    let UUID = this.generateUUID();
+
+    this.elementsOnCanvas.push({id:UUID, isEditable:true, config:conf, urlSummary:{img:"../../assets/images/actor-icon2.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/actor-icon2.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given Name",id:3},{name:"E-mail",id:4}]});
+    setTimeout(() => {
+       jsPlumb.draggable(UUID);
+        //place in a diff position each time - fix for overallaping divs issue
+       $("#"+ UUID).css({top: this.randomIntFromInterval(1,300), left: this.randomIntFromInterval(1,300)});
+    }, 100);
 
   }
 
    // adds an event  to the elementsOnCanvas list
   // which subsequently adds it to the canvas
   addEvent() {
-  	//for ng2-grid
-  	let id = this.elementsOnCanvas.length - 1 ;	
-	  const conf = this._generateDefaultItemConfig();
+    //for ng2-grid
+    let id = this.elementsOnCanvas.length - 1 ;  
+    const conf = this._generateDefaultItemConfig();
     conf.payload = 1 + id;
-  	this.elementsOnCanvas.push({id:this.generateUUID(), isEditable:true, config:conf, startDate:null,endDate:null,startDateAdded:false,endDateAdded:false ,   urlSummary:{img:"../../assets/images/event64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
-  	
+    let UUID = this.generateUUID();
+    this.elementsOnCanvas.push({id:UUID, isEditable:true, config:conf, startDate:null,endDate:null,startDateAdded:false,endDateAdded:false ,   urlSummary:{img:"../../assets/images/event64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
+    setTimeout(() => {
+       jsPlumb.draggable(UUID);
+        //place in a diff position each time - fix for overallaping divs issue
+       $("#"+ UUID).css({top: this.randomIntFromInterval(1,300), left: this.randomIntFromInterval(1,300)});
+    }, 100);
   }
 
   // adds a thing to the elementsOnCanvas list
   // which subsequently adds it to the canvas
   addThing() { 
-  	//for ng2-grid box sizing
-  	let id = this.elementsOnCanvas.length - 1 ;	
-	  const conf = this._generateDefaultItemConfig();
+    //for ng2-grid box sizing
+    let id = this.elementsOnCanvas.length - 1 ;  
+    const conf = this._generateDefaultItemConfig();
     conf.payload = 1 + id;
-  	this.elementsOnCanvas.push({id:this.generateUUID(), isEditable:true, config:conf, urlSummary:{img:"../../assets/images/document64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/document64.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2}]});
+    let UUID = this.generateUUID();
+    this.elementsOnCanvas.push({id:UUID, isEditable:true, config:conf, urlSummary:{img:"../../assets/images/document64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/document64.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2}]});
+    setTimeout(() => {
+       jsPlumb.draggable(UUID);
+       //place in a diff position each time - fix for overallaping divs issue
+       $("#"+ UUID).css({top: this.randomIntFromInterval(1,300), left: this.randomIntFromInterval(1,300)});
+    }, 100);
 
   }
 
@@ -202,11 +225,11 @@ confirm() {
   //TODO: HOW TO REMOVE ELEMENT FROM PROV DOCUMENT ALSO ?
   deleteElementFromCanvas(eleId:string) {
 
-  	for (var i = 0; i < this.elementsOnCanvas.length; i++) {
-  		if(this.elementsOnCanvas[i.toString()].id === eleId) {
-  			this.elementsOnCanvas.splice( i, 1 );
-  		}
-  	};
+    for (var i = 0; i < this.elementsOnCanvas.length; i++) {
+      if(this.elementsOnCanvas[i.toString()].id === eleId) {
+        this.elementsOnCanvas.splice( i, 1 );
+      }
+    };
 
   }
 
@@ -216,21 +239,21 @@ confirm() {
   //TODO: HOW TO REMOVE ELEMENT FROM PROV DOCUMENT ALSO ?
   genericDeleteElement(eleId:number , array:Array<Object>) {
 
-  	for (var i = 0; i < array.length; i++) {
-  		if(i === eleId) {
-  			array.splice( i, 1 );
-  		}
-  	};
+    for (var i = 0; i < array.length; i++) {
+      if(i === eleId) {
+        array.splice( i, 1 );
+      }
+    };
 
   }
 
 
   getDoc() {
-  	return this.doc.scope;
+    return this.doc.scope;
   }
 
   getProvJSON() {
-  	return this.getDoc().getProvJSON();
+    return this.getDoc().getProvJSON();
   }
 
 
@@ -239,307 +262,307 @@ confirm() {
   // so we need to split this out into their own methods 
   processEleAttribute(selectedAttrId, eleType, inputArray, attributeArray,ele) {
 
-  	// type thing
-  	if(eleType === "thing") {
+    // type thing
+    if(eleType === "thing") {
 
-  		this.addClickedAttToThingInput(selectedAttrId,inputArray,attributeArray);
-  	}
+      this.addClickedAttToThingInput(selectedAttrId,inputArray,attributeArray);
+    }
 
-  	// type actor
-  	else if (eleType === "actor") {
-  		this.addClickedAttToActorInput(selectedAttrId,inputArray,attributeArray);
-  	}
-	
-	// type event 
-	else { 
-		this.addClickedAttToEventInput(selectedAttrId,inputArray,attributeArray,ele);
-	}  	
+    // type actor
+    else if (eleType === "actor") {
+      this.addClickedAttToActorInput(selectedAttrId,inputArray,attributeArray);
+    }
+  
+  // type event 
+  else { 
+    this.addClickedAttToEventInput(selectedAttrId,inputArray,attributeArray,ele);
+  }    
 
   }
 
   //add attribute to a thing
   addClickedAttToThingInput(selectedAttrId:number, inputArray, attributeArray) {
 
-  	console.log(selectedAttrId);
+    console.log(selectedAttrId);
 
-  	//only allowed to have max 3 extra attributes 
-  	//stop adding stop adding more atributes
-  	if(inputArray.length <= 3 ) {
-  			
-	  	//location attr 
-	  	if (selectedAttrId === 0) {
-	  		//this.attributedSelected0 = true;
-	  		inputArray.push({name:"Location",value:"", id:this.generateUUID()});
-	  		//remove location from list so they cant add it again
-	  		this.removeAttributeFromList("Location",attributeArray);
-	  	}
-	  	// title attr 
-	  	else if(selectedAttrId === 1) {
-	  
-	  		//ensure no dupes use salt id
-	  		// so each input can be uniquely identified
-	  		inputArray.push({name:"Title",value:"", id:this.generateUUID()});
-	  		//remove from areay so users cant choose it 
-	  		//remove title from list so they cant add it again
-	  		this.removeAttributeFromList("Title",attributeArray);
-	  	}
+    //only allowed to have max 3 extra attributes 
+    //stop adding stop adding more atributes
+    if(inputArray.length <= 3 ) {
+        
+      //location attr 
+      if (selectedAttrId === 0) {
+        //this.attributedSelected0 = true;
+        inputArray.push({name:"Location",value:"", id:this.generateUUID()});
+        //remove location from list so they cant add it again
+        this.removeAttributeFromList("Location",attributeArray);
+      }
+      // title attr 
+      else if(selectedAttrId === 1) {
+    
+        //ensure no dupes use salt id
+        // so each input can be uniquely identified
+        inputArray.push({name:"Title",value:"", id:this.generateUUID()});
+        //remove from areay so users cant choose it 
+        //remove title from list so they cant add it again
+        this.removeAttributeFromList("Title",attributeArray);
+      }
 
-	  	//label attr 
-	  	else if(selectedAttrId === 2) {
-	  		
-	  		inputArray.push({name:"Label",value:"", id:this.generateUUID()});
-	  		//remove label from list so they cant add it again
-	  		this.removeAttributeFromList("Label",attributeArray);
-	  	} 
+      //label attr 
+      else if(selectedAttrId === 2) {
+        
+        inputArray.push({name:"Label",value:"", id:this.generateUUID()});
+        //remove label from list so they cant add it again
+        this.removeAttributeFromList("Label",attributeArray);
+      } 
 
-	  	//type attr 
-	  	else if (selectedAttrId === 3) {
-	  		
-	  		inputArray.push({name:"Type",value:"", id:this.generateUUID()});
-	  		//remove type from list so they cant add it again
-	  		this.removeAttributeFromList("Type",attributeArray);
-	  	}
+      //type attr 
+      else if (selectedAttrId === 3) {
+        
+        inputArray.push({name:"Type",value:"", id:this.generateUUID()});
+        //remove type from list so they cant add it again
+        this.removeAttributeFromList("Type",attributeArray);
+      }
 
-		else {
-	  		//case were it's -1 so do nothing 
-	  		//this is because the selectedoption by default is set to  -1 to allow a title for drop down 
-	  	}
- 	}
+    else {
+        //case were it's -1 so do nothing 
+        //this is because the selectedoption by default is set to  -1 to allow a title for drop down 
+      }
+   }
 
- 	else {
-  		alert("Reached max number of attributes that can be added!");
-  	}
+   else {
+      alert("Reached max number of attributes that can be added!");
+    }
   }
 
    //add attribute to a actor
   addClickedAttToActorInput(selectedAttrId:number, inputArray, attributeArray) {
-  	
-  	console.log(selectedAttrId);
+    
+    console.log(selectedAttrId);
 
-  	//only allowed to have max 5 extra attributes 
-  	//stop adding stop adding more atributes
-  	if(inputArray.length <= 5 ) {
-  			
-	  	//location attr 
-	  	if (selectedAttrId === 0) {
-	  		//this.attributedSelected0 = true;
-	  		inputArray.push({name:"Location",value:"", id:this.generateUUID()});
-	  		//remove location from list so they cant add it again
-	  		this.removeAttributeFromList("Location",attributeArray);
-	  	}
-	  	// label attr 
-	  	else if(selectedAttrId === 1) {
-	  
-	  		//ensure no dupes use salt id
-	  		// so each input can be uniquely identified
-	  		inputArray.push({name:"Label",value:"", id:this.generateUUID()});
-	  		//remove from areay so users cant choose it 
-	  		//remove title from list so they cant add it again
-	  		this.removeAttributeFromList("Label",attributeArray);
-	  	}
+    //only allowed to have max 5 extra attributes 
+    //stop adding stop adding more atributes
+    if(inputArray.length <= 5 ) {
+        
+      //location attr 
+      if (selectedAttrId === 0) {
+        //this.attributedSelected0 = true;
+        inputArray.push({name:"Location",value:"", id:this.generateUUID()});
+        //remove location from list so they cant add it again
+        this.removeAttributeFromList("Location",attributeArray);
+      }
+      // label attr 
+      else if(selectedAttrId === 1) {
+    
+        //ensure no dupes use salt id
+        // so each input can be uniquely identified
+        inputArray.push({name:"Label",value:"", id:this.generateUUID()});
+        //remove from areay so users cant choose it 
+        //remove title from list so they cant add it again
+        this.removeAttributeFromList("Label",attributeArray);
+      }
 
-	  	//type attr 
-	  	else if(selectedAttrId === 2) {
-	  		
-	  		inputArray.push({name:"Type",value:"", id:this.generateUUID()});
-	  		//remove label from list so they cant add it again
-	  		this.removeAttributeFromList("Type",attributeArray);
-	  	} 
+      //type attr 
+      else if(selectedAttrId === 2) {
+        
+        inputArray.push({name:"Type",value:"", id:this.generateUUID()});
+        //remove label from list so they cant add it again
+        this.removeAttributeFromList("Type",attributeArray);
+      } 
 
-	  	//given name attr 
-	  	else if (selectedAttrId === 3) {
-	  		
-	  		inputArray.push({name:"Given Name",value:"", id:this.generateUUID()});
-	  		//remove type from list so they cant add it again
-	  		this.removeAttributeFromList("Given Name",attributeArray);
-	  	}
+      //given name attr 
+      else if (selectedAttrId === 3) {
+        
+        inputArray.push({name:"Given Name",value:"", id:this.generateUUID()});
+        //remove type from list so they cant add it again
+        this.removeAttributeFromList("Given Name",attributeArray);
+      }
 
-	  	//email attr 
-	  	else if (selectedAttrId === 4) {
-	  		
-	  		inputArray.push({name:"E-mail",value:"", id:this.generateUUID()});
-	  		//remove type from list so they cant add it again
-	  		this.removeAttributeFromList("E-mail",attributeArray);
-	  	}
+      //email attr 
+      else if (selectedAttrId === 4) {
+        
+        inputArray.push({name:"E-mail",value:"", id:this.generateUUID()});
+        //remove type from list so they cant add it again
+        this.removeAttributeFromList("E-mail",attributeArray);
+      }
 
-		else {
-	  		//case were it's -1 so do nothing 
-	  		//this is because the selectedoption by default is set to  -1 to allow a title for drop down 
-	  	}
- 	}
+    else {
+        //case were it's -1 so do nothing 
+        //this is because the selectedoption by default is set to  -1 to allow a title for drop down 
+      }
+   }
 
- 	else {
-  		alert("Reached max number of attributes that can be added!");
-  	}
+   else {
+      alert("Reached max number of attributes that can be added!");
+    }
   }
 
    //add attribute to a event
   addClickedAttToEventInput(selectedAttrId:number, inputArray, attributeArray,ele) {
-  	
-  	console.log(selectedAttrId);
+    
+    console.log(selectedAttrId);
 
-  	//only allowed to have max 5 extra attributes 
-  	//stop adding stop adding more atributes
-  	if(inputArray.length <= 4 ) {
-  			
-	  	//location attr 
-	  	if (selectedAttrId === 0) {
-	  		//this.attributedSelected0 = true;
-	  		inputArray.push({name:"Location",value:"", id:this.generateUUID()});
-	  		//remove location from list so they cant add it again
-	  		this.removeAttributeFromList("Location",attributeArray);
-	  	}
-	  	// label attr 
-	  	else if(selectedAttrId === 1) {
-	  
-	  		//ensure no dupes use salt id
-	  		// so each input can be uniquely identified
-	  		inputArray.push({name:"Label",value:"", id:this.generateUUID()});
-	  		//remove from areay so users cant choose it 
-	  		//remove title from list so they cant add it again
-	  		this.removeAttributeFromList("Label",attributeArray);
-	  	}
+    //only allowed to have max 5 extra attributes 
+    //stop adding stop adding more atributes
+    if(inputArray.length <= 4 ) {
+        
+      //location attr 
+      if (selectedAttrId === 0) {
+        //this.attributedSelected0 = true;
+        inputArray.push({name:"Location",value:"", id:this.generateUUID()});
+        //remove location from list so they cant add it again
+        this.removeAttributeFromList("Location",attributeArray);
+      }
+      // label attr 
+      else if(selectedAttrId === 1) {
+    
+        //ensure no dupes use salt id
+        // so each input can be uniquely identified
+        inputArray.push({name:"Label",value:"", id:this.generateUUID()});
+        //remove from areay so users cant choose it 
+        //remove title from list so they cant add it again
+        this.removeAttributeFromList("Label",attributeArray);
+      }
 
-	  	//start time attr 
-	  	else if (selectedAttrId === 2) {
-	  		
-	  		//user has added a start time so lets add a special input box for them 
-	  		//to do this we set the startDateAdded var to true 
-	  		// which will make it appear using ngif 
+      //start time attr 
+      else if (selectedAttrId === 2) {
+        
+        //user has added a start time so lets add a special input box for them 
+        //to do this we set the startDateAdded var to true 
+        // which will make it appear using ngif 
 
-	  		ele.startDateAdded = true;
-	  		
-	  		//inputArray.push({name:"Start Time",value:"", id:this.generateUUID()});
-	  		//remove type from list so they cant add it again
-	  		this.removeAttributeFromList("Start Time",attributeArray);
-	  	}
+        ele.startDateAdded = true;
+        
+        //inputArray.push({name:"Start Time",value:"", id:this.generateUUID()});
+        //remove type from list so they cant add it again
+        this.removeAttributeFromList("Start Time",attributeArray);
+      }
 
-	  	//end time attr 
-	  	else if (selectedAttrId === 3) {
+      //end time attr 
+      else if (selectedAttrId === 3) {
 
-	  		//user has added a start time so lets add a special input box for them 
-	  		//to do this we set the startDateAdded var to true 
-	  		// which will make it appear using ngif 
+        //user has added a start time so lets add a special input box for them 
+        //to do this we set the startDateAdded var to true 
+        // which will make it appear using ngif 
 
-	  		ele.endDateAdded = true;
-	  		
-	  		//inputArray.push({name:"End Time",value:"", id:this.generateUUID()});
-	  		//remove type from list so they cant add it again
-	  		this.removeAttributeFromList("End Time",attributeArray);
-	  	}
+        ele.endDateAdded = true;
+        
+        //inputArray.push({name:"End Time",value:"", id:this.generateUUID()});
+        //remove type from list so they cant add it again
+        this.removeAttributeFromList("End Time",attributeArray);
+      }
 
-		else {
-	  		//case were it's -1 so do nothing 
-	  		//this is because the selectedoption by default is set to  -1 to allow a title for drop down 
-	  	}
+    else {
+        //case were it's -1 so do nothing 
+        //this is because the selectedoption by default is set to  -1 to allow a title for drop down 
+      }
   }
 }
 
 
-	//split url and grab the string after the last slash 
-	//this will be the element's name
-	getElementNameFromURL(URL:string):string {
-		
-		//name extracted from url 
-		// if it ends in http://jane.com/
-		//it would return an empty string 
+  //split url and grab the string after the last slash 
+  //this will be the element's name
+  getElementNameFromURL(URL:string):string {
+    
+    //name extracted from url 
+    // if it ends in http://jane.com/
+    //it would return an empty string 
 
-		// so we need to check if theres is a trailing slash and if it exits  -> remove it and THEN WE CAN process 
-		if(URL.substr(-1) === '/') {
+    // so we need to check if theres is a trailing slash and if it exits  -> remove it and THEN WE CAN process 
+    if(URL.substr(-1) === '/') {
 
-       		URL = URL.substr(0, URL.length - 1);
-    	}
+           URL = URL.substr(0, URL.length - 1);
+      }
 
-		//NOW we can process as usual 
-  		let name:string = /[^/]*$/.exec(URL)[0];
-  		return name;
-	}
+    //NOW we can process as usual 
+      let name:string = /[^/]*$/.exec(URL)[0];
+      return name;
+  }
 
   // creates a prov version of a 'thing' story element param
   // adds it to global prov document 
   processThing(thing) {
 
-  	
-  	let inputArray = thing.inputArray;
-  	let attributeArray = thing.attributes;
+    
+    let inputArray = thing.inputArray;
+    let attributeArray = thing.attributes;
 
-  	console.log(inputArray);
-	
-	let url = inputArray["0"].value;
+    console.log(inputArray);
+  
+  let url = inputArray["0"].value;
 
-	//handle case were url has no http:// before it 
-	//if the proefix is not ther 
-	///we append it 
-	var prefix = 'http://';
-		if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  )
-		{
-		    url = prefix + url;
-		}
-	let name = this.getElementNameFromURL(url);
+  //handle case were url has no http:// before it 
+  //if the proefix is not ther 
+  ///we append it 
+  var prefix = 'http://';
+    if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  )
+    {
+        url = prefix + url;
+    }
+  let name = this.getElementNameFromURL(url);
 
-	//just get the suffix without the 'name' bit which is the bit after the last slash 
-	url = this.stripTrailingSlash(url);
-	url = url.substring(0, url.lastIndexOf('/')) + "/";
+  //just get the suffix without the 'name' bit which is the bit after the last slash 
+  url = this.stripTrailingSlash(url);
+  url = url.substring(0, url.lastIndexOf('/')) + "/";
 
-	console.log(name,url);
-	
+  console.log(name,url);
+  
 
-	
-	//set the name and url of the enetity 
-	this.doc.addNamespace(name, url);
+  
+  //set the name and url of the enetity 
+  this.doc.addNamespace(name, url);
 
-	//set any attributes the user has added 
-	let titleIndex:number = this.getIndex("Title",inputArray);
-	let locationIndex:number = this.getIndex("Location",inputArray);
-	let labelIndex:number = this.getIndex("Label",inputArray);
-	
+  //set any attributes the user has added 
+  let titleIndex:number = this.getIndex("Title",inputArray);
+  let locationIndex:number = this.getIndex("Location",inputArray);
+  let labelIndex:number = this.getIndex("Label",inputArray);
+  
 
-	let title:string;
-	let location:string;
-	let label:string;
-	
+  let title:string;
+  let location:string;
+  let label:string;
+  
 
-	//keep a ref to entity so we can update its attributes
-	let entity  = this.doc.entity(name+":"+ name);
+  //keep a ref to entity so we can update its attributes
+  let entity  = this.doc.entity(name+":"+ name);
 
-	thing.prefixSuffix = name+":"+ name; //set element's suffixPrefix
+  thing.prefixSuffix = name+":"+ name; //set element's suffixPrefix
 
 
-	//-1 indicates that this attribute was not added to the element
-	//now lets set our attributess
-	// if an attribute is empty then a user has not set it TODO: maybe set to null instead of empty?
-	// CHECK for which attributes a user has set
-	// if set set them
-	
-	if(titleIndex !== -1){
-		//set the title to the user's input
-		 title = inputArray[this.getIndex("Title",inputArray).toString()].value;
-		 
-		if (title !== "") {
+  //-1 indicates that this attribute was not added to the element
+  //now lets set our attributess
+  // if an attribute is empty then a user has not set it TODO: maybe set to null instead of empty?
+  // CHECK for which attributes a user has set
+  // if set set them
+  
+  if(titleIndex !== -1){
+    //set the title to the user's input
+     title = inputArray[this.getIndex("Title",inputArray).toString()].value;
+     
+    if (title !== "") {
 
-			entity.attr("dcterms:title", [title]);
-		}
-	}
-	if(locationIndex !== -1){
-		//set the location to the user's input
-		 location = inputArray[this.getIndex("Location",inputArray).toString()].value;
-		 if (location !== "") {
+      entity.attr("dcterms:title", [title]);
+    }
+  }
+  if(locationIndex !== -1){
+    //set the location to the user's input
+     location = inputArray[this.getIndex("Location",inputArray).toString()].value;
+     if (location !== "") {
 
-			entity.attr("prov:location", [location]);
-		}
+      entity.attr("prov:location", [location]);
+    }
 
-	}
-	if(labelIndex !== -1){
-		//set the label to the user's input
-		 label = inputArray[this.getIndex("Label",inputArray).toString()].value;
-		 if (label !== "") {
-			
-			entity.attr("prov:label", [label]);
-		}
-	}
-	
-	// console.log(this.getDoc());
-	// console.log(JSON.stringify(this.getProvJSON(), null, "  "));
+  }
+  if(labelIndex !== -1){
+    //set the label to the user's input
+     label = inputArray[this.getIndex("Label",inputArray).toString()].value;
+     if (label !== "") {
+      
+      entity.attr("prov:label", [label]);
+    }
+  }
+  
+  // console.log(this.getDoc());
+  // console.log(JSON.stringify(this.getProvJSON(), null, "  "));
 
   }
 
@@ -547,139 +570,139 @@ confirm() {
   // adds it to global prov document 
   processActor(actor) {
 
-  	let inputArray = actor.inputArray;
-  	let attributeArray = actor.attributes;
+    let inputArray = actor.inputArray;
+    let attributeArray = actor.attributes;
 
-  	// test 
-  	console.log(inputArray);
+    // test 
+    console.log(inputArray);
 
-	let url = inputArray["0"].value;
+  let url = inputArray["0"].value;
 
-	//handle case were url has no http:// before it 
-	//if the proefix is not ther 
-	///we append it 
-	var prefix = 'http://';
-		if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  )
-		{
-		    url = prefix + url;
-		}
-	let name = this.getElementNameFromURL(url);
+  //handle case were url has no http:// before it 
+  //if the proefix is not ther 
+  ///we append it 
+  var prefix = 'http://';
+    if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  )
+    {
+        url = prefix + url;
+    }
+  let name = this.getElementNameFromURL(url);
 
-	//just get the suffix without the 'name' bit which is the bit after the last slash 
-	url = this.stripTrailingSlash(url);
-	url = url.substring(0, url.lastIndexOf('/')) + "/";
+  //just get the suffix without the 'name' bit which is the bit after the last slash 
+  url = this.stripTrailingSlash(url);
+  url = url.substring(0, url.lastIndexOf('/')) + "/";
 
-	console.log(name,url);
-	
-	
-	//set the name and url of the enetity 
-	this.doc.addNamespace(name, url);
+  console.log(name,url);
+  
+  
+  //set the name and url of the enetity 
+  this.doc.addNamespace(name, url);
 
-	//set any attributes the user has added 
-	let locationIndex:number = this.getIndex("Location",inputArray);
-	let labelIndex:number = this.getIndex("Label",inputArray);
-	let typeIndex:number = this.getIndex("Type",inputArray);
-	let givenNameIndex:number = this.getIndex("Given Name",inputArray);
-	let emailIndex:number = this.getIndex("E-mail",inputArray);
+  //set any attributes the user has added 
+  let locationIndex:number = this.getIndex("Location",inputArray);
+  let labelIndex:number = this.getIndex("Label",inputArray);
+  let typeIndex:number = this.getIndex("Type",inputArray);
+  let givenNameIndex:number = this.getIndex("Given Name",inputArray);
+  let emailIndex:number = this.getIndex("E-mail",inputArray);
 
-	let location:string;
-	let label:string;
-	let type:string;
-	let givenName:string;
-	let email:string; 
+  let location:string;
+  let label:string;
+  let type:string;
+  let givenName:string;
+  let email:string; 
 
-	//keep a ref to agent so we can update its attributes
-	let agent  = this.doc.agent(name+":"+ name);
+  //keep a ref to agent so we can update its attributes
+  let agent  = this.doc.agent(name+":"+ name);
 
-	actor.prefixSuffix = name+":"+ name; //set element's suffixPrefix
+  actor.prefixSuffix = name+":"+ name; //set element's suffixPrefix
 
-	//-1 indicates that this attribute was not added to the element
-	//now lets set our attributess
-	// if an attribute is empty then a user has not set it TODO: maybe set to null instead of empty?
-	// CHECK for which attributes a user has set
-	// if set set them
-	
-	if(givenNameIndex !== -1){
-		//set the title to the user's input
-		 givenName = inputArray[this.getIndex("Given Name",inputArray).toString()].value;
+  //-1 indicates that this attribute was not added to the element
+  //now lets set our attributess
+  // if an attribute is empty then a user has not set it TODO: maybe set to null instead of empty?
+  // CHECK for which attributes a user has set
+  // if set set them
+  
+  if(givenNameIndex !== -1){
+    //set the title to the user's input
+     givenName = inputArray[this.getIndex("Given Name",inputArray).toString()].value;
 
-		if (givenName !== "") {
+    if (givenName !== "") {
 
-			agent.attr("foaf:givenName", givenName);
-		}
-	}
+      agent.attr("foaf:givenName", givenName);
+    }
+  }
 
-	if(emailIndex !== -1){
-		//set the title to the user's input
-		 email = inputArray[this.getIndex("E-mail",inputArray).toString()].value;
-		 
-		if (email !== "") {
+  if(emailIndex !== -1){
+    //set the title to the user's input
+     email = inputArray[this.getIndex("E-mail",inputArray).toString()].value;
+     
+    if (email !== "") {
 
-			agent.attr("foaf:mbox", "<"+email+">");
-		}
-	}
+      agent.attr("foaf:mbox", "<"+email+">");
+    }
+  }
 
-	if(locationIndex !== -1){
-		//set the location to the user's input
-		 location = inputArray[this.getIndex("Location",inputArray).toString()].value;
-		 if (location !== "") {
+  if(locationIndex !== -1){
+    //set the location to the user's input
+     location = inputArray[this.getIndex("Location",inputArray).toString()].value;
+     if (location !== "") {
 
-			agent.attr("prov:location", [location]);
-		}
+      agent.attr("prov:location", [location]);
+    }
 
-	}
+  }
 
-	if(labelIndex !== -1){
-		//set the label to the user's input
-		 label = inputArray[this.getIndex("Label",inputArray).toString()].value;
-		 if (label !== "") {
-			
-			agent.attr("prov:label", [label]);
-		}
-	}
+  if(labelIndex !== -1){
+    //set the label to the user's input
+     label = inputArray[this.getIndex("Label",inputArray).toString()].value;
+     if (label !== "") {
+      
+      agent.attr("prov:label", [label]);
+    }
+  }
 
-	//only agents will have types
-	if(typeIndex !== -1) {
+  //only agents will have types
+  if(typeIndex !== -1) {
 
-		//todo: have a drop down box for users to select a prov type
-		// *** or they can click 'other' and define thir own -- will go for this option (custom type) and drag and drop 
-		// these will be two diff use cases 
-		// this is just for now till we implement the drag and drop 
-		// but we will still need the box their if they want to have thier own custom type 
-		// maybe give them the drop down and drag and drop option and in both cases they can create thier own custom types
-		// hard code type to Person for now till we decide // let user type in a type for now - has to be on of the inbuilt prov types
-		
-		//set the type to the user's input
-		 type = inputArray[this.getIndex("Type",inputArray).toString()].value;
-		 if (type !== "") {
+    //todo: have a drop down box for users to select a prov type
+    // *** or they can click 'other' and define thir own -- will go for this option (custom type) and drag and drop 
+    // these will be two diff use cases 
+    // this is just for now till we implement the drag and drop 
+    // but we will still need the box their if they want to have thier own custom type 
+    // maybe give them the drop down and drag and drop option and in both cases they can create thier own custom types
+    // hard code type to Person for now till we decide // let user type in a type for now - has to be on of the inbuilt prov types
+    
+    //set the type to the user's input
+     type = inputArray[this.getIndex("Type",inputArray).toString()].value;
+     if (type !== "") {
 
-		 	//check which type user put/drug in 
-		 	if(type.toLowerCase() === "organisation")
-		 	{
-				agent.attr("prov:type", this.prov.ns.qn("Organization"));
-				// agent.attr("prov:type", this.prov.ns.Organization);
-		 	}
-		 	else if(type.toLowerCase() === "person")
-		 	{
+       //check which type user put/drug in 
+       if(type.toLowerCase() === "organisation")
+       {
+        agent.attr("prov:type", this.prov.ns.qn("Organization"));
+        // agent.attr("prov:type", this.prov.ns.Organization);
+       }
+       else if(type.toLowerCase() === "person")
+       {
 
-		 		agent.attr("prov:type", this.prov.ns.qn("Person"));
-		 	}
-		 	else if(type.toLowerCase() === "softwareagent")
-		 	{
+         agent.attr("prov:type", this.prov.ns.qn("Person"));
+       }
+       else if(type.toLowerCase() === "softwareagent")
+       {
 
-		 	 	agent.attr("prov:type", this.prov.ns.qn("SoftwareAgent"));
-		 	 	// agent.attr("prov:type", this.prov.ns.SoftwareAgent);
-		 	}
-		 	else
-		 	{
-		 		//todo:allert that this field does nt have a valid type
-		 	}
+          agent.attr("prov:type", this.prov.ns.qn("SoftwareAgent"));
+          // agent.attr("prov:type", this.prov.ns.SoftwareAgent);
+       }
+       else
+       {
+         //todo:allert that this field does nt have a valid type
+       }
 
-		}
-	}
-	
-	// console.log(this.getDoc());
-	// console.log(JSON.stringify(this.getProvJSON(), null, "  "));
+    }
+  }
+  
+  // console.log(this.getDoc());
+  // console.log(JSON.stringify(this.getProvJSON(), null, "  "));
 
 
   }
@@ -695,103 +718,103 @@ confirm() {
   // adds it to global prov document 
   processEvent(event) {
 
-  	let inputArray = event.inputArray;
-  	let attributeArray = event.attributes;
+    let inputArray = event.inputArray;
+    let attributeArray = event.attributes;
 
-  	// test 
-  	console.log(inputArray);
+    // test 
+    console.log(inputArray);
 
-	let url = inputArray["0"].value;
-
-
-	//handle case were url has no http:// before it 
-	//if the proefix is not ther 
-	///we append it 
-	var prefix = 'http://';
-		if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  )
-		{
-		    url = prefix + url;
-		}
-
-	let name = this.getElementNameFromURL(url);
-	//just get the suffix without the 'name' bit which is the bit after the last slash 
-	url = this.stripTrailingSlash(url);
-	url = url.substring(0, url.lastIndexOf('/')) + "/";
-
-	console.log(name,url);
-
-	//set the name and url of the enetity 
-	this.doc.addNamespace(name, url);
-
-	//set any attributes the user has added 
-	let locationIndex:number = this.getIndex("Location",inputArray);
-	let labelIndex:number = this.getIndex("Label",inputArray);
-	let typeIndex:number = this.getIndex("Type",inputArray);
-
-	//not being added to input array - remove?
-	// let startTimeIndex:number = this.getIndex("Start Time",inputArray);
-	// let endTimeIndex:number = this.getIndex("End Time",inputArray);
-
-	let location:string;
-	let label:string;
-	let type:string;
-	let startDate:string;
-	let endDate:string; 
-
-	//keep a ref to activity so we can update its attributes
-	let activity  = this.doc.activity(name+":"+ name);
-
-	event.prefixSuffix = name+":"+ name; //set element's suffixPrefix
+  let url = inputArray["0"].value;
 
 
-	//-1 indicates that this attribute was not added to the element
-	//now lets set our attributess
-	// if an attribute is empty then a user has not set it TODO: maybe set to null instead of empty?
-	// CHECK for which attributes a user has set
-	// if set set them
-	
-	//TODO:STORT OUT TIME FORMATTING FOR USERS 
-	//MAKE IT EASIER 
-	if(event.startDate !== null) {
-		//set the title to the user's input
-		console.log("startdate added", event.startDate.toISOString());
-		startDate = event.startDate.toISOString();
+  //handle case were url has no http:// before it 
+  //if the proefix is not ther 
+  ///we append it 
+  var prefix = 'http://';
+    if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  )
+    {
+        url = prefix + url;
+    }
 
-		// activity("startTimee", event.startDate.toISOString());
-		
-	}
+  let name = this.getElementNameFromURL(url);
+  //just get the suffix without the 'name' bit which is the bit after the last slash 
+  url = this.stripTrailingSlash(url);
+  url = url.substring(0, url.lastIndexOf('/')) + "/";
 
-	if(event.endDate !== null){
-		//set the title to the user's input
-		 
-		console.log("endDate added", event.endDate.toISOString());
-		endDate = event.endDate.toISOString();
+  console.log(name,url);
 
-		// activity.attr("endTime", event.endDate.toISOString());
-	}
+  //set the name and url of the enetity 
+  this.doc.addNamespace(name, url);
 
-	if(locationIndex !== -1){
-		//set the location to the user's input
-		 location = inputArray[this.getIndex("Location",inputArray).toString()].value;
-		 if (location !== "") {
+  //set any attributes the user has added 
+  let locationIndex:number = this.getIndex("Location",inputArray);
+  let labelIndex:number = this.getIndex("Label",inputArray);
+  let typeIndex:number = this.getIndex("Type",inputArray);
 
-			activity.attr("prov:location", [location]);
-		}
+  //not being added to input array - remove?
+  // let startTimeIndex:number = this.getIndex("Start Time",inputArray);
+  // let endTimeIndex:number = this.getIndex("End Time",inputArray);
 
-	}
+  let location:string;
+  let label:string;
+  let type:string;
+  let startDate:string;
+  let endDate:string; 
 
-	if(labelIndex !== -1){
-		//set the label to the user's input
-		 label = inputArray[this.getIndex("Label",inputArray).toString()].value;
-		 if (label !== "") {
-			
-			activity.attr("prov:label", [label]);
-		}
-	}
-	
-	this.doc.activity(name+":"+ name,startDate,endDate);
-	// console.log(this.getDoc());
-	// console.log(JSON.stringify(this.getProvJSON(), null, "  "));
+  //keep a ref to activity so we can update its attributes
+  let activity  = this.doc.activity(name+":"+ name);
+
+  event.prefixSuffix = name+":"+ name; //set element's suffixPrefix
+
+
+  //-1 indicates that this attribute was not added to the element
+  //now lets set our attributess
+  // if an attribute is empty then a user has not set it TODO: maybe set to null instead of empty?
+  // CHECK for which attributes a user has set
+  // if set set them
+  
+  //TODO:STORT OUT TIME FORMATTING FOR USERS 
+  //MAKE IT EASIER 
+  if(event.startDate !== null) {
+    //set the title to the user's input
+    console.log("startdate added", event.startDate.toISOString());
+    startDate = event.startDate.toISOString();
+
+    // activity("startTimee", event.startDate.toISOString());
+    
+  }
+
+  if(event.endDate !== null){
+    //set the title to the user's input
+     
+    console.log("endDate added", event.endDate.toISOString());
+    endDate = event.endDate.toISOString();
+
+    // activity.attr("endTime", event.endDate.toISOString());
+  }
+
+  if(locationIndex !== -1){
+    //set the location to the user's input
+     location = inputArray[this.getIndex("Location",inputArray).toString()].value;
+     if (location !== "") {
+
+      activity.attr("prov:location", [location]);
+    }
+
+  }
+
+  if(labelIndex !== -1){
+    //set the label to the user's input
+     label = inputArray[this.getIndex("Label",inputArray).toString()].value;
+     if (label !== "") {
+      
+      activity.attr("prov:label", [label]);
+    }
+  }
+  
+  this.doc.activity(name+":"+ name,startDate,endDate);
+  // console.log(this.getDoc());
+  // console.log(JSON.stringify(this.getProvJSON(), null, "  "));
 
 
   }
@@ -804,30 +827,30 @@ confirm() {
   //SO IF URL FIELD IS EMPTY ....WE COULD GET THE ID AND HIGHIGHT IT OR ADD A TOAST MESSAGE 
   process()
   {
-  	for (var i = 0; i < this.elementsOnCanvas.length; i++) {
+    for (var i = 0; i < this.elementsOnCanvas.length; i++) {
 
-  		//if type is a thing
-  		if(this.elementsOnCanvas[i.toString()].type === "thing") {
-  			console.log("thing here");
-  			this.processThing(this.elementsOnCanvas[i]);
-  		}
+      //if type is a thing
+      if(this.elementsOnCanvas[i.toString()].type === "thing") {
+        console.log("thing here");
+        this.processThing(this.elementsOnCanvas[i]);
+      }
 
-  		//if type is a event
-  		else if(this.elementsOnCanvas[i.toString()].type === "event") {
-  			console.log("event here");
-  			this.processEvent(this.elementsOnCanvas[i]);
-  		}
+      //if type is a event
+      else if(this.elementsOnCanvas[i.toString()].type === "event") {
+        console.log("event here");
+        this.processEvent(this.elementsOnCanvas[i]);
+      }
 
-  		// if type is actor
-  		else {
-  			console.log("here");
-  			this.processActor(this.elementsOnCanvas[i]);
-  		}
-  	};
+      // if type is actor
+      else {
+        console.log("here");
+        this.processActor(this.elementsOnCanvas[i]);
+      }
+    };
 
-  	//once all elements have been made-we then need to make relations
-  	//might need promises ?
-  	this.inferRelations();
+    //once all elements have been made-we then need to make relations
+    //might need promises ?
+    this.inferRelations();
   }
 
   //check that all url fields are filled 
@@ -835,7 +858,15 @@ confirm() {
   UrlFieldCheck(){}
 
 
+highlight() {
+  if(this.selecting==true) {
+    return "solid 1px red";
+  }
+  else{
 
+    return "";
+  }
+}
   chosenElement(id) {
    
     // console.log(value);
@@ -844,11 +875,11 @@ confirm() {
     // var value = idAttr.nodeValue;
 
    
-    if(this.selecting==true){
+    if(this.selecting == true){
        if(this.twoSelectedElements.length < 2){
 
-         
-         console.log(id);
+        $("#"+ id).css({border: "solid 1px red" }); 
+        console.log(id);
         this.twoSelectedElements.push(id);
         if(this.twoSelectedElements.length === 2) {
            this.resetSelection();
@@ -861,12 +892,17 @@ confirm() {
          //this.resetSelection();
        }
     }
-    else{
+    else {
       console.log("hit the connect btn first");
     }
    
   }
 
+  deactivateSelection() {
+    $('.card').css('border','none');
+    this.selecting=false;
+    this.twoSelectedElements = [];
+  }
 
   activateSelectionMode()
   {
@@ -902,11 +938,11 @@ confirm() {
         paintStyle:{ stroke:"grey", strokeWidth:5},
         hoverPaintStyle:{stroke:"red"},
         endpoint:"Blank",
-        anchors:["Right", "Continuous" ],
+        anchors:["Continuous", "Continuous" ],
         overlays:[ ["PlainArrow", {location:1, width:15, length:12} ],
            ["Custom", {
             create:function(component) {
-              return $("<button id='myDropDown'> X </button>");                
+              return $("<button id='myDropDown' style='border: none;border-radius: 15px;'> x </button>");                
             },
             location:0.7,
             id:"customOverlay"
@@ -929,82 +965,95 @@ confirm() {
 
         jsPlumb.ready(function() {   
         connection = jsPlumb.connect({source:source, target:target}, commomStyle);
-        jsPlumb.draggable($(".window")); //temp - renders funny but the best option, doesnt play nice with nggrid , will remove when i v=come up with another soutuin
+        jsPlumb.repaintEverything(); 
+        //jsPlumb.draggable($(".window")); //temp - renders funny but the best option, doesnt play nice with nggrid , will remove when i v=come up with another soutuin
   });
      //add connecion to arr of connections 
      this.connections.push({id:connId,connectionObj:connection});
      this.addPair(connection.id,source,target);
      console.log("jsplumbConID",connection.id);
+     this.removeBorder(source,target);
 }
 
+  //remove the syling from the selected elements ()
+  removeBorder(source,target) {
+    //without hthis the 2nd selcted ele does not get a chance to e red a
+    //so set timer to delay removal
+     setTimeout(() => {
+        $("#"+ source).css({border: "none" }); 
+        $("#"+ target).css({border: "none" });
+    }, 300);
+  
+  }
+  
   inferRelations() {
 
-  	this.checkPairings();
+    this.checkPairings();
 
-  	//might need a promise here 
+    //might need a promise here 
 
-  	for (var i = 0; i < this.pairedElementsArray.length; i++) {
+    for (var i = 0; i < this.pairedElementsArray.length; i++) {
 
-  		let startEle = this.getElement(this.pairedElementsArray[i.toString()].startEleId);
-  		let endEle = this.getElement(this.pairedElementsArray[i.toString()].endEleId);
+      let startEle = this.getElement(this.pairedElementsArray[i.toString()].startEleId);
+      let endEle = this.getElement(this.pairedElementsArray[i.toString()].endEleId);
 
-  		//if null then no element with that id was found
+      //if null then no element with that id was found
 
-  		if(startEle === null || endEle === null ){
-  			console.log("Element not found")
-  		}
+      if(startEle === null || endEle === null ){
+        console.log("Element not found")
+      }
 
-  		else {
+      else {
 
-  			//delegation 
-  		if (startEle.type === "actor" && endEle.type === "actor") {
+        //delegation 
+      if (startEle.type === "actor" && endEle.type === "actor") {
 
-  			console.log("hi delegation");
-  			this.delegation(startEle.prefixSuffix,endEle.prefixSuffix);
-  		}
+        console.log("hi delegation");
+        this.delegation(startEle.prefixSuffix,endEle.prefixSuffix);
+      }
 
-  		//association
-  		else if (startEle.type === "event" && endEle.type === "actor") {
+      //association
+      else if (startEle.type === "event" && endEle.type === "actor") {
 
-  			console.log("hi association");
-  			this.association(startEle.prefixSuffix,endEle.prefixSuffix);
-  		}
+        console.log("hi association");
+        this.association(startEle.prefixSuffix,endEle.prefixSuffix);
+      }
 
-  		//usage
-  		else if (startEle.type === "event" && endEle.type === "thing") {
+      //usage
+      else if (startEle.type === "event" && endEle.type === "thing") {
 
-  			console.log("hi usage");
-  			this.usage(startEle.prefixSuffix,endEle.prefixSuffix);
-  		}
+        console.log("hi usage");
+        this.usage(startEle.prefixSuffix,endEle.prefixSuffix);
+      }
 
-  		//generation
-  		else if (startEle.type === "thing" && endEle.type === "event") {
-  			
-  			console.log("hi generation");
-  			this.generation(startEle.prefixSuffix,endEle.prefixSuffix);
-  		}
+      //generation
+      else if (startEle.type === "thing" && endEle.type === "event") {
+        
+        console.log("hi generation");
+        this.generation(startEle.prefixSuffix,endEle.prefixSuffix);
+      }
 
-  		//attribution
-  		else if (startEle.type === "thing" && endEle.type === "actor") {
-  			
-  			console.log("hi attribution");
-  			this.attribution(startEle.prefixSuffix,endEle.prefixSuffix);
-  		}
+      //attribution
+      else if (startEle.type === "thing" && endEle.type === "actor") {
+        
+        console.log("hi attribution");
+        this.attribution(startEle.prefixSuffix,endEle.prefixSuffix);
+      }
 
-  		//derivation
-  		else if (startEle.type === "thing" && endEle.type === "thing") {
-  			
-  			console.log("hi derivation");
-  			this.derivation(startEle.prefixSuffix,endEle.prefixSuffix);
-  		}
+      //derivation
+      else if (startEle.type === "thing" && endEle.type === "thing") {
+        
+        console.log("hi derivation");
+        this.derivation(startEle.prefixSuffix,endEle.prefixSuffix);
+      }
 
-  		else {
-  			console.log("hmm");
-  		}
+      else {
+        console.log("hmm");
+      }
 
-  	}
+    }
 
-  	};
+    };
   }
 
 
@@ -1013,186 +1062,186 @@ confirm() {
   // for now we will remove incorrect pairing from array  
   checkPairings() {
 
-  	for (var i = 0; i < this.pairedElementsArray.length; i++) {
+    for (var i = 0; i < this.pairedElementsArray.length; i++) {
 
-  		let startEle = this.getElement(this.pairedElementsArray[i.toString()].startEleId);
-  		let endEle = this.getElement(this.pairedElementsArray[i.toString()].endEleId);
+      let startEle = this.getElement(this.pairedElementsArray[i.toString()].startEleId);
+      let endEle = this.getElement(this.pairedElementsArray[i.toString()].endEleId);
 
-  		//if null then no element with that id was found
+      //if null then no element with that id was found
 
-  		if(startEle === null || endEle === null ) {
-  			console.log("Element not found")
-  		}
+      if(startEle === null || endEle === null ) {
+        console.log("Element not found")
+      }
 
-	  	else {
+      else {
 
-	  		
-	  		if (startEle.type === "event" && endEle.type === "event") {
-	  			this.genericDeleteElement(i,this.pairedElementsArray);
-	  			console.log("removing something");
-	  		}
-	  		else if (startEle.type === "actor" && endEle.type === "event") {
-	  			this.genericDeleteElement(i,this.pairedElementsArray);
-	  			console.log("removing something");
-	  		}
-	  		else if (startEle.type === "actor" && endEle.type === "thing") {
-	  			this.genericDeleteElement(i,this.pairedElementsArray);
-	  			console.log("removing something");
-	  		}
+        
+        if (startEle.type === "event" && endEle.type === "event") {
+          this.genericDeleteElement(i,this.pairedElementsArray);
+          console.log("removing something");
+        }
+        else if (startEle.type === "actor" && endEle.type === "event") {
+          this.genericDeleteElement(i,this.pairedElementsArray);
+          console.log("removing something");
+        }
+        else if (startEle.type === "actor" && endEle.type === "thing") {
+          this.genericDeleteElement(i,this.pairedElementsArray);
+          console.log("removing something");
+        }
 
-	  		else {
+        else {
 
-	  		}
-  		}
-  	};
+        }
+      }
+    };
 
   }
 
   //returns element from array with corresponding id 
   getElement(eleId:string) {
 
-  	let element = null; 
+    let element = null; 
 
-  	for (var i = 0; i < this.elementsOnCanvas.length; i++) {
-  		if(this.elementsOnCanvas[i.toString()].id === eleId) {
+    for (var i = 0; i < this.elementsOnCanvas.length; i++) {
+      if(this.elementsOnCanvas[i.toString()].id === eleId) {
 
-  			element = this.elementsOnCanvas[i.toString()];
-  		}
-  	};
+        element = this.elementsOnCanvas[i.toString()];
+      }
+    };
 
-  	return element;
+    return element;
   }
 
 
   /*all the relations*/
   derivation(startEleName:string, endElementName:string) {
 
-	//dont need local ref -> don't have any attriutes(yet, will keep simple for now sha)
+  //dont need local ref -> don't have any attriutes(yet, will keep simple for now sha)
 
-	//if names have not been set -> it means the 'export' button has not been pressed in order to make elements 
-	//do nothing -> without this check prov throws errors when the names are empty
-	// just used for manual connections
-	if(startEleName === "" || endElementName === "") {
+  //if names have not been set -> it means the 'export' button has not been pressed in order to make elements 
+  //do nothing -> without this check prov throws errors when the names are empty
+  // just used for manual connections
+  if(startEleName === "" || endElementName === "") {
 
-	}
-	else {
-		this.doc.wasDerivedFrom(startEleName, endElementName);
-		console.log("making a derivation");
-	}
+  }
+  else {
+    this.doc.wasDerivedFrom(startEleName, endElementName);
+    console.log("making a derivation");
+  }
 }
-	
+  
 
   usage(startEleName:string, endElementName:string) {
 
-  	if(startEleName === "" || endElementName === "") {
+    if(startEleName === "" || endElementName === "") {
 
-	}
-	else {
-		this.doc.used(startEleName, endElementName);
-		console.log("making a usage");
-	}
+  }
+  else {
+    this.doc.used(startEleName, endElementName);
+    console.log("making a usage");
+  }
 
   }
 
   generation(startEleName:string, endElementName:string) {
 
-  	if(startEleName === "" || endElementName === "") {
+    if(startEleName === "" || endElementName === "") {
 
-	}
-	else {
-		this.doc.wasGeneratedBy(startEleName, endElementName);
-		console.log("making a generation");
-	}
+  }
+  else {
+    this.doc.wasGeneratedBy(startEleName, endElementName);
+    console.log("making a generation");
+  }
   }
 
   attribution(startEleName:string, endElementName:string) {
-  	
+    
 
-  	if(startEleName === "" || endElementName === "") {
+    if(startEleName === "" || endElementName === "") {
 
-	}
-	else {
-		this.doc.wasAttributedTo(startEleName, endElementName);
-		console.log("making a attribution");
-	}
-  	
+  }
+  else {
+    this.doc.wasAttributedTo(startEleName, endElementName);
+    console.log("making a attribution");
+  }
+    
   }
 
   association(startEleName:string, endElementName:string) {
 
-  	if(startEleName === "" || endElementName === "") {
+    if(startEleName === "" || endElementName === "") {
 
-	}
-	else {
-		this.doc.wasAssociatedWith(startEleName, endElementName);
-		console.log("making a association");
-	}
-  	
+  }
+  else {
+    this.doc.wasAssociatedWith(startEleName, endElementName);
+    console.log("making a association");
+  }
+    
   }
 
   delegation(startEleName:string, endElementName:string) {
 
-  	if(startEleName === "" || endElementName === "") {
+    if(startEleName === "" || endElementName === "") {
 
-	}
-	else {
-		this.doc.actedOnBehalfOf(startEleName, endElementName);
-		console.log("making a delegation");
-	}
-	
-  	
+  }
+  else {
+    this.doc.actedOnBehalfOf(startEleName, endElementName);
+    console.log("making a delegation");
+  }
+  
+    
   }
 
 
   export() {
 
-  	this.process();
-  	console.log(this.getDoc());
-	console.log(JSON.stringify(this.getProvJSON(), null, "  "));
+    this.process();
+    console.log(this.getDoc());
+  console.log(JSON.stringify(this.getProvJSON(), null, "  "));
 
-	this.saveToStore()
+  this.saveToStore()
         .then(response => this.provStoreResponse = response)
         .catch(error => this.error = error);
 
         //check that provstoreresponse is not undefines
         setTimeout(() => {
 
-        	if(this.provStoreResponse){
-	        	console.log(this.provStoreResponse);
-	        	console.log(this.provStoreResponse.id);
-	        	let docID = this.provStoreResponse.id;
-	        	
-	        	//set story url
-	        	//do check here to see if storytitle is empty - if empty -> error message 
-	        	this.storyUrl = "https://provenance.ecs.soton.ac.uk/store/documents/" + docID;
-	          	this.confirm();
-        	}
-        	else{
-        		console.log("undefined response");
-        	}
-        	
+          if(this.provStoreResponse){
+            console.log(this.provStoreResponse);
+            console.log(this.provStoreResponse.id);
+            let docID = this.provStoreResponse.id;
+            
+            //set story url
+            //do check here to see if storytitle is empty - if empty -> error message 
+            this.storyUrl = "https://provenance.ecs.soton.ac.uk/store/documents/" + docID;
+              this.confirm();
+          }
+          else{
+            console.log("undefined response");
+          }
+          
           
         }, 1000);
   }
 
   saveToStore (): Promise<any> {
 
-  	console.log('its nkechi here again!!!');
+    console.log('its nkechi here again!!!');
 
-  	//do check here to see if storytitle is empty - if empty -> error message 
-  	///do other checks on content
-	let body = JSON.stringify({"content":this.getProvJSON(),"public":true,"rec_id":this.storyTitle});
+    //do check here to see if storytitle is empty - if empty -> error message 
+    ///do other checks on content
+  let body = JSON.stringify({"content":this.getProvJSON(),"public":true,"rec_id":this.storyTitle});
 
-	//set required headers ..cf /help/api
-	let headers = new Headers({ 'Content-Type': 'application/json' });
-	headers.append('Authorization','ApiKey jossai1:ead7d3d3e18845a807ab18af501805e05f7169eb');
-	headers.append('Accept','application/json');
-	let options = new RequestOptions({ headers: headers });
+  //set required headers ..cf /help/api
+  let headers = new Headers({ 'Content-Type': 'application/json' });
+  headers.append('Authorization','ApiKey jossai1:ead7d3d3e18845a807ab18af501805e05f7169eb');
+  headers.append('Accept','application/json');
+  let options = new RequestOptions({ headers: headers });
 
-	return this.http.post(this.provStoreUrl, body, options)
-	      .toPromise() 
-	      .then(response => response.json())
-	      .catch(this.handleError);
+  return this.http.post(this.provStoreUrl, body, options)
+        .toPromise() 
+        .then(response => response.json())
+        .catch(this.handleError);
   }
 
 
@@ -1216,26 +1265,26 @@ testDesc:string = "No Description";
 
 
 this.embedlyService
-  		.getUrlSummary("https://www.khanacademy.org/")
+      .getUrlSummary("https://www.khanacademy.org/")
         .then(res => this.testResponse = res)
         .catch(error => this.error = error);
 
         //check that provstoreresponse is not undefines
         setTimeout(() => {
-        	console.log( this.testResponse );
-        	console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
+          console.log( this.testResponse );
+          console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
 
-        	//set variables
-        	this.testImg = this.testResponse.images["0"].url;
-			this.testUrl = this.testResponse.url;
-			this.testTitle = this.testResponse.title;
+          //set variables
+          this.testImg = this.testResponse.images["0"].url;
+      this.testUrl = this.testResponse.url;
+      this.testTitle = this.testResponse.title;
 
-			//the description is too long so trim it to a certain length
-			let length = 20;
-			this.testDesc = this.testResponse.description;
-			//new length
-			this.testDesc = this.testDesc.substring(0, length);
-			
+      //the description is too long so trim it to a certain length
+      let length = 20;
+      this.testDesc = this.testResponse.description;
+      //new length
+      this.testDesc = this.testDesc.substring(0, length);
+      
           
         }, 2000);
   }
@@ -1245,26 +1294,26 @@ this.embedlyService
 // if it has pass that changed value to embedly to update 
 updateUrlSummary()
 {
-	for (var i = 0; i < this.elementsOnCanvas.length; i++) {
-		let newUrl = this.elementsOnCanvas[i.toString()].inputArray["0"].url;
-		let oldUrl = this.elementsOnCanvas[i.toString()].oldUrl;
-		
-		console.log("new",newUrl);
-		console.log("old",oldUrl);
+  for (var i = 0; i < this.elementsOnCanvas.length; i++) {
+    let newUrl = this.elementsOnCanvas[i.toString()].inputArray["0"].url;
+    let oldUrl = this.elementsOnCanvas[i.toString()].oldUrl;
+    
+    console.log("new",newUrl);
+    console.log("old",oldUrl);
 
-		if(newUrl)
-		{
-			//its changes so call emebedly 
-			if(newUrl !== oldUrl) {
-				console.log("url has changed");
-				//call embedly to 
-				this.grabURL(newUrl);
-			}
+    if(newUrl)
+    {
+      //its changes so call emebedly 
+      if(newUrl !== oldUrl) {
+        console.log("url has changed");
+        //call embedly to 
+        this.grabURL(newUrl);
+      }
 
-		}
+    }
 
-		oldUrl = newUrl;
-	}
+    oldUrl = newUrl;
+  }
 }
 
 // from stackverflow http://stackoverflow.com/questions/1701898/how-to-detect-whether-a-string-is-in-url-format-using-javascript
@@ -1283,7 +1332,7 @@ isUrl(s) {
 
 
  dede(url) {
- 	let timer:any = 0;
+   let timer:any = 0;
     return new Promise(
       (resolve)=>{ 
         console.log('2.process setting timer');
@@ -1302,7 +1351,7 @@ valuechange(url,$event) {
 // this.delay(function() {
 //     console.log("final value: ", url);
 //     //this.getUrlSummary(url);
-//   }, 10000 );	
+//   }, 10000 );  
 
 
 
@@ -1403,14 +1452,14 @@ getUrlSummary(url,ele) {
   }
 
  // getUrlSummary(url) {
- // 		// if(inputName === "URL"){
+ //     // if(inputName === "URL"){
 
- // 		// 	if(url !== "")
- // 		// 	{
- // 		// 		//code below goes in here
- // 		// 	}
+ //     //   if(url !== "")
+ //     //   {
+ //     //     //code below goes in here
+ //     //   }
 
- // 		// }
+ //     // }
 
  //        //onlu care if the url lenght is greater than 10 
  //        //else would be serch for letter in embedly
@@ -1418,66 +1467,66 @@ getUrlSummary(url,ele) {
  //        if(url.length >= 10 && this.isUrl(url)) {
 
  //           this.embedlyService
-	// 	  		.getUrlSummary(url)
-	// 	        .then(res => this.testResponse = res)
-	// 	        .catch(error => this.error = error);
+  //         .getUrlSummary(url)
+  //           .then(res => this.testResponse = res)
+  //           .catch(error => this.error = error);
 
 
-	// 	        setTimeout(() => {
-        		
-	// 	          console.log( this.testResponse );
-	// 	        	console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
+  //           setTimeout(() => {
+            
+  //             console.log( this.testResponse );
+  //             console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
 
 
-	// 	        	//check for any null or e,pty stuff
+  //             //check for any null or e,pty stuff
 
-	// 	        	if(this.testResponse.images["0"].url) {
-	// 	        		//set variables
-	// 	        		this.testImg = this.testResponse.images["0"].url;
-	// 	        	}
-	// 	        	else
-	// 	        	{
-	// 	        		this.testImg = "";
-	// 	        	}
+  //             if(this.testResponse.images["0"].url) {
+  //               //set variables
+  //               this.testImg = this.testResponse.images["0"].url;
+  //             }
+  //             else
+  //             {
+  //               this.testImg = "";
+  //             }
 
-	// 	        	if(this.testResponse.url) {
-	// 	        		this.testUrl = this.testResponse.url;
+  //             if(this.testResponse.url) {
+  //               this.testUrl = this.testResponse.url;
 
-	// 	        	}
-	// 	        	else
-	// 	        	{
-	// 	        		this.testUrl = "";
-	// 	        	}
+  //             }
+  //             else
+  //             {
+  //               this.testUrl = "";
+  //             }
 
-	// 	        	if(this.testResponse.title) {
+  //             if(this.testResponse.title) {
 
-	// 	        		this.testTitle = this.testResponse.title;
-	// 	        	}
-	// 	        	else
-	// 	        	{
-	// 	        		this.testTitle = "No Title";
-	// 	        	}
+  //               this.testTitle = this.testResponse.title;
+  //             }
+  //             else
+  //             {
+  //               this.testTitle = "No Title";
+  //             }
 
-	// 	        	if( this.testResponse.description) {
+  //             if( this.testResponse.description) {
 
-	// 		        	//the description is too long so trim it to a certain length
-	// 					let length = 20;
-	// 					this.testDesc = this.testResponse.description;
-	// 					//new length
-	// 					this.testDesc = this.testDesc.substring(0, length);
-	// 	        	}
-	// 	        	else
-	// 	        	{
-	// 	        		this.testDesc = "No Descrition";
-	// 	        	}
-		        	
+  //               //the description is too long so trim it to a certain length
+  //           let length = 20;
+  //           this.testDesc = this.testResponse.description;
+  //           //new length
+  //           this.testDesc = this.testDesc.substring(0, length);
+  //             }
+  //             else
+  //             {
+  //               this.testDesc = "No Descrition";
+  //             }
+              
 
- //          		}, 2000);
+ //              }, 2000);
 
  //        }
  //        else {
- //        	console.log("too short or wrong url format")
- //        	return;
+ //          console.log("too short or wrong url format")
+ //          return;
  //        }
  //  }
 
@@ -1485,10 +1534,10 @@ getUrlSummary(url,ele) {
 //old and for testing 
  grabURL(url) {
 
- 	console.log("change detected");
- 	console.log(url);
+   console.log("change detected");
+   console.log(url);
 // this.embedlyService
-//   		.getUrlSummary(url)
+//       .getUrlSummary(url)
 //         .then(res => this.testResponse = res)
 //         .catch(error => this.error = error);
 
@@ -1500,69 +1549,69 @@ getUrlSummary(url,ele) {
         if(url.length >= 10 && this.isUrl(url)) {
 
 
-        	 setTimeout(() => {
+           setTimeout(() => {
 
 
-        	setTimeout(() => {
+          setTimeout(() => {
 
            this.embedlyService
-		  		.getUrlSummary(url)
-		        .then(res => this.testResponse = res)
-		        .catch(error => this.error = error);
+          .getUrlSummary(url)
+            .then(res => this.testResponse = res)
+            .catch(error => this.error = error);
 
 
-		        setTimeout(() => {
-        		
-		          	console.log( this.testResponse );
-		        	console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
+            setTimeout(() => {
+            
+                console.log( this.testResponse );
+              console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
 
 
-		        	//check for any null or e,pty stuff
+              //check for any null or e,pty stuff
 
-		        	if(this.testResponse.images["0"].url) {
-		        		//set variables
-		        		this.testImg = this.testResponse.images["0"].url;
-		        	}
-		        	else
-		        	{
-		        		this.testImg = "";
-		        	}
+              if(this.testResponse.images["0"].url) {
+                //set variables
+                this.testImg = this.testResponse.images["0"].url;
+              }
+              else
+              {
+                this.testImg = "";
+              }
 
-		        	if(this.testResponse.url) {
-		        		this.testUrl = this.testResponse.url;
+              if(this.testResponse.url) {
+                this.testUrl = this.testResponse.url;
 
-		        	}
-		        	else
-		        	{
-		        		this.testUrl = "";
-		        	}
+              }
+              else
+              {
+                this.testUrl = "";
+              }
 
-		        	if(this.testResponse.title) {
+              if(this.testResponse.title) {
 
-		        		this.testTitle = this.testResponse.title;
-		        	}
-		        	else
-		        	{
-		        		this.testTitle = "No Title";
-		        	}
+                this.testTitle = this.testResponse.title;
+              }
+              else
+              {
+                this.testTitle = "No Title";
+              }
 
-		        	if( this.testResponse.description) {
+              if( this.testResponse.description) {
 
-			        	//the description is too long so trim it to a certain length
-						let length = 20;
-						this.testDesc = this.testResponse.description;
-						//new length
-						this.testDesc = this.testDesc.substring(0, length);
-		        	}
-		        	else
-		        	{
-		        		this.testDesc = "No Descrition";
-		        	}
-		        	
+                //the description is too long so trim it to a certain length
+            let length = 20;
+            this.testDesc = this.testResponse.description;
+            //new length
+            this.testDesc = this.testDesc.substring(0, length);
+              }
+              else
+              {
+                this.testDesc = "No Descrition";
+              }
+              
 
-          		}, 2000);
+              }, 2000);
 
-        	}, 0);
+          }, 0);
 
         }, 60000);
 
@@ -1570,7 +1619,7 @@ getUrlSummary(url,ele) {
         }
         else
         {
-        	return;
+          return;
         }
     
   }
@@ -1579,15 +1628,15 @@ getUrlSummary(url,ele) {
   //takes a url 
   //returns all the relvant summary data in an array
   oldGetUrlSummary (url:string): any {
-  		let response = "";
-  		this.embedlyService
-  		.getUrlSummary(url)
+      let response = "";
+      this.embedlyService
+      .getUrlSummary(url)
         .then(res => response = res)
         .catch(error => this.error = error);
 
         //check that provstoreresponse is not undefines
         setTimeout(() => {
-        	console.log(response);
+          console.log(response);
           
         }, 2000);
     return response;
@@ -1595,28 +1644,28 @@ getUrlSummary(url,ele) {
 
 
   clear() {
-  	//only removes elements put the namespace is still there :(
-  	//reset erthang !
-  	this.doc = this.prov.document();
-  	this.elementsOnCanvas = [];
-  	this.storyTitle = "";
-  	this.storyUrl = "";
+    //only removes elements put the namespace is still there :(
+    //reset erthang !
+    this.doc = this.prov.document();
+    this.elementsOnCanvas = [];
+    this.storyTitle = "";
+    this.storyUrl = "";
   }
 
   // old
   // export() {
-  // 	console.log(this.getDoc());
+  //   console.log(this.getDoc());
   // }
 
 
   // //using it for a 'thing's attribute array
   // removeAttributeFromList(item:string) {
 
-  // 	for (var i = 0; i < this.attributesArray.length; i++) {
-  // 		if(this.attributesArray[i].name === item){
-  // 			this.attributesArray.splice( i, 1 );
-  // 		}
-  // 	};
+  //   for (var i = 0; i < this.attributesArray.length; i++) {
+  //     if(this.attributesArray[i].name === item){
+  //       this.attributesArray.splice( i, 1 );
+  //     }
+  //   };
 
   // }
 
@@ -1626,23 +1675,23 @@ getUrlSummary(url,ele) {
   //remove an given attribute from a given attribute arrasy 
   removeAttributeFromList(item:string, attributeArray) {
 
-  	for (var i = 0; i < attributeArray.length; i++) {
-  		if(attributeArray[i].name === item){
-  			attributeArray.splice( i, 1 );
-  		}
-  	};
+    for (var i = 0; i < attributeArray.length; i++) {
+      if(attributeArray[i].name === item){
+        attributeArray.splice( i, 1 );
+      }
+    };
 
   }
 
  getIndex(item:string,array:any[]):number{
- 	let index = -1;
-  	for (var i = 0; i < array.length; i++) {
-  		if(array[i].name === item){
-  			index = i;
-  			//return index;
-  		}
-  	};
-  	return index;
+   let index = -1;
+    for (var i = 0; i < array.length; i++) {
+      if(array[i].name === item){
+        index = i;
+        //return index;
+      }
+    };
+    return index;
   }
 
 
@@ -1658,59 +1707,59 @@ getUrlSummary(url,ele) {
     });
     return uuid;
 };
-	
-// 	//adds an <input> given by id to the fieldset of a thing 
-// 	// or adds an attribute that the user selcted from the drop down
+  
+//   //adds an <input> given by id to the fieldset of a thing 
+//   // or adds an attribute that the user selcted from the drop down
 //  addClickedAttr(attributeNum:number) {
-//   	//this.attributedSelected= false;
-//   	console.log(attributeNum);
+//     //this.attributedSelected= false;
+//     console.log(attributeNum);
 
-//   	//only allowed to have max 3 extra attributes 
-//   	//stop adding stop adding more atributes
-//   	if(this.inputArray.length <= 5 ) {
-//   			// title attr 
-// 	  	if(attributeNum === 1) {
-// 	  		//this.attributedSelected = true;
-// 	  		//ensure no dupes use salt id
-// 	  		// so each input can be uniquely identified
-// 	  		this.inputArray.push({name:"title",value:"", id:this.generateUUID()});
-// 	  		//remove from areay so users cant choose it 
-// 	  		//remove title from list so they cant add it again
-// 	  		this.removeAttributeFromList("title");
-	  		
-// 	  	} 
-// 	  	//label attr 
-// 	  	else if(attributeNum === 2) {
-// 	  		//this.attributedSelected2 = true;
-// 	  		this.inputArray.push({name:"label",value:"", id:this.generateUUID()});
-// 	  		//remove label from list so they cant add it again
-// 	  		this.removeAttributeFromList("label");
-// 	  	} 
-// 	  	//location attr 
-// 	  	else if (attributeNum === 0) {
-// 	  		//this.attributedSelected0 = true;
-// 	  		this.inputArray.push({name:"location",value:"", id:this.generateUUID()});
-// 	  		//remove location from list so they cant add it again
-// 	  		this.removeAttributeFromList("location");
-// 	  	}
-// 	  	//location attr 
-// 	  	else if (attributeNum === 3) {
-// 	  		//this.attributedSelected0 = true;
-// 	  		this.inputArray.push({name:"type",value:"", id:this.generateUUID()});
-// 	  		//remove location from list so they cant add it again
-// 	  		this.removeAttributeFromList("type");
-// 	  	}
+//     //only allowed to have max 3 extra attributes 
+//     //stop adding stop adding more atributes
+//     if(this.inputArray.length <= 5 ) {
+//         // title attr 
+//       if(attributeNum === 1) {
+//         //this.attributedSelected = true;
+//         //ensure no dupes use salt id
+//         // so each input can be uniquely identified
+//         this.inputArray.push({name:"title",value:"", id:this.generateUUID()});
+//         //remove from areay so users cant choose it 
+//         //remove title from list so they cant add it again
+//         this.removeAttributeFromList("title");
+        
+//       } 
+//       //label attr 
+//       else if(attributeNum === 2) {
+//         //this.attributedSelected2 = true;
+//         this.inputArray.push({name:"label",value:"", id:this.generateUUID()});
+//         //remove label from list so they cant add it again
+//         this.removeAttributeFromList("label");
+//       } 
+//       //location attr 
+//       else if (attributeNum === 0) {
+//         //this.attributedSelected0 = true;
+//         this.inputArray.push({name:"location",value:"", id:this.generateUUID()});
+//         //remove location from list so they cant add it again
+//         this.removeAttributeFromList("location");
+//       }
+//       //location attr 
+//       else if (attributeNum === 3) {
+//         //this.attributedSelected0 = true;
+//         this.inputArray.push({name:"type",value:"", id:this.generateUUID()});
+//         //remove location from list so they cant add it again
+//         this.removeAttributeFromList("type");
+//       }
 
-// 		else {
-// 	  		//case were it's -1 so do nothing 
-// 	  		//this is because the selectedoption by default is set to  -1 to allow a title for drop down 
-// 	  	}
+//     else {
+//         //case were it's -1 so do nothing 
+//         //this is because the selectedoption by default is set to  -1 to allow a title for drop down 
+//       }
 //   }
 
-//  	else {
-//   	alert("Reached max number of attributes that can be added!");
+//    else {
+//     alert("Reached max number of attributes that can be added!");
 //   }
-  	
+    
 // }
 
 
@@ -1719,39 +1768,39 @@ getUrlSummary(url,ele) {
 //user select arrow and click 'delete' that point will have an id - which will be the same as the pairing's id in the array
 deleteAPair(pairId:string) {
 
-	for (var i = 0; i < this.pairedElementsArray.length; i++) {
-		if(this.pairedElementsArray[i.toString()].id === pairId) {
-			this.pairedElementsArray.splice( i, 1 );
-		}
-	};
+  for (var i = 0; i < this.pairedElementsArray.length; i++) {
+    if(this.pairedElementsArray[i.toString()].id === pairId) {
+      this.pairedElementsArray.splice( i, 1 );
+    }
+  };
 }
 
 //add a relation 
 addPair(connId:string, startEleId:string,endEleId:string) {
 
-	//make pairing - using ngmodel 
-	this.pairedElementsArray.push({id: connId, startEleId:startEleId, endEleId:endEleId});
-	console.log(this.pairedElementsArray);
+  //make pairing - using ngmodel 
+  this.pairedElementsArray.push({id: connId, startEleId:startEleId, endEleId:endEleId});
+  console.log(this.pairedElementsArray);
 }
 
 
 
 setValues(name:string) {
-	// if(name === "title"){
-	// 	this.title = name;
-	// }
-	// else if(name === "url"){
-	// 	this.url = name;
-	// }
-	// else if(name === "name"){
-	// 	this.name = name;
-	// }
-	// else if(name === "label"){
-	// 	this.label = name;
-	// }
-	// else {
-	// 	this.location = name;
-	// }
+  // if(name === "title"){
+  //   this.title = name;
+  // }
+  // else if(name === "url"){
+  //   this.url = name;
+  // }
+  // else if(name === "name"){
+  //   this.name = name;
+  // }
+  // else if(name === "label"){
+  //   this.label = name;
+  // }
+  // else {
+  //   this.location = name;
+  // }
 
 
 }
@@ -1776,9 +1825,9 @@ selectedCars:any[]= ["jane"];
 //         this.draggedCar = null;
 //     }
     
-	selectedIcon:any;
+  selectedIcon:any;
 
-	dragStart(event,iconName) {
+  dragStart(event,iconName) {
         this.selectedIcon = iconName;
     }
     
@@ -1786,17 +1835,17 @@ selectedCars:any[]= ["jane"];
         if(this.selectedIcon) {
 
 
-        	if(this.selectedIcon === "thing") {
-        		this.addThing();
-        	}
-        	else if(this.selectedIcon === "actor")
-        	{
-        		this.addActor();
-        	}
-        	//else event
-        	else {
-        		this.addEvent();
-        	}
+          if(this.selectedIcon === "thing") {
+            this.addThing();
+          }
+          else if(this.selectedIcon === "actor")
+          {
+            this.addActor();
+          }
+          //else event
+          else {
+            this.addEvent();
+          }
             //this.selectedCars.push(this.draggedCar);
             // this.availableCars.splice(this.findIndex(this.draggedCar), 1);
             this.selectedIcon = null;
