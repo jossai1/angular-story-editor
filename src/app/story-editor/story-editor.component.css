@@ -215,3 +215,7 @@ fieldset input {
 .grid-item {
     border: solid 1px #c8c8c8;
 }
+
+div span {
+    margin-right: 16%;
+}
