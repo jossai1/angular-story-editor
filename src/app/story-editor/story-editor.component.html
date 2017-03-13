@@ -65,8 +65,12 @@
     </ul> -->
         <button class="btn btn-success navbar-btn" (click)="clear()">New Story</button>
         <button style="float:right;" class="btn btn-default navbar-btn" (click)="export()">Export</button>
-        <button *ngIf="!selecting" style="" class="btn btn-default navbar-btn" (click)="activateSelectionMode()">Make Connections</button>
-        <button *ngIf="selecting" style="" class="btn btn-danger navbar-btn" (click)="deactivateSelection()">Cancel</button>
+        <button *ngIf="!selecting" style="" class="btn btn-default navbar-btn" (click)="activateSelectionMode()">
+            <i class="fa fa-share-alt" aria-hidden="true"></i>
+        Make Connections</button>
+        <button *ngIf="selecting" style="" class="btn btn-danger navbar-btn" (click)="deactivateSelection()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+        Cancel</button>
         <button style="float:right;" class="btn btn-info navbar-btn">Help</button>
     </div>
 </nav>

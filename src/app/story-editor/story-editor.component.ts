@@ -900,7 +900,7 @@ highlight() {
 
   deactivateSelection() {
     $('.card').css('border','none');
-    this.selecting=false;
+    this.selecting = false;
     this.twoSelectedElements = [];
   }
 
