@@ -950,6 +950,7 @@ highlight() {
         events:{
           click:function() { 
              jsPlumb.detach(connection);
+            console.log(jsPlumb.getConnections());
 
              ///remove from list of pairs (copied from deleteapair but couldnt call it from here as js wont let me :/ )
              // for (var i = 0; i < this.pairedElementsArray.length; i++) {
@@ -984,6 +985,16 @@ highlight() {
         $("#"+ target).css({border: "none" });
     }, 300);
   
+  }
+
+  enlarge(id)
+  {
+     $("#"+ id).css({width: "80%" }); 
+  }
+
+  shrink(id)
+  {
+     $("#"+ id).css({width: "24%" }); 
   }
   
   inferRelations() {
