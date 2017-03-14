@@ -10,6 +10,8 @@
         <button *ngIf="selecting" class="btn btn-danger navbar-btn" (click)="deactivateSelection()">
             <i class="fa fa-times" aria-hidden="true"></i> Cancel
         </button>
+        <p-messages [value]="errorMessages"></p-messages>
+        
         <button style="float:right;" class="btn btn-info navbar-btn">Help</button>
     </div>
 </nav>

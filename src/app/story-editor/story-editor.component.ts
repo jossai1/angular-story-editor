@@ -5,6 +5,8 @@ import 'rxjs/add/operator/toPromise';
 import { EmbedlyService } from '../services/embedly-service.service';
 import 'rxjs/add/operator/toPromise';
 import { NgGridConfig, NgGridItemConfig, NgGridItemEvent } from "angular2-grid";
+;
+
 
 interface attribute {
   name: string,
@@ -136,6 +138,31 @@ export class StoryEditorComponent implements OnInit {
   twoSelectedElements:any [] = []; //array of twoclicked eles
   selecting:boolean = false;
   connections:any [] = [];
+
+  errorMessages:any[] = [
+    // "Syntax error: please check syntax",
+    // "Missing URL field:  please fill in all url fields",
+    // "Compile time error: please name the story in the 'story title' field"
+    ];
+
+    showMissingURLFieldError() {
+        this.errorMessages = [];
+        this.errorMessages.push({severity:'error', summary:'Please fill in all url fields', detail:'Validation failed'});
+    }
+
+     showSyntaxError() {
+        this.errorMessages = [];
+        this.errorMessages.push({severity:'error', summary:'Please check syntax', detail:'Validation failed'});
+    }
+
+     showMissingTitleError() {
+        this.errorMessages = [];
+        this.errorMessages.push({severity:'warn', summary:'Please name the story in the "story title" field and make sure elements are present on canvas', detail:'Export Failed'});
+    }
+
+    clearMessage() {
+        this.errorMessages = [];
+    }
 
   ngOnInit() {
     //test to see if doc is loaded 
@@ -470,12 +497,12 @@ confirm() {
     // so we need to check if theres is a trailing slash and if it exits  -> remove it and THEN WE CAN process 
     if(URL.substr(-1) === '/') {
 
-           URL = URL.substr(0, URL.length - 1);
-      }
+      URL = URL.substr(0, URL.length - 1);
+    }
 
     //NOW we can process as usual 
-      let name:string = /[^/]*$/.exec(URL)[0];
-      return name;
+    let name:string = /[^/]*$/.exec(URL)[0];
+    return name;
   }
 
   // creates a prov version of a 'thing' story element param
@@ -822,7 +849,36 @@ confirm() {
 
 
   }
+  errPresent:boolean = false;
 
+  //check that all url fields are filled 
+  //call in process() method
+  urlFieldCheck() {
+   
+    this.errPresent = false; 
+    for (var i = 0; i < this.elementsOnCanvas.length; i++) {
+
+        console.log("hi", i);
+
+        if(this.elementsOnCanvas[i.toString()].inputArray["0"].value === "") {
+            
+            console.log("id", this.elementsOnCanvas[i.toString()].id);
+            
+            $("#"+ this.elementsOnCanvas[i.toString()].id).css({border: "solid 1px red" }); 
+           
+
+            // this.showMissingURLFieldError();
+            this.errPresent = true;
+            console.log("found an empty field", i);
+        }
+        else
+        {
+          //
+        }
+        //return this.errPresent;
+         console.log(this.errPresent);
+      }
+  }
 
   // this basically takes evrything on the canvas and processes it 
   // it seperates it by type into it's respective methods for further processing 
@@ -857,9 +913,7 @@ confirm() {
     this.inferRelations();
   }
 
-  //check that all url fields are filled 
-  //call in process() method
-  UrlFieldCheck(){}
+ 
 
 
 highlight() {
@@ -1205,41 +1259,58 @@ highlight() {
 
   export() {
 
-
+    this.errorMessages= [];
+    $('.card').css('border','none');
     if(this.storyTitle !== "" && this.elementsOnCanvas.length !== 0)
     {
-        this.process();
-        console.log(this.getDoc());
-        console.log(JSON.stringify(this.getProvJSON(), null, "  "));
+      
 
-      this.saveToStore()
-            .then(response => this.provStoreResponse = response)
-            .catch(error => this.error = error);
-
-            //check that provstoreresponse is not undefines
-            setTimeout(() => {
-
-              if(this.provStoreResponse){
-                console.log(this.provStoreResponse);
-                console.log(this.provStoreResponse.id);
-                let docID = this.provStoreResponse.id;
-                
-                //set story url
-                //do check here to see if storytitle is empty - if empty -> error message 
-                this.storyUrl = "https://provenance.ecs.soton.ac.uk/store/documents/" + docID;
-                  this.confirm();
-              }
-              else{
-                console.log("undefined response");
-              }
+            this.urlFieldCheck();
+            if(this.errPresent === true)
+            {
+             
+              this.showMissingURLFieldError();
+              //this.clear();
               
-              
-            }, 1000);
-      }
-      else
-      {
-        console.log("set title and make sure there are elements on the canvas");
-      }
+            }
+            else
+            {
+               this.process();
+               console.log(this.getDoc());
+               console.log(JSON.stringify(this.getProvJSON(), null, "  "));
+
+               this.saveToStore()
+                  .then(response => this.provStoreResponse = response)
+                  .catch(error => this.error = error);
+
+                  //check that provstoreresponse is not undefines
+                  setTimeout(() => {
+
+                    if(this.provStoreResponse){
+                      console.log(this.provStoreResponse);
+                      console.log(this.provStoreResponse.id);
+                      let docID = this.provStoreResponse.id;
+                      
+                      //set story url
+                      //do check here to see if storytitle is empty - if empty -> error message 
+                      this.storyUrl = "https://provenance.ecs.soton.ac.uk/store/documents/" + docID;
+                      this.confirm();
+                    }
+                    else {
+                      console.log("undefined response");
+                    }
+                    
+                        
+               }, 1000);
+            }
+           
+    }
+     else
+    {
+      console.log("set title and make sure there are elements on the canvas");
+      this.showMissingTitleError();
+    }
+
   }
 
   saveToStore (): Promise<any> {
@@ -1425,36 +1496,31 @@ this.embedlyService
       
   }
 
- 
+   newStory() {
+    let newprov = require('../../../provjs/prov');
+    this.prov = newprov;
+    
+    let newdoc =  newprov.document();
+    this.doc = newdoc;
+
+    this.ex = newdoc.addNamespace("ex", "http://www.example.org#");
+    this.dcterms = newdoc.addNamespace("dcterms", "http://purl.org/dc/terms/");
+    this.foaf = newdoc.addNamespace("foaf", "http://xmlns.com/foaf/0.1/");
+
+   }
+
   clear() {
     //only removes elements put the namespace is still there :(
     //reset erthang !
-    this.doc = this.prov.document();
+    
+    this.newStory();
     this.elementsOnCanvas = [];
     this.storyTitle = "";
     this.storyUrl = "";
     jsPlumb.detachEveryConnection();
   }
 
-  // old
-  // export() {
-  //   console.log(this.getDoc());
-  // }
-
-
-  // //using it for a 'thing's attribute array
-  // removeAttributeFromList(item:string) {
-
-  //   for (var i = 0; i < this.attributesArray.length; i++) {
-  //     if(this.attributesArray[i].name === item){
-  //       this.attributesArray.splice( i, 1 );
-  //     }
-  //   };
-
-  // }
-
-  
-
+ 
 
   //remove an given attribute from a given attribute arrasy 
   removeAttributeFromList(item:string, attributeArray) {
@@ -1492,60 +1558,6 @@ this.embedlyService
     return uuid;
 };
   
-//   //adds an <input> given by id to the fieldset of a thing 
-//   // or adds an attribute that the user selcted from the drop down
-//  addClickedAttr(attributeNum:number) {
-//     //this.attributedSelected= false;
-//     console.log(attributeNum);
-
-//     //only allowed to have max 3 extra attributes 
-//     //stop adding stop adding more atributes
-//     if(this.inputArray.length <= 5 ) {
-//         // title attr 
-//       if(attributeNum === 1) {
-//         //this.attributedSelected = true;
-//         //ensure no dupes use salt id
-//         // so each input can be uniquely identified
-//         this.inputArray.push({name:"title",value:"", id:this.generateUUID()});
-//         //remove from areay so users cant choose it 
-//         //remove title from list so they cant add it again
-//         this.removeAttributeFromList("title");
-        
-//       } 
-//       //label attr 
-//       else if(attributeNum === 2) {
-//         //this.attributedSelected2 = true;
-//         this.inputArray.push({name:"label",value:"", id:this.generateUUID()});
-//         //remove label from list so they cant add it again
-//         this.removeAttributeFromList("label");
-//       } 
-//       //location attr 
-//       else if (attributeNum === 0) {
-//         //this.attributedSelected0 = true;
-//         this.inputArray.push({name:"location",value:"", id:this.generateUUID()});
-//         //remove location from list so they cant add it again
-//         this.removeAttributeFromList("location");
-//       }
-//       //location attr 
-//       else if (attributeNum === 3) {
-//         //this.attributedSelected0 = true;
-//         this.inputArray.push({name:"type",value:"", id:this.generateUUID()});
-//         //remove location from list so they cant add it again
-//         this.removeAttributeFromList("type");
-//       }
-
-//     else {
-//         //case were it's -1 so do nothing 
-//         //this is because the selectedoption by default is set to  -1 to allow a title for drop down 
-//       }
-//   }
-
-//    else {
-//     alert("Reached max number of attributes that can be added!");
-//   }
-    
-// }
-
 
 //delete a pair
 //for interactive app
@@ -1568,47 +1580,6 @@ addPair(connId:string, startEleId:string,endEleId:string) {
 }
 
 
-
-setValues(name:string) {
-  // if(name === "title"){
-  //   this.title = name;
-  // }
-  // else if(name === "url"){
-  //   this.url = name;
-  // }
-  // else if(name === "name"){
-  //   this.name = name;
-  // }
-  // else if(name === "label"){
-  //   this.label = name;
-  // }
-  // else {
-  //   this.location = name;
-  // }
-
-
-}
-
-draggedCar:any;
-selectedCars:any[]= ["jane"];
-
-
-// dragStart(event,ele) {
-//         this.draggedCar = ele;
-//     }
-    
-//     drop(event) {
-//         if(this.draggedCar) {
-//             this.selectedCars.push(this.draggedCar);
-//             // this.availableCars.splice(this.findIndex(this.draggedCar), 1);
-//             this.draggedCar = null;
-//         }
-//     }
-    
-//     dragEnd(event) {
-//         this.draggedCar = null;
-//     }
-    
   selectedIcon:any;
 
   dragStart(event,iconName) {
@@ -1634,9 +1605,6 @@ selectedCars:any[]= ["jane"];
             // this.availableCars.splice(this.findIndex(this.draggedCar), 1);
             this.selectedIcon = null;
         }
-
-
-
     }
     
     dragEnd(event) {
