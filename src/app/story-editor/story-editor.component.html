@@ -15,12 +15,11 @@
 </nav>
 <div class="container-fluid">
     <div class="row">
-        <div class="story-title" >
-           <md-input-container >
-            <input mdInput placeholder="Story title" [(ngModel)]="storyTitle">
-        </md-input-container>
+        <div class="story-title">
+            <md-input-container>
+                <input mdInput placeholder="Story title" [(ngModel)]="storyTitle">
+            </md-input-container>
         </div>
-
         <div class="canvas col-sm-9 push-sm-3">
             <!-- / boolean to see if we should show the 'drag and drop story...' sign //only show if canvas is blank /i.e canvas array  is empty -->
             <div *ngIf="elementsOnCanvas.length === 0" class="traced-sign grey-out">
@@ -28,31 +27,15 @@
                     Drag and drop Story Elements here
                 </p>
             </div>
-            <!-- temp - remove  -->
-            <!--  <md-card  style="width: 200px;height:70px" (dblclick)="op2.show($event)" >
-                  
-                   <img md-card-image style="float:left;width:50px;height: 50px" class="canvas-icons" [src]="testImg">
-                    
-                    
-                        <md-card-title style="margin-left:20%;font-size:15px" >{{testTitle}}</md-card-title>
-                        <md-card-subtitle style="margin-left:20%;font-size:10px;">{{testDesc}} <a style="font-size: 14px;float: right;" [href]="testUrl"><i  class="fa fa-external-link" aria-hidden="true"></i></a></md-card-subtitle>
-                       
-                   
-                </md-card>
-                <input size="25" pInputText type="text" [(ngModel)]="testInput" (keyup)="valuechange(testInput,$event)"/> -->
-            <!-- remove after testing  -->
-            <!-- <div [dragula]='"first-bag"'> -->
-            <!-- old <div style="margin:2%;width:100px" *ngFor="let ele of elementsOnCanvas; let i = index;" [(ngGridItem)]="ele.config" (onDrag)="onDrag(i, $event)" [id]="ele.id"> -->
+    
             <div class="card" style="margin:2%;width:24%;position: absolute;" (click)="chosenElement(ele.id)" *ngFor="let ele of elementsOnCanvas; let i = index;" [id]="ele.id">
                 <!-- stiuff from url will go here -->
                 <div class="handle"> </div>
-                <!-- old <md-card style="width: 200px;height:70px" (dblclick)="op2.show($event)"> -->
+               
                 <md-card *ngIf="ele.isEditable" (dblclick)="ele.isEditable=false;enlarge(ele.id)">
-                    <!--  <img style="width:20px;height: 20px" [src]="ele.src" md-card-sm-image> -->
+                   
                     <img md-card-image style="float:left;width:50px;height: 50px" class="canvas-icons" [src]="ele.urlSummary.img">
-                    <!-- <img class="canvas-icons" [src]="ele.src" md-card-avatar>
-                        <md-card-title>Shiba Inu</md-card-title>
-                        <md-card-subtitle>Dog Breed</md-card-subtitle>-->
+            
                     <md-card-title style="margin-left:20%;font-size:15px">{{ele.urlSummary.title}}</md-card-title>
                     <md-card-subtitle style="margin-left:20%;font-size:10px;">{{ele.urlSummary.desc}}
                         <a mdTooltip="go to site" style="font-size: 14px;float: right;margin-left: 7px;margin-right: -15px;" [href]="ele.urlSummary.url">
@@ -67,7 +50,6 @@
                     <legend><img class="canvas-icons" [src]="ele.src"></legend>
                     <input size="25" pInputText type="text" [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" />
                     <!-- SHOW START/END SPEACIAL INPUT BOX IF CLICKED  -->
-                    <!-- todo: when to date boxes get added one goes to second line -->
                     <span style="margin-right: 3%;" *ngIf="ele.startDateAdded && ele.type==='event'">
                     <p-calendar  [(ngModel)]="ele.startDate" [showTime]="true" [showIcon]="true" ></p-calendar> 
                    
@@ -76,18 +58,12 @@
                     <p-calendar  [(ngModel)]="ele.endDate" [showTime]="true" [showIcon]="true"></p-calendar> 
                    
                     </span>
-                    <select [(ngModel)]="selectedOption" (ngModelChange)="processEleAttribute(selectedOption.id,ele.type,ele.inputArray,ele.attributeArray,ele)">
-                        <option selected disabled> Add an Attribute </option>
-                        <option *ngFor="let item of ele.attributeArray" [ngValue]="item">{{item.name}}</option>
-                    </select>
-                    <!--  <p-dropdown [options]="ele.attributeArray" [(ngModel)]="selectedOption"></p-dropdown> -->
-                    <!-- test to see if each box's input  is unique -->
-                    <!-- <div>words: {{ele.inputArray | json}}</div> -->
-                    <!--  old delete button <button class="grey-out" style="float:right;background-color: transparent;" (click)="deleteElementFromCanvas(ele.id)"><img style="height:10px;width:10px" src="../../assets/images/trash.png"></button> -->
+                    <md-select placeholder="Add Attribute" [(ngModel)]="selectedOption">
+                        <md-option *ngFor="let item of ele.attributeArray"  [value]="item" (click)="processEleAttribute(selectedOption.id,ele.type,ele.inputArray,ele.attributeArray,ele)">
+                            {{item.name}}
+                        </md-option>
+                    </md-select>
                     <img class="delete-icon grey-out" (click)="deleteElementFromCanvas(ele.id)" src="../../assets/images/trash.png">
-                    <!-- <button  class="btn btn-default navbar-btn" (click)="getUrlSummary(ele)" style="font-size: 14px;float: right;">
-                            <i class="fa fa-eye" aria-hidden="true"></i>
-                        </button> -->
                 </fieldset>
             </div>
             <!--   </div> -->
@@ -108,25 +84,6 @@
                                 <img mdTooltip="Actor (e.g. organisation, person)" (click)="addActor()" style="width: 64px; height: 54px;" class="spacing" src="../../assets/images/actor-icon2.png">
                             </div>
                         </p-accordionTab>
-                        <br>
-                        <!--    remove for now - dont think will be using   <p-accordionTab header="Labels" [selected]="true">
-                            <div class="story-elements">
-                                <img draggable="true" class="spacing" src="../../assets/images/book5464.png">
-                                <img draggable="true" class="spacing" src="../../assets/images/speech64.png">
-                                <img draggable="true" class="spacing" src="../../assets/images/webPage64.png">
-                              
-                            </div>
-                        </p-accordionTab>
-                        <br>
-                        <p-accordionTab header="Actor Types" [selected]="true">
-                            <div class="story-elements">
-                                <img draggable="true" class="spacing" src="../../assets/images/organisation64.png">
-                                <img draggable="true" class="spacing" src="../../assets/images/person64.png">
-                                <img draggable="true" class="spacing" src="../../assets/images/email64.png">
-                                <img draggable="true" class="spacing" src="../../assets/images/sofwareAgent.png">
-                              
-                            </div>
-                        </p-accordionTab> -->
                     </p-accordion>
                 </div>
             </div>

@@ -178,7 +178,7 @@ confirm() {
     conf.payload = 1 + id;
     let UUID = this.generateUUID();
 
-    this.elementsOnCanvas.push({id:UUID, isEditable:true, config:conf, urlSummary:{img:"../../assets/images/actor-icon2.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/actor-icon2.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given Name",id:3},{name:"E-mail",id:4}]});
+    this.elementsOnCanvas.push({id:UUID, isEditable:true, config:conf, urlSummary:{img:"../../assets/images/actor-icon2.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/actor-icon2.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given Name",id:3},{name:"E-mail",id:4}]});
     setTimeout(() => {
        jsPlumb.draggable(UUID);
         //place in a diff position each time - fix for overallaping divs issue
@@ -195,7 +195,7 @@ confirm() {
     const conf = this._generateDefaultItemConfig();
     conf.payload = 1 + id;
     let UUID = this.generateUUID();
-    this.elementsOnCanvas.push({id:UUID, isEditable:true, config:conf, startDate:null,endDate:null,startDateAdded:false,endDateAdded:false ,   urlSummary:{img:"../../assets/images/event64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
+    this.elementsOnCanvas.push({id:UUID, isEditable:true, config:conf, startDate:null,endDate:null,startDateAdded:false,endDateAdded:false ,   urlSummary:{img:"../../assets/images/event64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
     setTimeout(() => {
        jsPlumb.draggable(UUID);
         //place in a diff position each time - fix for overallaping divs issue
@@ -211,7 +211,7 @@ confirm() {
     const conf = this._generateDefaultItemConfig();
     conf.payload = 1 + id;
     let UUID = this.generateUUID();
-    this.elementsOnCanvas.push({id:UUID, isEditable:true, config:conf, urlSummary:{img:"../../assets/images/document64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/document64.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Attributes..",id:-1},{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2}]});
+    this.elementsOnCanvas.push({id:UUID, isEditable:true, config:conf, urlSummary:{img:"../../assets/images/document64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/document64.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2}]});
     setTimeout(() => {
        jsPlumb.draggable(UUID);
        //place in a diff position each time - fix for overallaping divs issue
