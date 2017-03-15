@@ -9,7 +9,8 @@ div.middle {
     display: table;
     margin-right: auto;
     margin-left: auto;
-    margin-top: 15%;   /*centers vertically*/
+    margin-top: 10%;   /*centers vertically*/
+    background: rgba(0, 0, 0, .1);
 }
 
 .middle-text {
@@ -21,5 +22,16 @@ div.middle {
 }
 
 .grey {
-    color: grey;
+    /*color: grey;*/
+    color: white;
+}
+
+div.container {
+  margin: 0;
+  background-color: #62c462;
+  background-image: -webkit-linear-gradient(135deg, #62c462, #75beaa);
+  background-image: linear-gradient(-45deg, #62c462, #75beaa);
+  font-family: "proxima-nova", "Helvetica Neue", sans-serif; 
+  width: 100%;
+  height: 700px;
 }
