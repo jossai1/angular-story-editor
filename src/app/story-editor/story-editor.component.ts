@@ -145,6 +145,9 @@ export class StoryEditorComponent implements OnInit {
     // "Compile time error: please name the story in the 'story title' field"
     ];
 
+  Shepherd:any = require('../../../node_modules/tether-shepherd/dist/js/shepherd');
+  tour:any;
+
     showMissingURLFieldError() {
         this.errorMessages = [];
         this.errorMessages.push({severity:'error', summary:'Please fill in all url fields', detail:'Validation failed'});
@@ -165,15 +168,220 @@ export class StoryEditorComponent implements OnInit {
     }
 
   ngOnInit() {
-    //test to see if doc is loaded 
 
-    ///add some elemens initially to the element - for ease of testing
-    // this.addThing();
-    // this.addActor();
-    // this.addEvent();
-    // console.log(this.doc);
+    this.startTour();
   }
  
+  startTour()
+  {
+    this.tour = new this.Shepherd.Tour({
+      defaults: {
+        classes: 'shepherd-theme-arrows',
+        scrollTo: false,
+        showCancelLink:true
+      }
+    });
+
+    this.tour.addStep('welcome', {
+    text: 'Welcome to the Story Editor! Here you can create provenance-based stories and export them!',
+    attachTo: '.navbar-brand left',
+    buttons: [
+       {
+        text: 'Back',
+        action: this.tour.back
+      },
+       {
+        text: 'Next',
+        action: this.tour.next
+      }
+    ]
+  });
+
+    this.tour.addStep('story-elements', {
+    text: 'These are story elements. Hover over them for more info',
+    attachTo: '.well right',
+    buttons: [
+       {
+        text: 'Back',
+        action: this.tour.back
+      },
+       {
+        text: 'Next',
+        action: this.tour.next
+      }
+    ]
+  });
+
+    this.tour.addStep('click-2-add', {
+    text: 'Click on an element to add it to the canvas. Try it! <br> <img src="../../assets/images/click2add.gif" alt="Click 2 add" style="width:500px;height:228px;">',
+    attachTo: '.well right',
+    buttons: [
+       {
+        text: 'Back',
+        action: this.tour.back
+      },
+       {
+        text: 'Next',
+        action: this.tour.next
+      }
+    ]
+  });
+
+
+
+  this.tour.addStep('move-elements', {
+    text: 'You can re-arrange elements on the canvas <br> <img src="../../assets/images/move-around.gif" alt="Rearrange" style="width:500px;height:228px;">',
+    attachTo: '.canvas center',
+    buttons: [
+       {
+        text: 'Back',
+        action: this.tour.back
+      },
+       {
+        text: 'Next',
+        action: this.tour.next
+      }
+    ]
+  });
+
+  this.tour.addStep('dbclick', {
+    text: 'Double Click an element to edit it <br> <img src="../../assets/images/editmode.gif" alt="editmode" style="width:500px;height:228px;">',
+    attachTo: '.canvas center',
+    buttons: [
+       {
+        text: 'Back',
+        action: this.tour.back
+      },
+       {
+        text: 'Next',
+        action: this.tour.next
+      }
+    ]
+  });
+
+  this.tour.addStep('urls', {
+    text: 'In edit mode you can drag and drop URLs to it\'s input field <br> <img src="../../assets/images/addUrl.gif" alt="addUrl" style="width:500px;height:228px;">',
+    attachTo: '.canvas center',
+    buttons: [
+       {
+        text: 'Back',
+        action: this.tour.back
+      },
+       {
+        text: 'Next',
+        action: this.tour.next
+      }
+    ]
+  });
+
+  this.tour.addStep('url-preview', {
+    text: 'Once an element\'s url field has been set, <br> click the "eye" icon to preview the URL <br> <img src="../../assets/images/urlPreview.gif" alt="urlPreview" style="width:500px;height:228px;">',
+    attachTo: '.canvas center',
+    buttons: [
+       {
+        text: 'Back',
+        action: this.tour.back
+      },
+       {
+        text: 'Next',
+        action: this.tour.next
+      }
+    ]
+  });
+
+this.tour.addStep('add-attr', {
+    text: 'Select attributes to add from the dropdown list <br> <img src="../../assets/images/addAttributes.gif" alt="addAttributes" style="width:500px;height:228px;">',
+    attachTo: '.canvas center',
+    buttons: [
+       {
+        text: 'Back',
+        action: this.tour.back
+      },
+       {
+        text: 'Next',
+        action: this.tour.next
+      }
+    ]
+  });
+
+this.tour.addStep('connect-elements', {
+    text: 'You can also connect elements! <br> <img src="../../assets/images/connectedElementsImg.png" alt="connectedElementsImg" style="width:500px;height:228px;"> ',
+    attachTo: '.canvas center',
+    buttons: [
+       {
+        text: 'Back',
+        action: this.tour.back
+      },
+       {
+        text: 'Next',
+        action: this.tour.next
+      }
+    ]
+  });
+
+this.tour.addStep('click-2-connect', {
+    text: 'Simply click this button to enter Connection Mode',
+    attachTo: '.connect bottom',
+    buttons: [
+       {
+        text: 'Back',
+        action: this.tour.back
+      },
+       {
+        text: 'Next',
+        action: this.tour.next
+      }
+    ]
+  });
+
+this.tour.addStep('select-2-connect', {
+    text: '<p>Then select the 2 elements you wish to connect. <br> The 1st element you select will be the source and the 2nd will be the target </p>  <br> <img src="../../assets/images/connectEles.gif" alt="connectEles" style="width:500px;height:228px;">',
+    attachTo: '.connect bottom',
+    buttons: [
+       {
+        text: 'Back',
+        action: this.tour.back
+      },
+       {
+        text: 'Next',
+        action: this.tour.next
+      }
+    ]
+  });
+
+this.tour.addStep('story-title', {
+    text: 'Name your story here',
+    attachTo: '.story-title bottom',
+    buttons: [
+       {
+        text: 'Back',
+        action: this.tour.back
+      },
+       {
+        text: 'Next',
+        action: this.tour.next
+      }
+    ]
+  });
+
+this.tour.addStep('export', {
+    text: 'Click the "Export" button to export your story to the ProvStore <br> <img src="../../assets/images/export.gif" alt="export" style="width:500px;height:228px;">',
+    attachTo: '.export-btn right',
+    buttons: [
+       {
+        text: 'Back',
+        action: this.tour.back
+      },
+       {
+        text: 'Done',
+        action: this.tour.cancel
+      }
+    ]
+  });
+
+    this.tour.start();
+
+  }
 
 confirm() {
         this.confirmationService.confirm({

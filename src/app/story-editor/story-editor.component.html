@@ -7,15 +7,15 @@
             <i class="fa fa-file-o" aria-hidden="true"></i>
             New Story
         </button>
-        <button mdTooltip="Compile story and save to ProvStore" style="float:right;" class="btn btn-default navbar-btn" (click)="export()">Export</button>
+        <button mdTooltip="Compile story and save to ProvStore" style="float:right;" class="export-btn btn btn-default navbar-btn" (click)="export()">Export</button>
         <button mdTooltip="select element to relate on canvas" *ngIf="!selecting" class="btn btn-default navbar-btn" (click)="activateSelectionMode()">
-            <i class="fa fa-share-alt" aria-hidden="true"></i> Make Connections</button>
+            <i class="connect fa fa-share-alt" aria-hidden="true"></i> Make Connections</button>
         <button *ngIf="selecting" class="btn btn-danger navbar-btn" (click)="deactivateSelection()">
             <i class="fa fa-times" aria-hidden="true"></i> Cancel
         </button>
         <p-messages [value]="errorMessages"></p-messages>
         
-        <button style="float:right;" class="btn btn-info navbar-btn">Help</button>
+        <button (click)="startTour()" style="float:right;" class="btn btn-info navbar-btn">Help</button>
     </div>
 </nav>
 <div class="container-fluid">

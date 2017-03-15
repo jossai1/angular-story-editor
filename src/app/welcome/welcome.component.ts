@@ -11,6 +11,7 @@ export class WelcomeComponent implements OnInit {
 
   Shepherd:any = require('../../../node_modules/tether-shepherd/dist/js/shepherd');
   tour:any;
+  
   ngOnInit() {
  
 	this.tour = new this.Shepherd.Tour({
@@ -20,13 +21,15 @@ export class WelcomeComponent implements OnInit {
 	  }
 	});
 
-	this.tour.addStep('example-step', {
-	  text: 'Click to go to the Story Editor',
-	  attachTo: '.create-story bottom',
-	  buttons: [
-	    
-	  ]
-	});
+  this.tour.addStep('dbclick', {
+    text: 'Let"s Get Started! Click to go to the Story Editor <br> <img src="../../assets/images/welcome.gif" alt="welcome" style="width:500px;height:228px;">',
+    attachTo: '.btn right',
+    buttons: [
+     
+    ]
+  });
+
+	
 
 	this.tour.start();
 
