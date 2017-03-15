@@ -157,6 +157,7 @@ div.panel {
 .delete-icon {
   float:right;
   transition: all .2s ease-in-out;
+  cursor: pointer;
   /*background-color: transparent;*/
 }
 

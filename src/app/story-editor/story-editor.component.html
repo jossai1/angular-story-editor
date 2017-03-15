@@ -3,7 +3,10 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Story Editor</a>
         </div>
-        <button class="btn btn-success navbar-btn" (click)="clear()">New Story</button>
+        <button class="btn btn-success navbar-btn" (click)="clear()">
+            <i class="fa fa-file-o" aria-hidden="true"></i>
+            New Story
+        </button>
         <button mdTooltip="Compile story and save to ProvStore" style="float:right;" class="btn btn-default navbar-btn" (click)="export()">Export</button>
         <button mdTooltip="select element to relate on canvas" *ngIf="!selecting" class="btn btn-default navbar-btn" (click)="activateSelectionMode()">
             <i class="fa fa-share-alt" aria-hidden="true"></i> Make Connections</button>
@@ -26,7 +29,7 @@
             <!-- / boolean to see if we should show the 'drag and drop story...' sign //only show if canvas is blank /i.e canvas array  is empty -->
             <div *ngIf="elementsOnCanvas.length === 0" class="traced-sign grey-out">
                 <p class="middle-text grey-out">
-                    Drag and drop Story Elements here
+                   Story Elements will be added here
                 </p>
             </div>
     
@@ -43,7 +46,7 @@
                         <a mdTooltip="go to site" style="font-size: 14px;float: right;margin-left: 7px;margin-right: -15px;" [href]="ele.urlSummary.url">
                             <i class="fa fa-external-link" aria-hidden="true"></i>
                         </a>
-                        <a mdTooltip="view url preview" *ngIf="ele.inputArray['0'].value !== '' " (click)="getUrlSummary(ele)" style="font-size: 14px;float: right;">
+                        <a mdTooltip="view url preview" *ngIf="ele.inputArray['0'].value !== '' " (click)="getUrlSummary(ele)" style="font-size: 14px;float: right; cursor: pointer;">
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </a>
                     </md-card-subtitle>
