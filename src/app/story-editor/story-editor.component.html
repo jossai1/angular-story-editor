@@ -35,7 +35,7 @@
     
             <div class="card" style="margin:2%;width:24%;position: absolute;" (click)="chosenElement(ele.id)" *ngFor="let ele of elementsOnCanvas; let i = index;" [id]="ele.id">
                 <!-- stiuff from url will go here -->
-                <div class="handle"> </div>
+                <div class="handle"> <span>{{ele.type}} : {{getElementNameFromURL(ele.inputArray["0"].value)}} </span></div>
                
                 <md-card *ngIf="ele.isEditable" (dblclick)="ele.isEditable=false;enlarge(ele.id)">
                    
