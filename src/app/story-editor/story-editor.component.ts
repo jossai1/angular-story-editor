@@ -1553,8 +1553,8 @@ highlight() {
     //every time a doc is created successfully we store the logged errors to local storage 
     //we understand that a user can create many documents hence the errors will be logged many times
     ///so we create one sessionid so we relate to one instance 
-    var currentdate = new Date(); 
-    var datetime = "Last Sync: " + currentdate.getDate() + "/"
+    let currentdate = new Date(); 
+    let datetime:any = "Time Of Log: " + currentdate.getDate() + "/"
                 + (currentdate.getMonth()+1)  + "/" 
                 + currentdate.getFullYear() + " @ "  
                 + currentdate.getHours() + ":"  
