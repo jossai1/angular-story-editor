@@ -17,7 +17,8 @@ export class WelcomeComponent implements OnInit {
 	this.tour = new this.Shepherd.Tour({
 	  defaults: {
 	    classes: 'shepherd-theme-arrows',
-	    scrollTo: true
+	    scrollTo: true,
+      showCancelLink:true
 	  }
 	});
 
