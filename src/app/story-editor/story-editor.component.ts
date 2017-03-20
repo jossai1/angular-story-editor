@@ -1553,12 +1553,19 @@ highlight() {
     //every time a doc is created successfully we store the logged errors to local storage 
     //we understand that a user can create many documents hence the errors will be logged many times
     ///so we create one sessionid so we relate to one instance 
+    var currentdate = new Date(); 
+    var datetime = "Last Sync: " + currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
     let log:any = { 
         missingTitleErrorCount: this.missingTitleErrorCount,
         missingURLFieldErrorCount: this.missingURLFieldErrorCount,
         helpButtonHitCount: this.helpButtonHitCount
     }
-    this.errorLog.push ({id:this.sessionErrorLogID, errorLog: log});
+    this.errorLog.push ({id:this.sessionErrorLogID, errorLog: log, time: datetime});
     localStorage.setItem( "ErrorLogs: "+ this.sessionErrorLogID, JSON.stringify(this.errorLog) );
     
    
