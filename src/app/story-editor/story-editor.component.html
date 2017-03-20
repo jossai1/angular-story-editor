@@ -3,7 +3,7 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Story Editor</a>
         </div>
-        <button class="btn btn-success navbar-btn" (click)="clear()">
+        <button class="btn btn-success navbar-btn" (click)="clear();">
             <i class="fa fa-file-o" aria-hidden="true"></i>
             New Story
         </button>
@@ -15,7 +15,7 @@
         </button>
         <p-messages [value]="errorMessages"></p-messages>
         
-        <button (click)="startTour()" style="float:right;" class="btn btn-info navbar-btn">Help</button>
+        <button (click)="startTour();" style="float:right;" class="btn btn-info navbar-btn">Help</button>
     </div>
 </nav>
 <div class="container-fluid">
@@ -35,7 +35,7 @@
     
             <div class="card" style="margin:2%;width:24%;position: absolute;" (click)="chosenElement(ele.id)" *ngFor="let ele of elementsOnCanvas; let i = index;" [id]="ele.id">
                 <!-- stiuff from url will go here -->
-                <div class="handle"> <span>{{ele.type}} : {{getElementNameFromURL(ele.inputArray["0"].value)}} </span></div>
+                <div class="handle"> <span style="font-size: smaller" >{{ele.type}} : {{getElementNameFromURL(ele.inputArray["0"].value)}} </span></div>
                
                 <md-card *ngIf="ele.isEditable" (dblclick)="ele.isEditable=false;enlarge(ele.id)">
                    

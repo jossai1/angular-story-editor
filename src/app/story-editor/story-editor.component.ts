@@ -30,7 +30,19 @@ declare var jsPlumb:any;
 export class StoryEditorComponent implements OnInit {
 
 
-  constructor(private confirmationService: ConfirmationService,private http: Http, private embedlyService: EmbedlyService) {}
+  constructor(private confirmationService: ConfirmationService,private http: Http, private embedlyService: EmbedlyService) 
+  {
+   
+    //initalise testing vars
+    
+    this.sessionErrorLogID = this.generateUUID();
+    this.errorLog = [];
+    //set local storage 
+    //localStorage.setItem( "ErrorLogs", JSON.stringify(this.errorLog) );
+    this.missingTitleErrorCount = 0;
+    this.missingURLFieldErrorCount = 0;
+    this.helpButtonHitCount = 0;
+  }
 
     private _generateDefaultItemConfig(): NgGridItemConfig {
         return { 'dragHandle': '.handle', 'col': 1, 'row': 1, 'sizex': 1, 'sizey': 1 };
@@ -72,6 +84,15 @@ export class StoryEditorComponent implements OnInit {
         'limit_to_screen': true
     };
 
+
+
+  //testing variables
+  missingTitleErrorCount:number;
+  missingURLFieldErrorCount:number;
+  helpButtonHitCount:number;
+  errorLog:any[];
+  sessionErrorLogID:string;
+  //testing variables 
 
   prov:any = require('../../../provjs/prov');
   doc:any =  this.prov.document();
@@ -174,6 +195,7 @@ export class StoryEditorComponent implements OnInit {
  
   startTour()
   {
+    this.helpButtonHitCount++;
     this.tour = new this.Shepherd.Tour({
       defaults: {
         classes: 'shepherd-theme-arrows',
@@ -1478,6 +1500,7 @@ highlight() {
             {
              
               this.showMissingURLFieldError();
+              this.missingURLFieldErrorCount++;
               //this.clear();
               
             }
@@ -1486,6 +1509,7 @@ highlight() {
                this.process();
                console.log(this.getDoc());
                console.log(JSON.stringify(this.getProvJSON(), null, "  "));
+
 
                this.saveToStore()
                   .then(response => this.provStoreResponse = response)
@@ -1511,14 +1535,33 @@ highlight() {
                         
                }, 1000);
             }
+            this.saveLoggedErrors();
            
     }
      else
     {
       console.log("set title and make sure there are elements on the canvas");
       this.showMissingTitleError();
+      this.missingTitleErrorCount++;
     }
 
+  }
+
+  /*save all the error variables- somewhere persistent*/
+  saveLoggedErrors()
+  {
+    //every time a doc is created successfully we store the logged errors to local storage 
+    //we understand that a user can create many documents hence the errors will be logged many times
+    ///so we create one sessionid so we relate to one instance 
+    let log:any = { 
+        missingTitleErrorCount: this.missingTitleErrorCount,
+        missingURLFieldErrorCount: this.missingURLFieldErrorCount,
+        helpButtonHitCount: this.helpButtonHitCount
+    }
+    this.errorLog.push ({id:this.sessionErrorLogID, errorLog: log});
+    localStorage.setItem( "ErrorLogs: "+ this.sessionErrorLogID, JSON.stringify(this.errorLog) );
+    
+   
   }
 
   saveToStore (): Promise<any> {
