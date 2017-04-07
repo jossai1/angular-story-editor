@@ -3,7 +3,7 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Story Editor</a>
         </div>
-        <button class="btn btn-success navbar-btn" (click)="clear()">
+        <button class="btn btn-success navbar-btn" (click)="clear();">
             <i class="fa fa-file-o" aria-hidden="true"></i>
             New Story
         </button>
@@ -15,7 +15,7 @@
         </button>
         <p-messages [value]="errorMessages"></p-messages>
         
-        <button (click)="startTour()" style="float:right;" class="btn btn-info navbar-btn">Help</button>
+        <button (click)="startTour();" style="float:right;" class="btn btn-info navbar-btn">Help</button>
     </div>
 </nav>
 <div class="container-fluid">
@@ -35,9 +35,19 @@
     
             <div class="card" style="margin:2%;width:24%;position: absolute;" (click)="chosenElement(ele.id)" *ngFor="let ele of elementsOnCanvas; let i = index;" [id]="ele.id">
                 <!-- stiuff from url will go here -->
-                <div class="handle"> <span>{{ele.type}} : {{getElementNameFromURL(ele.inputArray["0"].value)}} </span></div>
+                <div class="handle"> <span style="font-size: smaller" >{{ele.type}} : {{getElementNameFromURL(ele.inputArray["0"].value)}} 
+                
+
+                <a  class="enter-edit-icon" *ngIf="ele.isEditable" (click)="ele.isEditable=false;enlarge(ele.id)" >  
+                <i mdTooltip="enter edit mode"  class="fa fa-window-maximize"  aria-hidden="true"></i>
+                 </a>
+
+                <a  class="exit-edit-icon" *ngIf="!ele.isEditable"  (click)="ele.isEditable=true;shrink(ele.id)" >  
+                <i mdTooltip="exit edit mode"  class="fa fa-window-minimize"  aria-hidden="true"></i>
+                 </a>
+                </span></div>
                
-                <md-card *ngIf="ele.isEditable" (dblclick)="ele.isEditable=false;enlarge(ele.id)">
+                <md-card *ngIf="ele.isEditable">
                    
                     <img md-card-image style="float:left;width:50px;height: 50px" class="canvas-icons" [src]="ele.urlSummary.img">
             
@@ -51,7 +61,7 @@
                         </a>
                     </md-card-subtitle>
                 </md-card>
-                <fieldset *ngIf="!ele.isEditable" (dblclick)="ele.isEditable=true;shrink(ele.id)">
+                <fieldset *ngIf="!ele.isEditable" >
                     <legend><img class="canvas-icons" [src]="ele.src"></legend>
                     <input size="25" pInputText type="text" [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" />
                     <!-- SHOW START/END SPEACIAL INPUT BOX IF CLICKED  -->
@@ -66,7 +76,7 @@
                     <md-select placeholder="Add Attribute" [(ngModel)]="selectedOption">
                         <md-option *ngFor="let item of ele.attributeArray"  [value]="item" (click)="processEleAttribute(selectedOption.id,ele.type,ele.inputArray,ele.attributeArray,ele)">
                             {{item.name}}
-                        </md-option>
+                        </md-option> 
                     </md-select>
                     <img class="delete-icon grey-out" (click)="deleteElementFromCanvas(ele.id)" src="../../assets/images/trash.png">
                 </fieldset>
