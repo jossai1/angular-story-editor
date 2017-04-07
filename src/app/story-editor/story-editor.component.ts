@@ -267,7 +267,7 @@ export class StoryEditorComponent implements OnInit {
   });
 
   this.tour.addStep('dbclick', {
-    text: 'Double Click an element to edit it <br> <img src="../../assets/images/editmode.gif" alt="editmode" style="width:500px;height:228px;">',
+    text: ' Click the maximize icon to edit an element <br> <img src="../../assets/images/editmode.gif" alt="editmode" style="width:500px;height:228px;">',
     attachTo: '.canvas center',
     buttons: [
        {
@@ -1533,7 +1533,7 @@ highlight() {
                     }
                     
                         
-               }, 1000);
+               }, 2000);
             }
             this.saveLoggedErrors();
            
