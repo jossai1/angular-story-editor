@@ -30,7 +30,12 @@ declare var jsPlumb:any;
 export class StoryEditorComponent implements OnInit {
 
 
-  constructor(private confirmationService: ConfirmationService,private http: Http, private embedlyService: EmbedlyService) {}
+  constructor(private confirmationService: ConfirmationService,private http: Http, private embedlyService: EmbedlyService) {
+
+    // window.onbeforeunload = function(e) {
+    //   return 'Your story will not be saved.';
+    // };
+  }
 
     private _generateDefaultItemConfig(): NgGridItemConfig {
         return { 'dragHandle': '.handle', 'col': 1, 'row': 1, 'sizex': 1, 'sizey': 1 };
@@ -245,7 +250,7 @@ export class StoryEditorComponent implements OnInit {
   });
 
   this.tour.addStep('dbclick', {
-    text: 'Click the "maximize" icon to edit an element <br> <img src="../../assets/images/editmode.gif" alt="editmode" style="width:500px;height:228px;">',
+    text: 'Click the "maximize" icon to enter edit mode. <br> In edit mode you can edit elements. <br> <img src="../../assets/images/maximise.gif" alt="maximise" style="width:500px;height:228px;">',
     attachTo: '.canvas center',
     buttons: [
        {
@@ -260,7 +265,7 @@ export class StoryEditorComponent implements OnInit {
   });
 
   this.tour.addStep('urls', {
-    text: 'Just search Google for whatever URL you want! Then in edit mode you can drag and drop the URL to it\'s input field. <br> <img src="../../assets/images/addUrl.gif" alt="addUrl" style="width:500px;height:228px;">',
+    text: 'Just search Google for whatever URL you want! <br> Then in edit mode you can drag and drop the URL to it\'s input field. <br> <img src="../../assets/images/addUrl.gif" alt="addUrl" style="width:500px;height:228px;">',
     attachTo: '.canvas center',
     buttons: [
        {
