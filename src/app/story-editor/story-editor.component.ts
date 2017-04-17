@@ -32,9 +32,9 @@ export class StoryEditorComponent implements OnInit {
 
   constructor(private confirmationService: ConfirmationService,private http: Http, private embedlyService: EmbedlyService) {
 
-    // window.onbeforeunload = function(e) {
-    //   return 'Your story will not be saved.';
-    // };
+    window.onbeforeunload = function(e) {
+      return 'Your story will not be saved.';
+    };
   }
 
     private _generateDefaultItemConfig(): NgGridItemConfig {
