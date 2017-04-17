@@ -33,9 +33,9 @@
                 </p>
             </div>
     
-            <div class="card" style="margin:2%;width:24%;position: absolute;" (click)="chosenElement(ele.id)" *ngFor="let ele of elementsOnCanvas; let i = index;" [id]="ele.id">
+             <div class="card" style="margin:2%;width:250px;position: absolute;" (click)="chosenElement(ele.id)" *ngFor="let ele of elementsOnCanvas; let i = index;" [id]="ele.id">
                 <!-- stiuff from url will go here -->
-                <div class="handle"> <span style="font-size: smaller" >{{ele.type}} : {{getElementNameFromURL(ele.inputArray["0"].value)}} 
+                <div class="handle"> <span style="font-size: smaller" >{{ele.type}} : {{shortenURLonCard(ele.inputArray["0"].value)}} 
                 
 
                 <a  class="enter-edit-icon" *ngIf="ele.isEditable" (click)="ele.isEditable=false;enlarge(ele.id)" >  

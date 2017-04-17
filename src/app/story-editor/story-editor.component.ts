@@ -260,7 +260,7 @@ export class StoryEditorComponent implements OnInit {
   });
 
   this.tour.addStep('urls', {
-    text: 'In edit mode you can drag and drop URLs to it\'s input field <br> <img src="../../assets/images/addUrl.gif" alt="addUrl" style="width:500px;height:228px;">',
+    text: 'Just search Google for whatever URL you want! Then in edit mode you can drag and drop the URL to it\'s input field. <br> <img src="../../assets/images/addUrl.gif" alt="addUrl" style="width:500px;height:228px;">',
     attachTo: '.canvas center',
     buttons: [
        {
@@ -692,6 +692,30 @@ confirm() {
       }
   }
 }
+
+
+shortenURLonCard(URL:string):string {
+    
+    //name extracted from url 
+    // if it ends in http://jane.com/
+    //it would return an empty string 
+
+    // so we need to check if theres is a trailing slash and if it exits  -> remove it and THEN WE CAN process 
+    if(URL.substr(-1) === '/') {
+
+      URL = URL.substr(0, URL.length - 1);
+    }
+
+    //NOW we can process as usual 
+    let name:string = /[^/]*$/.exec(URL)[0];
+
+
+    let length = 28;
+                     
+    name= name.substring(0, length);
+    return name;
+  }
+
 
 
   //split url and grab the string after the last slash 
@@ -1253,7 +1277,7 @@ highlight() {
 
   shrink(id)
   {
-     $("#"+ id).css({width: "24%" }); 
+     $("#"+ id).css({width: "250px" }); 
   }
   
   inferRelations() {
