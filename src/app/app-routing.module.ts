@@ -7,7 +7,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/story-editor', pathMatch: 'full' },
+  { path: '', redirectTo: '/welcome', pathMatch: 'full' },
   { path: 'story-editor',  component: StoryEditorComponent },
   { path: 'welcome',  component: WelcomeComponent },
   { path: 'test-model', component: TestModelComponent }

@@ -386,12 +386,17 @@ this.tour.addStep('export', {
 confirm() {
         this.confirmationService.confirm({
             message: " Your story has been created! \r" +
-             " Click 'Yes' to visit the document in the ProvStore \r" +
+             " Click 'Yes' to visit the document in the ProvStore (opens in newtab) \r" +
              " OR Copy the document's link below: \r" + 
              this.storyUrl,
             accept: () => {
                //Actual logic to perform a confirmation
-                window.location.href = this.storyUrl;
+                //window.location.href = this.storyUrl;
+              //open in a new window.
+              window.open (
+              this.storyUrl,
+              '_blank' // <- This is what makes it open in a new window.
+            );
             }
         });
     }
