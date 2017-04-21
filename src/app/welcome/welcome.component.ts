@@ -9,7 +9,7 @@ export class WelcomeComponent implements OnInit {
 
   constructor() { }
 
-  Shepherd:any = require('../../../node_modules/tether-shepherd/dist/js/shepherd');
+  Shepherd:any = require('../../assets/shepherd-1.8.0/dist/js/shepherd');
   tour:any;
   
   ngOnInit() {

@@ -150,7 +150,7 @@ export class StoryEditorComponent implements OnInit {
     // "Compile time error: please name the story in the 'story title' field"
     ];
 
-  Shepherd:any = require('../../../node_modules/tether-shepherd/dist/js/shepherd');
+  Shepherd:any = require('../../assets/shepherd-1.8.0/dist/js/shepherd');;
   tour:any;
 
     showMissingURLFieldError() {
