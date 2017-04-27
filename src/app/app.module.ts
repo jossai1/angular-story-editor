@@ -6,14 +6,10 @@ import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoryEditorComponent } from './story-editor/story-editor.component';
-import { TestModelComponent } from './test-model/test-model.component';
 import { WelcomeComponent } from './welcome/welcome.component';
-
-import { DragulaModule } from 'ng2-dragula';
 
 // temp testing 
 import { DragDropModule, MessagesModule, DropdownModule, OverlayPanelModule, CalendarModule, AccordionModule, ConfirmDialogModule } from 'primeng/primeng';
-import { NgGridModule } from "angular2-grid"; 
 import { MaterialModule } from '@angular/material';
 
 
@@ -23,7 +19,6 @@ import { MaterialModule } from '@angular/material';
   declarations: [
     AppComponent,
     StoryEditorComponent,
-    TestModelComponent,
     WelcomeComponent
   ],
   imports: [
@@ -34,13 +29,11 @@ import { MaterialModule } from '@angular/material';
     ReactiveFormsModule,
     HttpModule,
     AppRoutingModule,
-    DragulaModule,
     CalendarModule,
     ConfirmDialogModule,
     MaterialModule,
     OverlayPanelModule,
     DropdownModule,
-    NgGridModule,
     MessagesModule
   ],
   providers: [],

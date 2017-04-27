@@ -4,8 +4,6 @@ import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { EmbedlyService } from '../services/embedly-service.service';
 import 'rxjs/add/operator/toPromise';
-import { NgGridConfig, NgGridItemConfig, NgGridItemEvent } from "angular2-grid";
-;
 
 
 interface attribute {
@@ -13,10 +11,6 @@ interface attribute {
   id:number
 }
 
-interface Box {
-    id: number;
-    config: NgGridItemConfig;
-}
 
 declare var $:any;
 declare var jsPlumb:any;
@@ -27,55 +21,19 @@ declare var jsPlumb:any;
   styleUrls: ['./story-editor.component.css'],
   providers: [ConfirmationService, EmbedlyService]
 })
+
+
 export class StoryEditorComponent implements OnInit {
 
 
-  constructor(private confirmationService: ConfirmationService,private http: Http, private embedlyService: EmbedlyService) {
+  constructor (private confirmationService: ConfirmationService, private http: Http, private embedlyService: EmbedlyService) {
 
-    window.onbeforeunload = function(e) {
-      return 'Your story will not be saved.';
-    };
+      // confirm if users would like to leave page 
+      window.onbeforeunload = function(e) {
+        return 'Your story will not be saved.';
+      };
   }
 
-    private _generateDefaultItemConfig(): NgGridItemConfig {
-        return { 'dragHandle': '.handle', 'col': 1, 'row': 1, 'sizex': 1, 'sizey': 1 };
-    }
-
-    onDrag(index: number, event: NgGridItemEvent): void {
-        // Do something here
-    }
-
-    onResize(index: number, event: NgGridItemEvent): void {
-        // Do something here
-    }
-
-    updateItem(eleId: string, event: NgGridItemEvent): void {
-        // Do something here
-    }
-    
-    private gridConfig: NgGridConfig = <NgGridConfig>{
-        'margins': [5],
-        'draggable': true,
-        'resizable': true,
-        'max_cols': 0,
-        'max_rows': 0,
-        'visible_cols': 0,
-        'visible_rows': 0,
-        'min_cols': 1,
-        'min_rows': 1,
-        'col_width': 2,
-        'row_height': 2,
-        'cascade': 'up',
-        'min_width': 33, //for size of grid item (holds card)
-        'min_height': 22,
-        'fix_to_grid': false,
-        'auto_style': true,
-        'auto_resize': false,
-        'maintain_ratio': false,
-        'prefer_new': true,
-        'zoom_on_drag': false,
-        'limit_to_screen': true
-    };
 
 
   prov:any = require('../../../provjs/prov');
@@ -86,95 +44,56 @@ export class StoryEditorComponent implements OnInit {
   ex = this.doc.addNamespace("ex", "http://www.example.org#");
   dcterms = this.doc.addNamespace("dcterms", "http://purl.org/dc/terms/");
   foaf = this.doc.addNamespace("foaf", "http://xmlns.com/foaf/0.1/");
-
-  url:string="";
-  name:string="";
-  location:string="";
-  label:string="";
   storyTitle:string="";
-
-  //for pairings
-  startEleId:string;
-  endEleId:string;
-
   storyUrl:string; //url to prov store
   private provStoreUrl = 'https://provenance.ecs.soton.ac.uk/store/api/v0/documents/';
+  
   //respponse returned from provstore -> json obj that contains id to doc,
   provStoreResponse:any;
   error:any;
-
-
-  //for bools used for ng if - for start and end time 
-  // they need special inputs so to add we will use an ngif 
-  startDateAdded:boolean =false;
-  endDateAdded:boolean=false;
-
-  //to store input from user 
-  startDate: Date;
-  endDate: Date;
-
+ 
   //a list that represents every element on the canvas 
   //grows dynamically 
   elementsOnCanvas:Array<Object> = [];
   
-
-  //an array of all the pairings of elements(stores element's id) thatondon a user has made
-  //used for making relations
-  //when a users makes a connection in the ui 
-  //a method is called which pushes the two elements in thisarray 
-  // {startEleId:, endEleId:} 
-  pairedElementsArray: Array<Object> = [];
-
-
-
-  //possible attributes that a user can select
-  attributesArray: Array<attribute> = [{name:"attributes..",id:-1},{name:"location",id:0}, {name:"title",id:1},{name:"label",id:2},{name:"type",id:3} ];
-
   //just set it to smhting - doesnt show add titile to box 
   selectedOption:attribute = {name:"attributes..",id:-1};
-
-  //no  longer in use 
-  attributedSelected:boolean = false;
-
-  //an array of all the text boxes in a fieldset 
-  // users add more inputs by selecting from a list of atributes - used for a single thing for now 
-  inputArray: Array<Object> = [{name:"url",value:"",id:"0"}];
 
   twoSelectedElements:any [] = []; //array of twoclicked eles
   selecting:boolean = false;
   connections:any [] = [];
 
-  errorMessages:any[] = [
-    // "Syntax error: please check syntax",
-    // "Missing URL field:  please fill in all url fields",
-    // "Compile time error: please name the story in the 'story title' field"
-    ];
+  errorMessages:any[] = [];
 
   Shepherd:any = require('../../assets/shepherd-1.8.0/dist/js/shepherd');;
   tour:any;
 
-    showMissingURLFieldError() {
-        this.errorMessages = [];
-        this.errorMessages.push({severity:'error', summary:'Please fill in all url fields', detail:'Validation failed'});
-    }
 
-     showSyntaxError() {
-        this.errorMessages = [];
-        this.errorMessages.push({severity:'error', summary:'Please check syntax', detail:'Validation failed'});
-    }
 
-     showMissingTitleError() {
-        this.errorMessages = [];
-        this.errorMessages.push({severity:'warn', summary:'Please name the story in the "story title" field and make sure elements are present on canvas', detail:'Export Failed'});
-    }
 
-    clearMessage() {
-        this.errorMessages = [];
-    }
+
+  showMissingURLFieldError() {
+     this.errorMessages = [];
+     this.errorMessages.push({severity:'error', summary:'Please fill in all url fields', detail:'Validation failed'});
+  }
+
+   showSyntaxError() {
+     this.errorMessages = [];
+     this.errorMessages.push({severity:'error', summary:'Please check syntax', detail:'Validation failed'});
+  }
+
+   showMissingTitleError() {
+     this.errorMessages = [];
+     this.errorMessages.push({severity:'warn', summary:'Please name the story in the "story title" field and make sure elements are present on canvas', detail:'Export Failed'});
+  }
+
+  clearMessage() {
+     this.errorMessages = [];
+  }
 
   ngOnInit() {
 
-    this.startTour();
+    this.startTour(); //start tutorial 
   }
  
   startTour()
@@ -386,44 +305,46 @@ this.tour.addStep('export', {
 
     this.tour.start();
 
+}
+
+
+
+  confirm() {
+      this.confirmationService.confirm({
+          message: " Your story has been created! \r" +
+           " Click 'Yes' to visit the document in the ProvStore (opens in newtab) \r" +
+           " OR Copy the document's link below: \r" + 
+           this.storyUrl,
+          accept: () => {
+            //open in a new tab.
+            window.open (
+            this.storyUrl,
+            '_blank' // <- This is what makes it open in a new tab.
+          );
+          }
+      });
   }
 
-confirm() {
-        this.confirmationService.confirm({
-            message: " Your story has been created! \r" +
-             " Click 'Yes' to visit the document in the ProvStore (opens in newtab) \r" +
-             " OR Copy the document's link below: \r" + 
-             this.storyUrl,
-            accept: () => {
-               //Actual logic to perform a confirmation
-                //window.location.href = this.storyUrl;
-              //open in a new window.
-              window.open (
-              this.storyUrl,
-              '_blank' // <- This is what makes it open in a new window.
-            );
-            }
-        });
-    }
-  setNameSpace(){
-    // Prefix declarations
-  }
 
+
+  //generates random numbers within a specified range
   randomIntFromInterval(min,max)
   {
      return Math.floor(Math.random()*(max-min+1)+min);
   }
 
-  // adds an actor to the elementsOnCanvas list
-  // which subsequently adds it to the canvas
+
+
+
+  /* 
+    * adds an actor to the elementsOnCanvas list
+    * which subsequently adds it to the canvas
+  */
   addActor() {
-    //for ng2-grid box sizing
-    let id = this.elementsOnCanvas.length - 1 ;  
-    const conf = this._generateDefaultItemConfig();
-    conf.payload = 1 + id;
+    
     let UUID = this.generateUUID();
 
-    this.elementsOnCanvas.push({id:UUID, isEditable:true, config:conf, urlSummary:{img:"../../assets/images/actor-icon2.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/actor-icon2.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given Name",id:3},{name:"E-mail",id:4}]});
+    this.elementsOnCanvas.push({id:UUID, isEditable:true, urlSummary:{img:"../../assets/images/actor-icon2.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/actor-icon2.png",type:"actor",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Location",id:0},{name:"Label",id:1},{name:"Type",id:2},{name:"Given Name",id:3},{name:"E-mail",id:4}]});
     setTimeout(() => {
        jsPlumb.draggable(UUID);
         //place in a diff position each time - fix for overallaping divs issue
@@ -432,31 +353,31 @@ confirm() {
 
   }
 
-   // adds an event  to the elementsOnCanvas list
-  // which subsequently adds it to the canvas
+
+  /*
+   * adds an event  to the elementsOnCanvas list
+   * which subsequently adds it to the canvas 
+  */
   addEvent() {
-    //for ng2-grid
-    let id = this.elementsOnCanvas.length - 1 ;  
-    const conf = this._generateDefaultItemConfig();
-    conf.payload = 1 + id;
+
     let UUID = this.generateUUID();
-    this.elementsOnCanvas.push({id:UUID, isEditable:true, config:conf, startDate:null,endDate:null,startDateAdded:false,endDateAdded:false ,   urlSummary:{img:"../../assets/images/event64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
+    this.elementsOnCanvas.push({id:UUID, isEditable:true, startDate:null,endDate:null,startDateAdded:false, endDateAdded:false ,   urlSummary:{img:"../../assets/images/event64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/event64.png",type:"event",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Location",id:0},{name:"Label",id:1},{name:"Start Time",id:2},{name:"End Time",id:3}]});
     setTimeout(() => {
        jsPlumb.draggable(UUID);
-        //place in a diff position each time - fix for overallaping divs issue
+       //place in a diff position each time - fix for overallaping divs issue
        $("#"+ UUID).css({top: this.randomIntFromInterval(1,300), left: this.randomIntFromInterval(1,300)});
     }, 100);
   }
 
-  // adds a thing to the elementsOnCanvas list
-  // which subsequently adds it to the canvas
+
+  /* 
+   * adds a thing to the elementsOnCanvas list
+   * which subsequently adds it to the canvas 
+  */
   addThing() { 
-    //for ng2-grid box sizing
-    let id = this.elementsOnCanvas.length - 1 ;  
-    const conf = this._generateDefaultItemConfig();
-    conf.payload = 1 + id;
+  
     let UUID = this.generateUUID();
-    this.elementsOnCanvas.push({id:UUID, isEditable:true, config:conf, urlSummary:{img:"../../assets/images/document64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/document64.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2}]});
+    this.elementsOnCanvas.push({id:UUID, isEditable:true, urlSummary:{img:"../../assets/images/document64.png", url:"" ,desc:"No Description", title:"No Title", providerUrl:"#"},prefixSuffix:"", src:"../../assets/images/document64.png",type:"thing",inputArray:[{name:"URL",value:"",id:"0"}],attributeArray:[{name:"Location",id:0}, {name:"Title",id:1},{name:"Label",id:2}]});
     setTimeout(() => {
        jsPlumb.draggable(UUID);
        //place in a diff position each time - fix for overallaping divs issue
@@ -465,28 +386,15 @@ confirm() {
 
   }
 
-  //deletes the elemnt with the given id from the canvas 
-  // by deleteing it from the list of elementsOnTheCanvas
-  //TODO: HOW TO REMOVE ELEMENT FROM PROV DOCUMENT ALSO ?
+  /* 
+    * deletes the elemnt with the given id from the canvas 
+    * by deleteing it from the list of elementsOnTheCanvas
+  */
   deleteElementFromCanvas(eleId:string) {
 
     for (var i = 0; i < this.elementsOnCanvas.length; i++) {
       if(this.elementsOnCanvas[i.toString()].id === eleId) {
         this.elementsOnCanvas.splice( i, 1 );
-      }
-    };
-
-  }
-
-
-   //deletes the elemnt with the given id from the given array 
-  // by deleteing it from the list of elementsOnTheCanvas
-  //TODO: HOW TO REMOVE ELEMENT FROM PROV DOCUMENT ALSO ?
-  genericDeleteElement(eleId:number , array:Array<Object>) {
-
-    for (var i = 0; i < array.length; i++) {
-      if(i === eleId) {
-        array.splice( i, 1 );
       }
     };
 
@@ -502,13 +410,14 @@ confirm() {
   }
 
 
-  // determine which type of element was clicked - so we can send it to appropriate method 
-  // each element has diff types and numbers of attributes 
-  // so we need to split this out into their own methods 
-  processEleAttribute(selectedAttrId, eleType, inputArray, attributeArray,ele) {
+  /* determine which type of element was clicked - so we can send it to appropriate method 
+   * each element has diff types and numbers of attributes 
+   * so we need to split this out into their own methods 
+  */
+  processEleAttribute(selectedAttrId, eleType, inputArray, attributeArray, ele) {
 
     // type thing
-    if(eleType === "thing") {
+    if (eleType === "thing") {
 
       this.addClickedAttToThingInput(selectedAttrId,inputArray,attributeArray);
     }
@@ -518,17 +427,19 @@ confirm() {
       this.addClickedAttToActorInput(selectedAttrId,inputArray,attributeArray);
     }
   
-  // type event 
-  else { 
-    this.addClickedAttToEventInput(selectedAttrId,inputArray,attributeArray,ele);
-  }    
+      // type event 
+    else { 
+        this.addClickedAttToEventInput(selectedAttrId,inputArray,attributeArray,ele);
+    }    
 
   }
 
-  //add attribute to a thing
-  addClickedAttToThingInput(selectedAttrId:number, inputArray, attributeArray) {
 
-    console.log(selectedAttrId);
+
+  /*
+   * dynamically adds the selected attribute to thing story element
+  */
+  addClickedAttToThingInput(selectedAttrId: number, inputArray, attributeArray) {
 
     //only allowed to have max 3 extra attributes 
     //stop adding stop adding more atributes
@@ -536,13 +447,13 @@ confirm() {
         
       //location attr 
       if (selectedAttrId === 0) {
-        //this.attributedSelected0 = true;
+     
         inputArray.push({name:"Location",value:"", id:this.generateUUID()});
         //remove location from list so they cant add it again
         this.removeAttributeFromList("Location",attributeArray);
       }
       // title attr 
-      else if(selectedAttrId === 1) {
+      else if (selectedAttrId === 1) {
     
         //ensure no dupes use salt id
         // so each input can be uniquely identified
@@ -553,7 +464,7 @@ confirm() {
       }
 
       //label attr 
-      else if(selectedAttrId === 2) {
+      else if (selectedAttrId === 2) {
         
         inputArray.push({name:"Label",value:"", id:this.generateUUID()});
         //remove label from list so they cant add it again
@@ -575,14 +486,17 @@ confirm() {
    }
 
    else {
-      alert("Reached max number of attributes that can be added!");
+      //alert("Reached max number of attributes that can be added!");
     }
   }
 
-   //add attribute to a actor
-  addClickedAttToActorInput(selectedAttrId:number, inputArray, attributeArray) {
+
+  /*
+   * dynamically adds the selected attribute to actor story element
+  */
+  addClickedAttToActorInput(selectedAttrId: number, inputArray, attributeArray) {
     
-    console.log(selectedAttrId);
+   
 
     //only allowed to have max 5 extra attributes 
     //stop adding stop adding more atributes
@@ -590,13 +504,13 @@ confirm() {
         
       //location attr 
       if (selectedAttrId === 0) {
-        //this.attributedSelected0 = true;
+      
         inputArray.push({name:"Location",value:"", id:this.generateUUID()});
         //remove location from list so they cant add it again
         this.removeAttributeFromList("Location",attributeArray);
       }
       // label attr 
-      else if(selectedAttrId === 1) {
+      else if (selectedAttrId === 1) {
     
         //ensure no dupes use salt id
         // so each input can be uniquely identified
@@ -607,7 +521,7 @@ confirm() {
       }
 
       //type attr 
-      else if(selectedAttrId === 2) {
+      else if (selectedAttrId === 2) {
         
         inputArray.push({name:"Type",value:"", id:this.generateUUID()});
         //remove label from list so they cant add it again
@@ -637,22 +551,24 @@ confirm() {
    }
 
    else {
-      alert("Reached max number of attributes that can be added!");
+      //alert("Reached max number of attributes that can be added!");
     }
   }
 
-   //add attribute to a event
-  addClickedAttToEventInput(selectedAttrId:number, inputArray, attributeArray,ele) {
+  
+  /*
+   * dynamically adds the selected attribute to event story element
+  */
+  addClickedAttToEventInput(selectedAttrId:number, inputArray, attributeArray, ele) {
     
-    console.log(selectedAttrId);
-
+   
     //only allowed to have max 5 extra attributes 
     //stop adding stop adding more atributes
     if(inputArray.length <= 4 ) {
         
       //location attr 
       if (selectedAttrId === 0) {
-        //this.attributedSelected0 = true;
+        
         inputArray.push({name:"Location",value:"", id:this.generateUUID()});
         //remove location from list so they cant add it again
         this.removeAttributeFromList("Location",attributeArray);
@@ -663,8 +579,7 @@ confirm() {
         //ensure no dupes use salt id
         // so each input can be uniquely identified
         inputArray.push({name:"Label",value:"", id:this.generateUUID()});
-        //remove from areay so users cant choose it 
-        //remove title from list so they cant add it again
+        //remove from areay so users cant choose it again
         this.removeAttributeFromList("Label",attributeArray);
       }
 
@@ -676,8 +591,7 @@ confirm() {
         // which will make it appear using ngif 
 
         ele.startDateAdded = true;
-        
-        //inputArray.push({name:"Start Time",value:"", id:this.generateUUID()});
+  
         //remove type from list so they cant add it again
         this.removeAttributeFromList("Start Time",attributeArray);
       }
@@ -691,7 +605,6 @@ confirm() {
 
         ele.endDateAdded = true;
         
-        //inputArray.push({name:"End Time",value:"", id:this.generateUUID()});
         //remove type from list so they cant add it again
         this.removeAttributeFromList("End Time",attributeArray);
       }
@@ -703,12 +616,10 @@ confirm() {
   }
 }
 
-
-shortenURLonCard(URL:string):string {
-    
-    //name extracted from url 
-    // if it ends in http://jane.com/
-    //it would return an empty string 
+/* 
+  * split url and return  the string after the last slash
+*/
+shortenURLonCard(URL: string): string {
 
     // so we need to check if theres is a trailing slash and if it exits  -> remove it and THEN WE CAN process 
     if(URL.substr(-1) === '/') {
@@ -722,14 +633,16 @@ shortenURLonCard(URL:string):string {
 
     let length = 28;
                      
-    name= name.substring(0, length);
+    name = name.substring(0, length);
     return name;
   }
 
 
 
-  //split url and grab the string after the last slash 
-  //this will be the element's name
+  /* 
+    * split url and grab the string after the last slash 
+    * this will be the element's name
+  */
   getElementNameFromURL(URL:string):string {
     
     //name extracted from url 
@@ -747,491 +660,425 @@ shortenURLonCard(URL:string):string {
     return name;
   }
 
-  // creates a prov version of a 'thing' story element param
-  // adds it to global prov document 
+
+  /* creates a prov version of a 'thing' story element param
+   * adds it to global prov document 
+  */
   processThing(thing) {
 
-    
+
     let inputArray = thing.inputArray;
     let attributeArray = thing.attributes;
+    let url = inputArray["0"].value;
 
-    console.log(inputArray);
-  
-  let url = inputArray["0"].value;
-
-  //handle case were url has no http:// before it 
-  //if the proefix is not ther 
-  ///we append it 
-  var prefix = 'http://';
-    if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  )
-    {
+    //handle case were url has no http:// before it 
+    //if the proefix is not ther 
+    ///we append it 
+    var prefix = 'http://';
+    if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  ) {
         url = prefix + url;
     }
-  let name = this.getElementNameFromURL(url);
 
-  //just get the suffix without the 'name' bit which is the bit after the last slash 
-  url = this.stripTrailingSlash(url);
-  url = url.substring(0, url.lastIndexOf('/')) + "/";
+    let name = this.getElementNameFromURL(url);
 
-  console.log(name,url);
-  
+    //just get the suffix without the 'name' bit which is the bit after the last slash 
+    url = this.stripTrailingSlash(url);
+    url = url.substring(0, url.lastIndexOf('/')) + "/";
 
-  
-  //set the name and url of the enetity 
-  this.doc.addNamespace(name, url);
+    //set the name and url of the enetity 
+    this.doc.addNamespace(name, url);
 
-  //set any attributes the user has added 
-  let titleIndex:number = this.getIndex("Title",inputArray);
-  let locationIndex:number = this.getIndex("Location",inputArray);
-  let labelIndex:number = this.getIndex("Label",inputArray);
-  
+    //set any attributes the user has added 
+    let titleIndex:number = this.getIndex("Title",inputArray);
+    let locationIndex:number = this.getIndex("Location",inputArray);
+    let labelIndex:number = this.getIndex("Label",inputArray);
 
-  let title:string;
-  let location:string;
-  let label:string;
-  
-
-  //keep a ref to entity so we can update its attributes
-  let entity  = this.doc.entity(name+":"+ name);
-
-  thing.prefixSuffix = name+":"+ name; //set element's suffixPrefix
+    let title:string;
+    let location:string;
+    let label:string;
 
 
-  //-1 indicates that this attribute was not added to the element
-  //now lets set our attributess
-  // if an attribute is empty then a user has not set it TODO: maybe set to null instead of empty?
-  // CHECK for which attributes a user has set
-  // if set set them
-  
-  if(titleIndex !== -1){
-    //set the title to the user's input
-     title = inputArray[this.getIndex("Title",inputArray).toString()].value;
-     
-    if (title !== "") {
+    //keep a ref to entity so we can update its attributes
+    let entity  = this.doc.entity(name+":"+ name);
 
-      entity.attr("dcterms:title", [title]);
-    }
-  }
-  if(locationIndex !== -1){
-    //set the location to the user's input
-     location = inputArray[this.getIndex("Location",inputArray).toString()].value;
-     if (location !== "") {
+    thing.prefixSuffix = name+":"+ name; //set element's suffixPrefix
 
-      entity.attr("prov:location", [location]);
+
+    //-1 indicates that this attribute was not added to the element
+
+    if (titleIndex !== -1) {
+
+      //set the title to the user's input
+      title = inputArray[this.getIndex("Title",inputArray).toString()].value;
+
+      if (title !== "") {
+
+          entity.attr("dcterms:title", [title]);
+      }
     }
 
-  }
-  if(labelIndex !== -1){
-    //set the label to the user's input
-     label = inputArray[this.getIndex("Label",inputArray).toString()].value;
-     if (label !== "") {
-      
-      entity.attr("prov:label", [label]);
+    if (locationIndex !== -1) {
+
+      //set the location to the user's input
+      location = inputArray[this.getIndex("Location",inputArray).toString()].value;
+
+      if (location !== "") {
+
+          entity.attr("prov:location", [location]);
+      }
+    }
+
+    if (labelIndex !== -1) {
+
+      //set the label to the user's input
+      label = inputArray[this.getIndex("Label",inputArray).toString()].value;
+
+      if (label !== "") {
+
+          entity.attr("prov:label", [label]);
+      }
     }
   }
-  
-  // console.log(this.getDoc());
-  // console.log(JSON.stringify(this.getProvJSON(), null, "  "));
 
-  }
-
-  // creates a prov version of a 'actor' story element param
-  // adds it to global prov document 
-  processActor(actor) {
+  /* creates a prov version of a 'actor' story element param
+   * adds it to global prov document 
+  */
+  processActor (actor) {
 
     let inputArray = actor.inputArray;
     let attributeArray = actor.attributes;
+    let url = inputArray["0"].value;
 
-    // test 
-    console.log(inputArray);
-
-  let url = inputArray["0"].value;
-
-  //handle case were url has no http:// before it 
-  //if the proefix is not ther 
-  ///we append it 
-  var prefix = 'http://';
-    if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  )
-    {
+    //handle case were url has no http:// before it 
+    //if the proefix is not ther 
+    ///we append it 
+    var prefix = 'http://';
+    if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  ) {
         url = prefix + url;
     }
-  let name = this.getElementNameFromURL(url);
 
-  //just get the suffix without the 'name' bit which is the bit after the last slash 
-  url = this.stripTrailingSlash(url);
-  url = url.substring(0, url.lastIndexOf('/')) + "/";
+    let name = this.getElementNameFromURL(url);
 
-  console.log(name,url);
-  
-  
-  //set the name and url of the enetity 
-  this.doc.addNamespace(name, url);
+    //just get the suffix without the 'name' bit which is the bit after the last slash 
+    url = this.stripTrailingSlash(url);
+    url = url.substring(0, url.lastIndexOf('/')) + "/";
 
-  //set any attributes the user has added 
-  let locationIndex:number = this.getIndex("Location",inputArray);
-  let labelIndex:number = this.getIndex("Label",inputArray);
-  let typeIndex:number = this.getIndex("Type",inputArray);
-  let givenNameIndex:number = this.getIndex("Given Name",inputArray);
-  let emailIndex:number = this.getIndex("E-mail",inputArray);
+    //set the name and url of the enetity 
+    this.doc.addNamespace(name, url);
 
-  let location:string;
-  let label:string;
-  let type:string;
-  let givenName:string;
-  let email:string; 
+    //set any attributes the user has added 
+    let locationIndex:number = this.getIndex("Location",inputArray);
+    let labelIndex:number = this.getIndex("Label",inputArray);
+    let typeIndex:number = this.getIndex("Type",inputArray);
+    let givenNameIndex:number = this.getIndex("Given Name",inputArray);
+    let emailIndex:number = this.getIndex("E-mail",inputArray);
 
-  //keep a ref to agent so we can update its attributes
-  let agent  = this.doc.agent(name+":"+ name);
+    let location:string;
+    let label:string;
+    let type:string;
+    let givenName:string;
+    let email:string; 
 
-  actor.prefixSuffix = name+":"+ name; //set element's suffixPrefix
+    //keep a ref to agent so we can update its attributes
+    let agent  = this.doc.agent(name+":"+ name);
 
-  //-1 indicates that this attribute was not added to the element
-  //now lets set our attributess
-  // if an attribute is empty then a user has not set it TODO: maybe set to null instead of empty?
-  // CHECK for which attributes a user has set
-  // if set set them
-  
-  if(givenNameIndex !== -1){
-    //set the title to the user's input
-     givenName = inputArray[this.getIndex("Given Name",inputArray).toString()].value;
+    actor.prefixSuffix = name+":"+ name; //set element's suffixPrefix
 
-    if (givenName !== "") {
+    //-1 indicates that this attribute was not added to the element
+   
 
-      agent.attr("foaf:givenName", givenName);
-    }
-  }
+    if (givenNameIndex !== -1) {
+      //set the title to the user's input
+      givenName = inputArray[this.getIndex("Given Name",inputArray).toString()].value;
 
-  if(emailIndex !== -1){
-    //set the title to the user's input
-     email = inputArray[this.getIndex("E-mail",inputArray).toString()].value;
-     
-    if (email !== "") {
+      if (givenName !== "") {
 
-      agent.attr("foaf:mbox", "<"+email+">");
-    }
-  }
-
-  if(locationIndex !== -1){
-    //set the location to the user's input
-     location = inputArray[this.getIndex("Location",inputArray).toString()].value;
-     if (location !== "") {
-
-      agent.attr("prov:location", [location]);
+          agent.attr("foaf:givenName", givenName);
+      }
     }
 
-  }
+    if (emailIndex !== -1) {
+        //set the title to the user's input
+      email = inputArray[this.getIndex("E-mail",inputArray).toString()].value;
 
-  if(labelIndex !== -1){
-    //set the label to the user's input
-     label = inputArray[this.getIndex("Label",inputArray).toString()].value;
-     if (label !== "") {
+      if (email !== "") {
+
+          agent.attr("foaf:mbox", "<"+email+">");
+      }
+    }
+
+    if (locationIndex !== -1) {
+      //set the location to the user's input
+      location = inputArray[this.getIndex("Location",inputArray).toString()].value;
+
+      if (location !== "") {
+
+          agent.attr("prov:location", [location]);
+      }
+
+    }
+
+    if (labelIndex !== -1) {
+      //set the label to the user's input
+      label = inputArray[this.getIndex("Label",inputArray).toString()].value;
+
+      if (label !== "") {
+
+          agent.attr("prov:label", [label]);
+      }
+    }
+
+    //only agents will have types
+    if (typeIndex !== -1) {
+
+
+      //set the type to the user's input
+      type = inputArray[this.getIndex("Type",inputArray).toString()].value;
       
-      agent.attr("prov:label", [label]);
+      if (type !== "") {
+
+        //check which type user put/drug in 
+        if (type.toLowerCase() === "organisation") {
+            agent.attr("prov:type", this.prov.ns.qn("Organization"));
+        
+        }
+
+        else if (type.toLowerCase() === "person") {
+
+            agent.attr("prov:type", this.prov.ns.qn("Person"));
+        }
+
+        else if (type.toLowerCase() === "softwareagent") {
+
+            agent.attr("prov:type", this.prov.ns.qn("SoftwareAgent"));
+       
+        }
+
+        else {
+      
+        }
+      }
     }
-  }
 
-  //only agents will have types
-  if(typeIndex !== -1) {
-
-    //todo: have a drop down box for users to select a prov type
-    // *** or they can click 'other' and define thir own -- will go for this option (custom type) and drag and drop 
-    // these will be two diff use cases 
-    // this is just for now till we implement the drag and drop 
-    // but we will still need the box their if they want to have thier own custom type 
-    // maybe give them the drop down and drag and drop option and in both cases they can create thier own custom types
-    // hard code type to Person for now till we decide // let user type in a type for now - has to be on of the inbuilt prov types
-    
-    //set the type to the user's input
-     type = inputArray[this.getIndex("Type",inputArray).toString()].value;
-     if (type !== "") {
-
-       //check which type user put/drug in 
-       if(type.toLowerCase() === "organisation")
-       {
-        agent.attr("prov:type", this.prov.ns.qn("Organization"));
-        // agent.attr("prov:type", this.prov.ns.Organization);
-       }
-       else if(type.toLowerCase() === "person")
-       {
-
-         agent.attr("prov:type", this.prov.ns.qn("Person"));
-       }
-       else if(type.toLowerCase() === "softwareagent")
-       {
-
-          agent.attr("prov:type", this.prov.ns.qn("SoftwareAgent"));
-          // agent.attr("prov:type", this.prov.ns.SoftwareAgent);
-       }
-       else
-       {
-         //todo:allert that this field does nt have a valid type
-       }
-
-    }
-  }
-  
-  // console.log(this.getDoc());
-  // console.log(JSON.stringify(this.getProvJSON(), null, "  "));
+    // console.log(this.getDoc());
+    // console.log(JSON.stringify(this.getProvJSON(), null, "  "));
 
 
   }
 
-  stripTrailingSlash(str) {
+  stripTrailingSlash (str) {
+
     if(str.substr(-1) === '/') {
         return str.substr(0, str.length - 1);
     }
     return str;
-}
+  }
 
-  // creates a prov version of a 'event' story element param
-  // adds it to global prov document 
-  processEvent(event) {
+  /* creates a prov version of a 'event' story element param
+   * adds it to global prov document 
+  */
+  processEvent (event) {
 
     let inputArray = event.inputArray;
     let attributeArray = event.attributes;
-
-    // test 
-    console.log(inputArray);
-
-  let url = inputArray["0"].value;
+    let url = inputArray["0"].value;
 
 
-  //handle case were url has no http:// before it 
-  //if the proefix is not ther 
-  ///we append it 
-  var prefix = 'http://';
-    if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  )
-    {
+    //handle case were url has no http:// before it 
+    //if the proefix is not ther 
+    ///we append it 
+    var prefix = 'http://';
+    if (url.substr(0, prefix.length) !== prefix && url.substr(0, prefix.length+1) !== "https://"  ) {
+
         url = prefix + url;
     }
 
-  let name = this.getElementNameFromURL(url);
-  //just get the suffix without the 'name' bit which is the bit after the last slash 
-  url = this.stripTrailingSlash(url);
-  url = url.substring(0, url.lastIndexOf('/')) + "/";
+    let name = this.getElementNameFromURL(url);
+    //just get the suffix without the 'name' bit which is the bit after the last slash 
+    url = this.stripTrailingSlash(url);
+    url = url.substring(0, url.lastIndexOf('/')) + "/";
 
-  console.log(name,url);
+    //set the name and url of the enetity 
+    this.doc.addNamespace(name, url);
 
-  //set the name and url of the enetity 
-  this.doc.addNamespace(name, url);
+    //set any attributes the user has added 
+    let locationIndex:number = this.getIndex("Location",inputArray);
+    let labelIndex:number = this.getIndex("Label",inputArray);
+    let typeIndex:number = this.getIndex("Type",inputArray);
 
-  //set any attributes the user has added 
-  let locationIndex:number = this.getIndex("Location",inputArray);
-  let labelIndex:number = this.getIndex("Label",inputArray);
-  let typeIndex:number = this.getIndex("Type",inputArray);
+    let location:string;
+    let label:string;
+    let type:string;
+    let startDate:string;
+    let endDate:string; 
 
-  //not being added to input array - remove?
-  // let startTimeIndex:number = this.getIndex("Start Time",inputArray);
-  // let endTimeIndex:number = this.getIndex("End Time",inputArray);
+    //keep a ref to activity so we can update its attributes
+    let activity  = this.doc.activity(name+":"+ name);
 
-  let location:string;
-  let label:string;
-  let type:string;
-  let startDate:string;
-  let endDate:string; 
-
-  //keep a ref to activity so we can update its attributes
-  let activity  = this.doc.activity(name+":"+ name);
-
-  event.prefixSuffix = name+":"+ name; //set element's suffixPrefix
+    event.prefixSuffix = name+":"+ name; //set element's suffixPrefix
 
 
-  //-1 indicates that this attribute was not added to the element
-  //now lets set our attributess
-  // if an attribute is empty then a user has not set it TODO: maybe set to null instead of empty?
-  // CHECK for which attributes a user has set
-  // if set set them
+    //-1 indicates that this attribute was not added to the element
+   
+
   
-  //TODO:STORT OUT TIME FORMATTING FOR USERS 
-  //MAKE IT EASIER 
-  if(event.startDate !== null) {
-    //set the title to the user's input
-    console.log("startdate added", event.startDate.toISOString());
-    startDate = event.startDate.toISOString();
+    if(event.startDate !== null) {
+   
+      startDate = event.startDate.toISOString();
 
-    // activity("startTimee", event.startDate.toISOString());
-    
-  }
+    }
 
-  if(event.endDate !== null){
-    //set the title to the user's input
-     
-    console.log("endDate added", event.endDate.toISOString());
-    endDate = event.endDate.toISOString();
+    if (event.endDate !== null) { 
+   
+      endDate = event.endDate.toISOString();
 
-    // activity.attr("endTime", event.endDate.toISOString());
-  }
+    }
 
-  //fix for issue #13
-  var act = this.doc.activity(name+":"+ name, startDate,endDate);
+    //fix for issue #13
+    var act = this.doc.activity(name+":"+ name, startDate,endDate);
 
-  if(locationIndex !== -1){
+    if(locationIndex !== -1) {
     //set the location to the user's input
-     location = inputArray[this.getIndex("Location",inputArray).toString()].value;
-     if (location !== "") {
+        location = inputArray[this.getIndex("Location",inputArray).toString()].value;
 
-      act.attr("prov:location", [location]);
+        if (location !== "") {
+
+            act.attr("prov:location", [location]);
+
+        }
+
+    }
+
+    
+    if (labelIndex !== -1) {
+        //set the label to the user's input
+        label = inputArray[this.getIndex("Label",inputArray).toString()].value;
+
+        if (label !== "") {
+
+          act.attr("prov:label", [label]);
+
+        }
     }
 
   }
 
-  if(labelIndex !== -1){
-    //set the label to the user's input
-     label = inputArray[this.getIndex("Label",inputArray).toString()].value;
-     if (label !== "") {
-      
-     act.attr("prov:label", [label]);
-    }
-  }
-  
-
-  //this.doc.activity(name+":"+ name,startDate,endDate);
-  // console.log(this.getDoc());
-  // console.log(JSON.stringify(this.getProvJSON(), null, "  "));
-
-
-  }
   errPresent:boolean = false;
 
-  //check that all url fields are filled 
-  //call in process() method
+  /*
+   * check that all url fields are filled 
+   * called in process() method
+   * an error is given and elements with mising url are highligthed in red 
+  */
   urlFieldCheck() {
    
     this.errPresent = false; 
     for (var i = 0; i < this.elementsOnCanvas.length; i++) {
 
-        console.log("hi", i);
-
-        if(this.elementsOnCanvas[i.toString()].inputArray["0"].value === "") {
-            
-            console.log("id", this.elementsOnCanvas[i.toString()].id);
+        if (this.elementsOnCanvas[i.toString()].inputArray["0"].value === "") {
             
             $("#"+ this.elementsOnCanvas[i.toString()].id).css({border: "solid 1px red" }); 
-           
-
-            // this.showMissingURLFieldError();
+        
             this.errPresent = true;
-            console.log("found an empty field", i);
         }
-        else
-        {
+        else {
           //
         }
-        //return this.errPresent;
-         console.log(this.errPresent);
       }
   }
 
-  // this basically takes evrything on the canvas and processes it 
-  // it seperates it by type into it's respective methods for further processing 
-  // to create a story - using prov 
-  //TODO : ADD IN CHECKS TO MAK SURE URL FIELDS ARE NOT EMPTY 
-  //SO IF URL FIELD IS EMPTY ....WE COULD GET THE ID AND HIGHIGHT IT OR ADD A TOAST MESSAGE 
+  /* 
+    * this method basically takes all the elements on the canvas and processes it 
+    * it seperates elements by type into it's respective methods for further processing 
+  */
   process()
   {
     for (var i = 0; i < this.elementsOnCanvas.length; i++) {
 
       //if type is a thing
-      if(this.elementsOnCanvas[i.toString()].type === "thing") {
-        console.log("thing here");
+      if (this.elementsOnCanvas[i.toString()].type === "thing") {
+        
         this.processThing(this.elementsOnCanvas[i]);
       }
 
       //if type is a event
-      else if(this.elementsOnCanvas[i.toString()].type === "event") {
-        console.log("event here");
+      else if (this.elementsOnCanvas[i.toString()].type === "event") {
+       
         this.processEvent(this.elementsOnCanvas[i]);
       }
 
       // if type is actor
       else {
-        console.log("here");
+       
         this.processActor(this.elementsOnCanvas[i]);
       }
     };
 
-    //once all elements have been made-we then need to make relations
-    //might need promises ?
     this.inferRelations();
   }
 
  
-
-
-highlight() {
-  if(this.selecting==true) {
-    return "solid 1px red";
-  }
-  else{
-
-    return "";
-  }
-}
-  chosenElement(id) {
    
-    // console.log(value);
-    // var target = event.target || event.srcElement || event.currentTarget;
-    // var idAttr = target.attributes.id;
-    // var value = idAttr.nodeValue;
-
+   /* 
+    * use to help implement connecting functionality 
+    * adds the chosen element's id to array of selected elements
+   */
+  chosenElement (id) {
    
-    if(this.selecting == true){
-       if(this.twoSelectedElements.length < 2){
+   
+    if (this.selecting == true) {
+
+       if (this.twoSelectedElements.length < 2) {
 
         $("#"+ id).css({border: "solid 1px red" }); 
-        console.log(id);
+        
         this.twoSelectedElements.push(id);
-        if(this.twoSelectedElements.length === 2) {
-           this.resetSelection();
+
+        if (this.twoSelectedElements.length === 2) {
+
+            this.resetSelection();
          }
       
-      }
-       else
-       {
-         console.log("you can only selct two at a time");
-         //this.resetSelection();
-       }
+        }
+    
+        else {
+            console.log("you can only selct two at a time");  
+        }
     }
+
     else {
-      console.log("hit the connect btn first");
+      
     }
-   
   }
 
-  deactivateSelection() {
+  deactivateSelection () {
     $('.card').css('border','none');
     this.selecting = false;
     this.twoSelectedElements = [];
   }
 
-  activateSelectionMode()
-  {
+  activateSelectionMode () {
     this.selecting = true;
-    console.log("selecting: ", this.selecting);
-
   }
 
-  resetSelection ()
-  {
-    console.log("the selected items are: ", this.twoSelectedElements);
+  resetSelection () {
     this.drawLine(this.twoSelectedElements[0],this.twoSelectedElements[1]);
-    //this.drawLine();
     this.twoSelectedElements = [];
     this.selecting = false;
   }
 
 
+  /*
+    method used to connect two selected elements on a canvas
+  */
+  drawLine (sourceId, targetId) {
 
-  drawLine(sourceId,targetId)
-  {
-
-    //which is spurce and which is trget 
-    //id 1  is 
-    //id 2 is 
     let source = sourceId.toString();
     let target = targetId.toString();
+
     let connId = this.connections.length+1;
     let connection;
+
     //common style for all connections 
     var commomStyle = {
         connector:"StateMachine",
@@ -1250,8 +1097,6 @@ highlight() {
         events:{
           click:function() { 
              jsPlumb.detach(connection);
-             //testing
-             console.log(jsPlumb.getConnections());
           }
         }
       }]
@@ -1261,17 +1106,15 @@ highlight() {
         jsPlumb.ready(function() {   
         connection = jsPlumb.connect({source:source, target:target}, commomStyle);
         jsPlumb.repaintEverything(); 
-        //jsPlumb.draggable($(".window")); //temp - renders funny but the best option, doesnt play nice with nggrid , will remove when i v=come up with another soutuin
   });
      //add connecion to arr of connections 
      this.connections.push({id:connId,connectionObj:connection});
-     console.log("jsplumbConID",connection.id);
      this.removeBorder(source,target);
 }
 
-  //remove the syling from the selected elements ()
-  removeBorder(source,target) {
-    //without hthis the 2nd selcted ele does not get a chance to e red a
+  //remove the syling from the two selected elements 
+  removeBorder (source, target) {
+    //without this the 2nd selcted ele does not get a chance to be red
     //so set timer to delay removal
      setTimeout(() => {
         $("#"+ source).css({border: "none" }); 
@@ -1280,22 +1123,28 @@ highlight() {
   
   }
 
-  enlarge(id)
-  {
+  //this method increases the size of the element with the supplied id 
+  enlarge (id) {
      $("#"+ id).css({width: "80%" }); 
   }
 
-  shrink(id)
-  {
+  //this method decrease the size of the element with the supplied id 
+  shrink (id) {
      $("#"+ id).css({width: "250px" }); 
   }
-  
+
+
+  /*
+   * This method infers the relation of conencted pairs
+   * the type of relation is determined by the type of the connected elements
+   * once the type of relation is determined, the elements are passed to the method that creates that relation in Prov
+  */
   inferRelations() {
 
     this.checkPairings();
-    let conectionList = jsPlumb.getConnections();
-    //might need a promise here 
 
+    let conectionList = jsPlumb.getConnections();
+   
     for (var i = 0; i < conectionList.length; i++) {
 
       let startEle = this.getElement(conectionList[i.toString()].sourceId);
@@ -1303,57 +1152,52 @@ highlight() {
 
       //if null then no element with that id was found
 
-      if(startEle === null || endEle === null ){
-        console.log("Element not found")
+      if (startEle === null || endEle === null ) {
+
+          console.log("Element not found");
       }
 
       else {
 
         //delegation 
-      if (startEle.type === "actor" && endEle.type === "actor") {
+        if (startEle.type === "actor" && endEle.type === "actor") {
 
-        console.log("hi delegation");
-        this.delegation(startEle.prefixSuffix,endEle.prefixSuffix);
-      }
+          this.delegation(startEle.prefixSuffix,endEle.prefixSuffix);
+        }
 
-      //association
-      else if (startEle.type === "event" && endEle.type === "actor") {
+        //association
+        else if (startEle.type === "event" && endEle.type === "actor") {
 
-        console.log("hi association");
-        this.association(startEle.prefixSuffix,endEle.prefixSuffix);
-      }
+          this.association(startEle.prefixSuffix,endEle.prefixSuffix);
+        }
 
-      //usage
-      else if (startEle.type === "event" && endEle.type === "thing") {
+        //usage
+        else if (startEle.type === "event" && endEle.type === "thing") {
 
-        console.log("hi usage");
-        this.usage(startEle.prefixSuffix,endEle.prefixSuffix);
-      }
+          this.usage(startEle.prefixSuffix,endEle.prefixSuffix);
+        }
 
-      //generation
-      else if (startEle.type === "thing" && endEle.type === "event") {
-        
-        console.log("hi generation");
-        this.generation(startEle.prefixSuffix,endEle.prefixSuffix);
-      }
+        //generation
+        else if (startEle.type === "thing" && endEle.type === "event") {
+          
+          this.generation(startEle.prefixSuffix,endEle.prefixSuffix);
+        }
 
-      //attribution
-      else if (startEle.type === "thing" && endEle.type === "actor") {
-        
-        console.log("hi attribution");
-        this.attribution(startEle.prefixSuffix,endEle.prefixSuffix);
-      }
+        //attribution
+        else if (startEle.type === "thing" && endEle.type === "actor") {
+          
+          this.attribution(startEle.prefixSuffix,endEle.prefixSuffix);
+        }
 
-      //derivation
-      else if (startEle.type === "thing" && endEle.type === "thing") {
-        
-        console.log("hi derivation");
-        this.derivation(startEle.prefixSuffix,endEle.prefixSuffix);
-      }
+        //derivation
+        else if (startEle.type === "thing" && endEle.type === "thing") {
+          
+          this.derivation(startEle.prefixSuffix,endEle.prefixSuffix);
+        }
 
-      else {
-        console.log("hmm");
-      }
+        else {
+         
+        }
 
     }
 
@@ -1361,12 +1205,13 @@ highlight() {
   }
 
 
-  //check that all the 
-  //TODO: add a style(with a message or tooltip or somrthing or red thing) to the elements to show that a wrong relation was made 
-  // for now we will remove incorrect pairing from array  
+  /* checks that all the connections are valid in terms of prov relations  
+   * removes any incorrect pairing from array
+   */  
   checkPairings() {
 
     let conectionList = jsPlumb.getConnections();
+
     for (var i = 0; i < conectionList.length; i++) {
 
       let startEle = this.getElement(conectionList[i.toString()].sourceId);
@@ -1374,41 +1219,35 @@ highlight() {
 
 
       //if null then no element with that id was found
-
-      if(startEle === null || endEle === null ) {
-        console.log("Element not found")
+      if (startEle === null || endEle === null ) {
+        console.log("Element not found");
       }
 
       else {
-
         
         if (startEle.type === "event" && endEle.type === "event") {
-          jsPlumb.detach(conectionList[i.toString()]);
-          console.log("removing something", jsPlumb.getConnections().length);
+            jsPlumb.detach(conectionList[i.toString()]);
         }
         else if (startEle.type === "actor" && endEle.type === "event") {
-          jsPlumb.detach(conectionList[i.toString()]);
-           console.log("removing something", jsPlumb.getConnections().length);
+            jsPlumb.detach(conectionList[i.toString()]);
         }
         else if (startEle.type === "actor" && endEle.type === "thing") {
-         jsPlumb.detach(conectionList[i.toString()]);
-           console.log("removing something", jsPlumb.getConnections().length);
+            jsPlumb.detach(conectionList[i.toString()]);
         }
-
         else {
-
+            // do nothing
         }
       }
     };
-
   }
 
-  //returns element from array with corresponding id 
-  getElement(eleId:string) {
+  //returns element from elements on canvas array with given id 
+  getElement(eleId: string) {
 
     let element = null; 
 
     for (var i = 0; i < this.elementsOnCanvas.length; i++) {
+
       if(this.elementsOnCanvas[i.toString()].id === eleId) {
 
         element = this.elementsOnCanvas[i.toString()];
@@ -1420,106 +1259,112 @@ highlight() {
 
 
   /*all the relations*/
-  derivation(startEleName:string, endElementName:string) {
 
-  //dont need local ref -> don't have any attriutes(yet, will keep simple for now sha)
 
-  //if names have not been set -> it means the 'export' button has not been pressed in order to make elements 
-  //do nothing -> without this check prov throws errors when the names are empty
-  // just used for manual connections
-  if(startEleName === "" || endElementName === "") {
+  // creates a derivation type relation with supplied elements
+  derivation(startEleName: string, endElementName: string) {
 
-  }
-  else {
-    this.doc.wasDerivedFrom(startEleName, endElementName);
-    console.log("making a derivation");
-  }
-}
-  
+    if (startEleName === "" || endElementName === "") {
 
-  usage(startEleName:string, endElementName:string) {
+    }
 
-    if(startEleName === "" || endElementName === "") {
-
-  }
-  else {
-    this.doc.used(startEleName, endElementName);
-    console.log("making a usage");
-  }
-
-  }
-
-  generation(startEleName:string, endElementName:string) {
-
-    if(startEleName === "" || endElementName === "") {
-
-  }
-  else {
-    this.doc.wasGeneratedBy(startEleName, endElementName);
-    console.log("making a generation");
-  }
-  }
-
-  attribution(startEleName:string, endElementName:string) {
+    else {
     
-
-    if(startEleName === "" || endElementName === "") {
-
-  }
-  else {
-    this.doc.wasAttributedTo(startEleName, endElementName);
-    console.log("making a attribution");
-  }
-    
-  }
-
-  association(startEleName:string, endElementName:string) {
-
-    if(startEleName === "" || endElementName === "") {
-
-  }
-  else {
-    this.doc.wasAssociatedWith(startEleName, endElementName);
-    console.log("making a association");
-  }
-    
-  }
-
-  delegation(startEleName:string, endElementName:string) {
-
-    if(startEleName === "" || endElementName === "") {
-
-  }
-  else {
-    this.doc.actedOnBehalfOf(startEleName, endElementName);
-    console.log("making a delegation");
+      this.doc.wasDerivedFrom(startEleName, endElementName);  
+    }
   }
   
+  // creates a usage type relation with supplied elements
+  usage(startEleName: string, endElementName: string) {
+
+    if (startEleName === "" || endElementName === "") {
+
+    }
+     
+    else {
+
+      this.doc.used(startEleName, endElementName);
+    }
+  }
+
+  // creates a generation type relation with supplied elements
+  generation(startEleName: string, endElementName: string) {
+
+    if (startEleName === "" || endElementName === "") {
+
+    }
+    
+    else {
+
+      this.doc.wasGeneratedBy(startEleName, endElementName);
+    }
+  }
+
+  // creates a attribution type relation with supplied elements
+  attribution(startEleName: string, endElementName: string) {
+    
+    if (startEleName === "" || endElementName === "") {
+
+    }
+     
+    else {
+
+       this.doc.wasAttributedTo(startEleName, endElementName);
+    }
+  }
+
+   // creates a association type relation with supplied elements
+  association(startEleName: string, endElementName: string) {
+
+    if (startEleName === "" || endElementName === "") {
+
+    }
+
+    else {
+
+      this.doc.wasAssociatedWith(startEleName, endElementName);
+    }
     
   }
 
+  // creates a delegation type relation with supplied elements
+  delegation (startEleName: string, endElementName: string) {
 
+    if (startEleName === "" || endElementName === "") {
+
+    }
+   
+    else {
+
+        this.doc.actedOnBehalfOf(startEleName, endElementName);
+    }
+  }
+
+  /*
+   * this method is called when a user clicks the 'export' button
+   * it performs syntax and sanity checks on elements on the canvas 
+   * if the checks pass it then calls the process() method which converts the story to a prov document 
+   * else it displays an error
+   * once done, it calls saveToStore(), which saves the document to the provstore
+
+  */
   export() {
 
     this.errorMessages= [];
     $('.card').css('border','none');
-    if(this.storyTitle !== "" && this.elementsOnCanvas.length !== 0)
-    {
+
+    if (this.storyTitle !== "" && this.elementsOnCanvas.length !== 0) {
       
 
             this.urlFieldCheck();
-            if(this.errPresent === true)
-            {
+            if (this.errPresent === true) {
              
               this.showMissingURLFieldError();
-              //this.clear();
-              
+             
             }
-            else
-            {
+            else {
+               
                this.process();
-               console.log(this.getDoc());
-               console.log(JSON.stringify(this.getProvJSON(), null, "  "));
 
                this.saveToStore()
                   .then(response => this.provStoreResponse = response)
@@ -1528,148 +1373,78 @@ highlight() {
                   //check that provstoreresponse is not undefines
                   setTimeout(() => {
 
-                    if(this.provStoreResponse){
-                      console.log(this.provStoreResponse);
-                      console.log(this.provStoreResponse.id);
+                    if (this.provStoreResponse) {
+                   
                       let docID = this.provStoreResponse.id;
                       
                       //set story url
-                      //do check here to see if storytitle is empty - if empty -> error message 
                       this.storyUrl = "https://provenance.ecs.soton.ac.uk/store/documents/" + docID;
                       this.confirm();
                     }
                     else {
                       console.log("undefined response");
                     }
-                    
-                        
+                     
                }, 2000);
             }
-           
     }
-     else
-    {
-      console.log("set title and make sure there are elements on the canvas");
+    else {
       this.showMissingTitleError();
     }
 
   }
 
+
+  /* saves the gloabal prov document to the provStore using the provapi
+   *  returns a promise with containing store's response 
+   */
   saveToStore (): Promise<any> {
 
-    console.log('its nkechi here again!!!');
+    let body = JSON.stringify({"content":this.getProvJSON(),"public":true,"rec_id":this.storyTitle});
 
-    //do check here to see if storytitle is empty - if empty -> error message 
-    ///do other checks on content
-  let body = JSON.stringify({"content":this.getProvJSON(),"public":true,"rec_id":this.storyTitle});
+    //set required headers 
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    headers.append('Authorization','ApiKey jossai1:ead7d3d3e18845a807ab18af501805e05f7169eb');
+    headers.append('Accept','application/json');
+    let options = new RequestOptions({ headers: headers });
 
-  //set required headers ..cf /help/api
-  let headers = new Headers({ 'Content-Type': 'application/json' });
-  headers.append('Authorization','ApiKey jossai1:ead7d3d3e18845a807ab18af501805e05f7169eb');
-  headers.append('Accept','application/json');
-  let options = new RequestOptions({ headers: headers });
-
-  return this.http.post(this.provStoreUrl, body, options)
-        .toPromise() 
-        .then(response => response.json())
-        .catch(this.handleError);
+    return this.http.post(this.provStoreUrl, body, options)
+    .toPromise() 
+    .then(response => response.json())
+    .catch(this.handleError);
   }
 
 
- //temp? 
- //contains embedly response data 
- embedlyResponse:any;
 
- private handleError(error: any) {
+  private handleError(error: any) {
      console.error('An error occurred', error);
      return Promise.reject(error.message || error);
   }
-
-testInput:string;
-testImg:string="";
-testResponse:any;
-testUrl:string;
-testTitle:string = "No Title";
-testDesc:string = "No Description";
-
-  testEmbedly() {
-
-
-this.embedlyService
-      .getUrlSummary("https://www.khanacademy.org/")
-        .then(res => this.testResponse = res)
-        .catch(error => this.error = error);
-
-        //check that provstoreresponse is not undefines
-        setTimeout(() => {
-          console.log( this.testResponse );
-          console.log("embedly stuff: ",  this.testResponse ,  this.testResponse.images["0"].url);
-
-          //set variables
-          this.testImg = this.testResponse.images["0"].url;
-      this.testUrl = this.testResponse.url;
-      this.testTitle = this.testResponse.title;
-
-      //the description is too long so trim it to a certain length
-      let length = 20;
-      this.testDesc = this.testResponse.description;
-      //new length
-      this.testDesc = this.testDesc.substring(0, length);
-      
-          
-        }, 2000);
-  }
-
-
-  //check every url field and see if it has changed 
-  // if it has pass that changed value to embedly to update 
-  updateUrlSummary()
-  {
-    for (var i = 0; i < this.elementsOnCanvas.length; i++) {
-      let newUrl = this.elementsOnCanvas[i.toString()].inputArray["0"].url;
-      let oldUrl = this.elementsOnCanvas[i.toString()].oldUrl;
-      
-      console.log("new",newUrl);
-      console.log("old",oldUrl);
-
-      if(newUrl)
-      {
-        //its changes so call emebedly 
-        if(newUrl !== oldUrl) {
-          console.log("url has changed");
-          //call embedly to 
-          //this.grabURL(newUrl);
-        }
-
-      }
-
-      oldUrl = newUrl;
-    }
-  }
+ 
 
   // from stackverflow http://stackoverflow.com/questions/1701898/how-to-detect-whether-a-string-is-in-url-format-using-javascript
-  isUrl(s) {
+  isUrl (s) {
      var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
      return regexp.test(s);
   }
 
  
+/*
+    * this method uses embedly's extract api, through the embedly service 
+    * Embeldy’s Extract API takes a URL and returns metadata extracted from that URL
+*/
+  getUrlSummary (ele) {
 
-  getUrlSummary(ele) {
-     // if(inputName === "URL"){
        let url = ele.inputArray['0'].value;
   
-         //code below goes in here
-       
-
-        //onlu care if the url lenght is greater than 10 
+        //only care if the url lenght is greater than 10 
         //else would be serch for letter in embedly
         //check that it is a valid url ..google keep does this :) 
         
         let desc = ele.urlSummary.desc;
         let response;
         
-        if(url.length >= 10 && this.isUrl(url)) {
+        if (url.length >= 10 && this.isUrl(url)) {
 
            this.embedlyService
           .getUrlSummary(url)
@@ -1679,15 +1454,13 @@ this.embedlyService
 
             setTimeout(() => {
             
-             
-
-
-              //check for any null or e,pty stuff
-              if(response)
+       
+              //check for any null or empty stuff
+              if (response)
               {
-                 console.log( response );
+                 // console.log( response );
           
-                  if(response.images["0"].url) {
+                  if (response.images["0"].url) {
                     //set variables
                     ele.urlSummary.img = response.images["0"].url;
                   }
@@ -1705,7 +1478,7 @@ this.embedlyService
                    ele.urlSummary.url = "";
                   }
 
-                  if(response.title) {
+                  if (response.title) {
 
                     ele.urlSummary.title = response.title;
                   }
@@ -1714,7 +1487,7 @@ this.embedlyService
                      ele.urlSummary.title = "No Title";
                   }
 
-                  if(response.description) {
+                  if (response.description) {
 
                           //the description is too long so trim it to a certain length
                      let length = 20;
@@ -1724,21 +1497,21 @@ this.embedlyService
                   }
                   else
                   {
-                    ele.urlSummary.desc = "No Descrition";
+                    ele.urlSummary.desc = "No Description";
                   }
               }
 
               }, 1000);
-
         }
         else {
           console.log("too short or wrong url format")
           return;
         }
-      
   }
 
-   newStory() {
+  //resets the global prov document to a new one 
+  newStory() {
+
     let newprov = require('../../../provjs/prov');
     this.prov = newprov;
     
@@ -1749,11 +1522,10 @@ this.embedlyService
     this.dcterms = newdoc.addNamespace("dcterms", "http://purl.org/dc/terms/");
     this.foaf = newdoc.addNamespace("foaf", "http://xmlns.com/foaf/0.1/");
 
-   }
+  }
 
-  clear() {
-    //only removes elements put the namespace is still there :(
-    //reset erthang !
+  //Resets editor to initial state - clears all fields
+  clear () {
     
     this.newStory();
     this.elementsOnCanvas = [];
@@ -1764,7 +1536,7 @@ this.embedlyService
 
  
 
-  //remove an given attribute from a given attribute arrasy 
+  //remove a given attribute from a given attribute arrasy 
   removeAttributeFromList(item:string, attributeArray) {
 
     for (var i = 0; i < attributeArray.length; i++) {
@@ -1775,7 +1547,8 @@ this.embedlyService
 
   }
 
- getIndex(item:string,array:any[]):number{
+  /*Returns index of given item in  the supplied array*/
+  getIndex (item: string, array: any []) : number {
    let index = -1;
     for (var i = 0; i < array.length; i++) {
       if(array[i].name === item){
@@ -1786,72 +1559,21 @@ this.embedlyService
     return index;
   }
 
-
- generateUUID() {
-    var d = new Date().getTime();
-    if(window.performance && typeof window.performance.now === "function"){
-        d += performance.now();; //use high-precision timer if available
-    }
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (d + Math.random()*16)%16 | 0;
-        d = Math.floor(d/16);
-        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-    });
-    return uuid;
-};
+  //generate random IDS
+  generateUUID () {
+      var d = new Date().getTime();
+      if(window.performance && typeof window.performance.now === "function"){
+          d += performance.now();; //use high-precision timer if available
+      }
+      var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = (d + Math.random()*16)%16 | 0;
+          d = Math.floor(d/16);
+          return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+      });
+      return uuid;
+  }
   
-
-//delete a pair
-//for interactive app
-//user select arrow and click 'delete' that point will have an id - which will be the same as the pairing's id in the array
-deleteAPair(pairId:string) {
-
-  for (var i = 0; i < this.pairedElementsArray.length; i++) {
-    if(this.pairedElementsArray[i.toString()].id === pairId) {
-      this.pairedElementsArray.splice( i, 1 );
-    }
-  };
-}
-
-//add a relation 
-addPair(connId:string, startEleId:string,endEleId:string) {
-
-  //make pairing - using ngmodel 
-  this.pairedElementsArray.push({id: connId, startEleId:startEleId, endEleId:endEleId});
-  console.log(this.pairedElementsArray);
-}
-
-
-  selectedIcon:any;
-
-  dragStart(event,iconName) {
-        this.selectedIcon = iconName;
-    }
-    
-    drop(event) {
-        if(this.selectedIcon) {
-
-
-          if(this.selectedIcon === "thing") {
-            this.addThing();
-          }
-          else if(this.selectedIcon === "actor")
-          {
-            this.addActor();
-          }
-          //else event
-          else {
-            this.addEvent();
-          }
-            //this.selectedCars.push(this.draggedCar);
-            // this.availableCars.splice(this.findIndex(this.draggedCar), 1);
-            this.selectedIcon = null;
-        }
-    }
-    
-    dragEnd(event) {
-        this.selectedIcon = null;
-    }
+       
     
 }
 
