@@ -1,28 +1,45 @@
 <nav class="navbar navbar-default">
+
     <div class="container-fluid">
+
         <div class="navbar-header">
             <a class="navbar-brand">Story Editor</a>
         </div>
+
         <button class="btn btn-success navbar-btn" (click)="clear();">
             <i class="fa fa-file-o" aria-hidden="true"></i> New Story
         </button>
-        <button mdTooltip="Compile story and save to ProvStore" style="float:right;" class="export-btn btn btn-default navbar-btn" (click)="export()">Export</button>
+
+        <button mdTooltip="Compile story and save to ProvStore" style="float:right;" class="export-btn btn btn-default navbar-btn" (click)="export()">Export
+        </button>
+
         <button mdTooltip="select element to relate on canvas" *ngIf="!selecting" class="btn btn-default navbar-btn" (click)="activateSelectionMode()">
-            <i class="connect fa fa-share-alt" aria-hidden="true"></i> Make Connections</button>
+            <i class="connect fa fa-share-alt" aria-hidden="true"></i> Make Connections
+        </button>
+
         <button *ngIf="selecting" class="btn btn-danger navbar-btn" (click)="deactivateSelection()">
             <i class="fa fa-times" aria-hidden="true"></i> Cancel
         </button>
+
+        <!-- show any errors -->
         <p-messages [value]="errorMessages"></p-messages>
+
         <button (click)="startTour();" style="float:right;" class="btn btn-info navbar-btn">Help</button>
     </div>
 </nav>
+
+
 <div class="container-fluid">
     <div class="row">
         <div class="story-title">
+
             <md-input-container>
                 <input mdInput placeholder="Story title" [(ngModel)]="storyTitle">
             </md-input-container>
+
         </div>
+
+        
         <div class="canvas col-sm-9 push-sm-3">
             <!--  boolean to see if we should show the 'drag and drop story...' sign //only show if canvas is blank /i.e canvas array  is empty -->
             <div *ngIf="elementsOnCanvas.length === 0" class="traced-sign grey-out">
@@ -31,18 +48,26 @@
                 </p>
             </div>
             <div class="card" style="margin:2%;width:250px;position: absolute;" (click)="chosenElement(ele.id)" *ngFor="let ele of elementsOnCanvas; let i = index;" [id]="ele.id">
+
                 <!-- shortend url will go here -->
-                <div class="handle"> <span style="font-size: smaller">{{ele.type}} : {{shortenURLonCard(ele.inputArray["0"].value)}} 
+                <div class="handle"> 
+
+                    <span style="font-size: smaller">{{ele.type}} : {{shortenURLonCard(ele.inputArray["0"].value)}} 
                 
+                    <!-- maximise icon to enter edit mode -->
+                    <a  class="enter-edit-icon" *ngIf="ele.isEditable" (click)="ele.isEditable=false;enlarge(ele.id)" >  
+                        <i mdTooltip="enter edit mode"  class="fa fa-window-maximize"  aria-hidden="true"></i>
+                    </a>
 
-                <a  class="enter-edit-icon" *ngIf="ele.isEditable" (click)="ele.isEditable=false;enlarge(ele.id)" >  
-                <i mdTooltip="enter edit mode"  class="fa fa-window-maximize"  aria-hidden="true"></i>
-                 </a>
+                    <!-- maximise icon to enter edit mode -->
+                    <a  class="exit-edit-icon" *ngIf="!ele.isEditable"  (click)="ele.isEditable=true;shrink(ele.id)" >  
+                        <i mdTooltip="exit edit mode"  class="fa fa-window-minimize"  aria-hidden="true"></i>
+                    </a>
 
-                <a  class="exit-edit-icon" *ngIf="!ele.isEditable"  (click)="ele.isEditable=true;shrink(ele.id)" >  
-                <i mdTooltip="exit edit mode"  class="fa fa-window-minimize"  aria-hidden="true"></i>
-                 </a>
-                </span></div>
+                    </span>
+                </div>
+
+                <!-- card representation of story element -->
                 <md-card *ngIf="ele.isEditable">
                     <img md-card-image style="float:left;width:50px;height: 50px" class="canvas-icons" [src]="ele.urlSummary.img">
                     <md-card-title style="margin-left:20%;font-size:15px">{{ele.urlSummary.title}}</md-card-title>
@@ -55,27 +80,35 @@
                         </a>
                     </md-card-subtitle>
                 </md-card>
+
+                <!-- fieldset of story element shown when in in edit mode - toggable  -->
                 <fieldset *ngIf="!ele.isEditable">
                     <legend><img class="canvas-icons" [src]="ele.src"></legend>
+
+                    <!-- input box for url -->
                     <input size="25" pInputText type="text" [placeholder]="input.name" *ngFor="let input of ele.inputArray;let in=index" [(ngModel)]="input.value" [id]="input.id" />
-                    <!-- primeNg calenders for start and end time -->
+
+                    <!-- primeNg calenders for start and end time - only shown if selected from attribute list -->
                     <span style="margin-right: 3%;" *ngIf="ele.startDateAdded && ele.type==='event'">
-                    <p-calendar  [(ngModel)]="ele.startDate" [showTime]="true" [showIcon]="true" ></p-calendar> 
-                   
+                        <p-calendar  [(ngModel)]="ele.startDate" [showTime]="true" [showIcon]="true" ></p-calendar> 
                     </span>
+
                     <span style="margin-right: 3%;" *ngIf="ele.endDateAdded && ele.type==='event'">
-                    <p-calendar  [(ngModel)]="ele.endDate" [showTime]="true" [showIcon]="true"></p-calendar> 
-                   
+                        <p-calendar  [(ngModel)]="ele.endDate" [showTime]="true" [showIcon]="true"></p-calendar> 
                     </span>
+
+                    <!-- drop down select list for adding attributes to an element -->
                     <md-select placeholder="Add Attribute" [(ngModel)]="selectedOption">
                         <md-option *ngFor="let item of ele.attributeArray" [value]="item" (click)="processEleAttribute(selectedOption.id,ele.type,ele.inputArray,ele.attributeArray,ele)">
                             {{item.name}}
                         </md-option>
                     </md-select>
+
                     <img class="delete-icon grey-out" (click)="deleteElementFromCanvas(ele.id)" src="../../assets/images/trash.png">
                 </fieldset>
             </div>
-            <!-- story element icons -->
+
+            <!-- side bar for story element icons -->
         </div>
         <div class="col-sm-3">
             <div class="sidebar-nav-fixed pull-right affix">
@@ -96,4 +129,6 @@
             </div>
         </div>
     </div>
+
+    <!-- confirm dialog for when story has been exported - populated in ts component -->
     <p-confirmDialog header="Do you wish to leave this page ?" icon="fa fa-question-circle" width="425"></p-confirmDialog>
