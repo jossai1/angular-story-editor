@@ -1,10 +1,9 @@
 # Prov-Narrator 
 
-Prov-Narrator is an interactive web-based tool for creating provenance-based narratives. User's have access to all the tools required to build thier stories. The tool converts the story to a provenance document and exports it to the [ProvStore](https://provenance.ecs.soton.ac.uk/store/) 
+Prov-Narrator is an interactive web-based tool for creating provenance-based narratives. User's have access to all the tools required to build thier stories. The tool converts the story to a provenance document and exports it to the [ProvStore](https://provenance.ecs.soton.ac.uk/store/).
 
 
-This project was built with [Angular 2](https://angular.io/)
-
+This project was built with [Angular 2](https://angular.io/). The angular-cli was used to aid development [angular-cli](https://github.com/angular/angular-cli)
 
 
 
