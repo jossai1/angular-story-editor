@@ -1,6 +1,12 @@
-# AngularStoryEditor
+# Prov-Narrator 
 
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.26.
+Prov-Narrator is an interactive web-based tool for creating provenance-based narratives. User's have access to all the tools required to build thier stories. The tool converts the story to a provenance document and exports it to the [ProvStore](https://provenance.ecs.soton.ac.uk/store/) 
+
+
+This project was built with [Angular 2](https://angular.io/)
+
+
+
 
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
