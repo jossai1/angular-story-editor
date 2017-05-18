@@ -1,5 +1,8 @@
 # AngularStoryEditor
 
+
+NOTE: The most updated version of this repository can be found on the 'Final' branch. 
+
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.26.
 
 ## Development server
